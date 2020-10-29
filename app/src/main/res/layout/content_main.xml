@@ -25,7 +25,10 @@
         android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.781"
         tools:srcCompat="@tools:sample/avatars" />
 
     <Button
@@ -34,8 +37,12 @@
         android:layout_height="55dp"
         android:layout_marginTop="24dp"
         android:text="Flip a Coin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline"
-        tools:layout_editor_absoluteX="122dp" />
+        app:layout_constraintVertical_bias="0.059" />
 
     <Button
         android:id="@+id/kidsBtn"

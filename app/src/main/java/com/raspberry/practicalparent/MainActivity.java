@@ -1,5 +1,6 @@
 package com.raspberry.practicalparent;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -12,20 +13,37 @@ import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 /**
  * Main menu and launching activity
  *
  */
 public class MainActivity extends AppCompatActivity {
-
+    private Button button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        button = (Button) findViewById(R.id.timeoutBtn);
+        button.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    openActivityTimer();
 
+                }
+            }
+
+        );
+
+    }
+
+    private void openActivityTimer() {
+        Intent intent = new Intent(this, timerActivityMainMenu.class);
+        startActivity(intent);
     }
 
     @Override
