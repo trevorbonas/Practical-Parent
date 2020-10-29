@@ -11,14 +11,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class History extends AppCompatActivity {
+
     private RecyclerView rv;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManger;
     private ArrayList<CardViewMaker> cardList = new ArrayList<>();
+    private TextView historyText;
+    private Button toggleBtn;
+    private boolean toggledAll = false;
 
 
     @Override
@@ -26,12 +31,19 @@ public class History extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        //Examples
-        cardList.add(new CardViewMaker(R.drawable.ic_check, "NAME", "WIN", "DATE", "SIDE"));
-        cardList.add(new CardViewMaker(R.drawable.ic_x, "NAME", "LOSS", "DATE", "SIDE"));
+        //TODO: Examples to be removed
+        cardList.add(0, new CardViewMaker(R.drawable.ic_check, "NAME", "WIN", "DATE", "SIDE"));
+        cardList.add(0, new CardViewMaker(R.drawable.ic_x, "NAME", "LOST", "DATE", "SIDE"));
 
-        //populateKidHistory();
+        historyText = findViewById(R.id.tv_history_name);
+        toggleBtn = findViewById(R.id.btn_toggle_history);
 
+        createRecyclerView();
+        populateKidHistory();
+        registerClickCallback();
+    }
+
+    private void createRecyclerView() {
         //Setting up RecyclerView
         rv = findViewById(R.id.recyclerview);
         rv.setHasFixedSize(true);
@@ -42,55 +54,123 @@ public class History extends AppCompatActivity {
         rv.setAdapter(adapter);
     }
 
-    //TODO: Extract kid class from shared prefs
+    //Get child class from manager
 /*    private Kid extractChild(Context context) {
         int kidPosition = extractDataFromIntent();
-        //if sharedprefs for kidsmanager
-        SharedPreferences prefs = context.getSharedPreferences("AppPrefs", MODE_PRIVATE);
+
+        //TODO: get kidmanager from shared prefs
+
         KidManager manager = KidManger.getInstance();
         return manager.get(kidPosition);
     }*/
 
-    //TODO: populate kid's history
-   /* private void populateKidHistory() {
-        //TODO: after Trevor finishes results class and kids class
-        Kid k = extractChild();
-        TextView historyText = findViewById(R.id.tv_history_name);
-        Button toggleBtn = findViewById(R.id.btn_toggle_history);
-        historyText.setText(k.getName() + "'S FLIPS");
-        toggleBtn.setText("ALL FLIPS");
-        Results res = k.getResults();
-        for (int record: res) {
-            Boolean won = record.getWin();
-            int image = R.drawable.ic_x;
-            if (won == true) {
-                image = R.drawable.ic_check;
-            }
-            cardList.add(new CardViewMaker(image, record.getName(), won, record.getDate(), record.getSide()));
-        }
-    }*/
+    //TODO: populate kid's history (this is the default when viewing history)
+    private void populateKidHistory() {
 
-/*   //register click for toggling history
+        //TODO: remove when populaterecyclerview works
+        clearRecyclerView();
+
+        //Get child information
+        //Kid k = extractChild();
+        //String name = k.getName();
+
+        //Set on screen text
+        //historyText.setText(name + "'S FLIPS");
+        historyText.setText("KID'S FLIPS");
+        toggleBtn.setText("ALL FLIPS");
+        updateText();
+
+        //Create child flips history
+        //ResultsManager childHistory = k.getResults();
+        //populateRecyclerView(childHistory);
+
+        //TODO: example to be removed
+        for (int i = 0; i < 4; i++) {
+            cardList.add(0, new CardViewMaker(R.drawable.ic_x, "NAME", "LOST", "DATE", "SIDE"));
+            adapter.notifyItemInserted(0);
+        }
+    }
+
+
+    private void showAllHistory() {
+
+        //TODO: remove when populaterecyclerview works
+        clearRecyclerView();
+
+        //String kidName = extractChild().getName();
+        historyText.setText("ALL FLIPS");
+        toggleBtn.setText("KID'S FLIPS");
+        //toggleBtn.setText(kidName + "'s FLIPS");
+        updateText();
+
+        //all history resultsmanager will be thru shared prefs?
+        //Create all flips history
+        //ResultsManager allHistory =
+        //populateRecyclerView(allHistory);
+
+        //TODO: Example to be removed
+        for (int i = 0; i < 2; i++) {
+            cardList.add(0, new CardViewMaker(R.drawable.ic_check, "NAME", "WIN", "DATE", "SIDE"));
+            adapter.notifyItemInserted(0);
+        }
+    }
+
+    //Update text on toggle
+    private void updateText() {
+        historyText.invalidate();
+        toggleBtn.invalidate();
+    }
+
+    //Register click for toggling history
     private void registerClickCallback() {
-        Button btn = (Button) findViewById(R.id.btn_toggle_history);
-        btn.setOnClickListener(new View.OnClickListener() {
+        toggleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showAllHistory();
+                if (!toggledAll) {
+                    Toast.makeText(History.this, "Now showing all flips", Toast.LENGTH_SHORT).show();
+                    toggledAll = true;
+                    showAllHistory();
+                }
+                else {
+                    Toast.makeText(History.this, "Now showing child's flips", Toast.LENGTH_SHORT).show();
+                    toggledAll = false;
+                    populateKidHistory();
+                }
             }
         });
-    }*/
+    }
 
-/*    //TODO: show all history
-    private void showAllHistory() {
-        String kidName = extractChild().getName();
-        TextView historyText = findViewById(R.id.tv_history_name);
-        Button toggleBtn = findViewById(R.id.btn_toggle_history);
-        historyText.setText("ALL FLIPS");
-        toggleBtn.setText(kidName + "'s FLIPS");
-    }*/
+    //Populate RecyclerView
+    private void populateRecyclerView(ResultsManager manager) {
 
-    //make intent
+        clearRecyclerView();
+
+        //Populate list
+        for (Results flip: manager) {
+
+            //Image is lost flip by default
+            int image = R.drawable.ic_x;
+            Boolean won = flip.isWonFlip();
+            String wonOrLost = "LOST";
+
+            //Check if they won flip
+            if (won) {
+                image = R.drawable.ic_check;
+                wonOrLost = "WON";
+            }
+            //Add flip to list
+            cardList.add(0, new CardViewMaker(image, flip.getChildName(), wonOrLost, flip.getDateFlip(), flip.getSideChosen()));
+            adapter.notifyItemInserted(0);
+        }
+    }
+
+    //Clear RecyclerView
+    private void clearRecyclerView() {
+        cardList.clear();
+        adapter.notifyDataSetChanged();
+    }
+
+    //Make intent
     public static Intent makeLaunchIntent(Context context) {
         Intent intent = new Intent(context, History.class);
         return intent;
