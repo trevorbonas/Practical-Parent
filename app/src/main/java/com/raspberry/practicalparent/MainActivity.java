@@ -1,5 +1,6 @@
 package com.raspberry.practicalparent;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -12,6 +13,7 @@ import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 /**
  * Main menu and launching activity
@@ -25,6 +27,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Button btnFlipCoin = findViewById(R.id.flipBtn);
+        btnFlipCoin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = FlipCoinAnimation.makeIntent(MainActivity.this);
+                startActivity(intent);
+            }
+        });
 
     }
 
