@@ -43,15 +43,18 @@ public class AddKidActivity extends AppCompatActivity {
                 kids.addKid(kidsName);
 
                 // Saving KidManager into SharedPreferences
-                SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+                SharedPreferences prefs = getSharedPreferences("Kids", MODE_PRIVATE);
                 SharedPreferences.Editor prefEditor = prefs.edit();
                 Gson gson = new Gson();
-                String json = gson.toJson(kids); // Saving singleton object
-                prefEditor.putString("Kids", json);
+                String json = gson.toJson(kids.getList()); // Saving list
+                prefEditor.putString("List", json);
+                json = gson.toJson(kids.getCurrentIndex()); // Saving list
+                prefEditor.putString("Index", json); // Saving current index
                 prefEditor.apply();
 
                 Toast.makeText(AddKidActivity.this,
                         kidsName + " added", Toast.LENGTH_SHORT).show();
+                okayBtn.setEnabled(false);
             }
         });
 

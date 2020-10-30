@@ -69,11 +69,13 @@ public class EditFragment extends AppCompatDialogFragment {
 
                 // Saving KidManager into SharedPreferences
                 SharedPreferences prefs = getActivity()
-                        .getPreferences(Context.MODE_PRIVATE);
+                        .getSharedPreferences("Kids", Context.MODE_PRIVATE);
                 SharedPreferences.Editor prefEditor = prefs.edit();
                 Gson gson = new Gson();
-                String json = gson.toJson(kids); // Saving singleton object
-                prefEditor.putString("Kids", json);
+                String json = gson.toJson(kids.getList()); // Saving list
+                prefEditor.putString("List", json);
+                json = gson.toJson(kids.getCurrentIndex()); // Saving list
+                prefEditor.putString("Index", json); // Saving current index
                 prefEditor.apply();
 
                 ((KidOptionsActivity)getActivity()).setupListView();
@@ -98,6 +100,8 @@ public class EditFragment extends AppCompatDialogFragment {
         name.setEnabled(true);
         name.setInputType(InputType.TYPE_CLASS_TEXT);
 
+        // Changes made to EditText
+        // in edit kid
         name.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -106,9 +110,24 @@ public class EditFragment extends AppCompatDialogFragment {
                     case EditorInfo.IME_ACTION_NEXT:
                     case EditorInfo.IME_ACTION_PREVIOUS:
                         String newName = name.getText().toString();
+
+                        // Changing singleton
                         kids.getKidAt(index).setName(newName);
-                        ((KidOptionsActivity)getActivity()).setupListView();
                         name.clearFocus();
+
+                        // Saving KidManager into SharedPreferences
+                        SharedPreferences prefs = getActivity()
+                                .getSharedPreferences("Kids", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor prefEditor = prefs.edit();
+                        Gson gson = new Gson();
+                        String json = gson.toJson(kids.getList()); // Saving list
+                        prefEditor.putString("List", json);
+                        json = gson.toJson(kids.getCurrentIndex()); // Saving list
+                        prefEditor.putString("Index", json); // Saving current index
+                        prefEditor.apply();
+
+                        // Refreshing activity list
+                        ((KidOptionsActivity)getActivity()).setupListView();
                         dismiss();
                         return true;
                 }

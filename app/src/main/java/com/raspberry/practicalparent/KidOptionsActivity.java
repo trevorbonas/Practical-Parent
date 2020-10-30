@@ -7,6 +7,8 @@ import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
 import com.raspberry.practicalparent.model.Kid;
 import com.raspberry.practicalparent.model.KidManager;
 
@@ -21,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,10 +59,17 @@ public class KidOptionsActivity extends AppCompatActivity {
     private void setupKidManager() {
         kids = KidManager.getInstance();
 
-        SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences("Kids", MODE_PRIVATE);
         Gson gson = new Gson();
-        String json = prefs.getString("Kids", "");
-        kids = gson.fromJson(json, KidManager.class);
+        String json = prefs.getString("List", "");
+        if (json.length() > 0) {
+            Type listType = new TypeToken<ArrayList<Kid>>(){}.getType();
+            List<Kid> list = gson.fromJson(json, listType);
+            kids.setList(list);
+            json = prefs.getString("Index", "");
+            int index = gson.fromJson(json, Integer.class);
+            kids.changeKid(index);
+        }
     }
 
     public void setupListView() {
