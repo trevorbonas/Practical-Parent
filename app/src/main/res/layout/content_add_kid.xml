@@ -22,6 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="36dp"
         android:ems="10"
+        android:hint="Name"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toEndOf="parent"

@@ -1,6 +1,7 @@
 package com.raspberry.practicalparent;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.app.Dialog;
@@ -26,30 +27,32 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
+import com.google.gson.Gson;
 import com.raspberry.practicalparent.model.Kid;
 import com.raspberry.practicalparent.model.KidManager;
 
 public class EditFragment extends AppCompatDialogFragment {
-
     private int index;
+    private String kidName;
+    private EditText name;
+    private View v;
+    private KidManager kids = KidManager.getInstance();
+
     @Override
     @Nullable
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        View v = LayoutInflater.from(getActivity()).inflate(R.layout.edit_layout, null);
+        v = LayoutInflater.from(getActivity()).inflate(R.layout.edit_layout, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        // Create the view to show
+        builder.setView(v);
+
         Bundle bundle = this.getArguments();
-        final KidManager kids = KidManager.getInstance();
-        final EditText name = v.findViewById(R.id.childName);
-        final String kidName = bundle.getString("Kid name");
         this.index = bundle.getInt("Index");
-        name.setText(kidName);
-        name.setEnabled(false);
-        name.setInputType(InputType.TYPE_NULL);
+        kidName = bundle.getString("Kid name");
 
         Button cancelBtn = v.findViewById(R.id.cancelBtn);
-        Button editBtn = v.findViewById(R.id.editBtn);
         Button deleteBtn = v.findViewById(R.id.deleteBtn);
+
+        setupInputField();
 
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,40 +61,21 @@ public class EditFragment extends AppCompatDialogFragment {
             }
         });
 
-        editBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                name.setEnabled(true);
-                name.setInputType(InputType.TYPE_CLASS_TEXT);
-                name.setSelected(true);
-                name.requestFocus();
-                InputMethodManager imm = (InputMethodManager) getActivity()
-                        .getSystemService(Context.INPUT_METHOD_SERVICE);
-
-                name.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                    @Override
-                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        switch(actionId){
-                            case EditorInfo.IME_ACTION_DONE:
-                            case EditorInfo.IME_ACTION_NEXT:
-                            case EditorInfo.IME_ACTION_PREVIOUS:
-                                String newName = name.getText().toString();
-                                kids.getKidAt(index).setName(newName);
-                                ((KidOptionsActivity)getActivity()).setupListView();
-                                name.clearFocus();
-                                dismiss();
-                                return true;
-                        }
-                        return true;
-                    }
-                });
-            }
-        });
 
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 kids.deleteKid(index);
+
+                // Saving KidManager into SharedPreferences
+                SharedPreferences prefs = getActivity()
+                        .getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences.Editor prefEditor = prefs.edit();
+                Gson gson = new Gson();
+                String json = gson.toJson(kids); // Saving singleton object
+                prefEditor.putString("Kids", json);
+                prefEditor.apply();
+
                 ((KidOptionsActivity)getActivity()).setupListView();
                 dismiss();
             }
@@ -106,5 +90,30 @@ public class EditFragment extends AppCompatDialogFragment {
         /*return new AlertDialog.Builder(getActivity())
                 .setView(v)
                 .create();*/
+    }
+
+    private void setupInputField() {
+        name = v.findViewById(R.id.childName);
+        name.setText(kidName);
+        name.setEnabled(true);
+        name.setInputType(InputType.TYPE_CLASS_TEXT);
+
+        name.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                switch(actionId){
+                    case EditorInfo.IME_ACTION_DONE:
+                    case EditorInfo.IME_ACTION_NEXT:
+                    case EditorInfo.IME_ACTION_PREVIOUS:
+                        String newName = name.getText().toString();
+                        kids.getKidAt(index).setName(newName);
+                        ((KidOptionsActivity)getActivity()).setupListView();
+                        name.clearFocus();
+                        dismiss();
+                        return true;
+                }
+                return true;
+            }
+        });
     }
 }

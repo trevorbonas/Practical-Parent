@@ -1,10 +1,12 @@
 package com.raspberry.practicalparent;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
 import com.raspberry.practicalparent.model.Kid;
 import com.raspberry.practicalparent.model.KidManager;
 
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class KidOptionsActivity extends AppCompatActivity {
+    private KidManager kids;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,10 @@ public class KidOptionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_kid_options);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // All of this would be done in MainActivity
+        // upon launch
+        setupKidManager();
 
         FloatingActionButton fab = findViewById(R.id.addButton);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -43,6 +50,16 @@ public class KidOptionsActivity extends AppCompatActivity {
 
         setupListView();
         registerListClick();
+    }
+
+    private void setupKidManager() {
+        SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = prefs.getString("Kids", "");
+        kids = gson.fromJson(json, KidManager.class);
+        if (kids == null) {
+            kids = KidManager.getInstance();
+        }
     }
 
     public void setupListView() {

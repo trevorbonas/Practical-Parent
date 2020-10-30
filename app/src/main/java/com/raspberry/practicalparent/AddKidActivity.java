@@ -1,9 +1,11 @@
 package com.raspberry.practicalparent;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
 import com.raspberry.practicalparent.model.KidManager;
 
 import androidx.appcompat.app.ActionBar;
@@ -39,6 +41,15 @@ public class AddKidActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 kids.addKid(kidsName);
+
+                // Saving KidManager into SharedPreferences
+                SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+                SharedPreferences.Editor prefEditor = prefs.edit();
+                Gson gson = new Gson();
+                String json = gson.toJson(kids); // Saving singleton object
+                prefEditor.putString("Kids", json);
+                prefEditor.apply();
+
                 Toast.makeText(AddKidActivity.this,
                         kidsName + " added", Toast.LENGTH_SHORT).show();
             }
