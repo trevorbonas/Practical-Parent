@@ -9,6 +9,7 @@ import android.widget.Button;
 
 public class timerActivityMainMenu extends AppCompatActivity {
     private Button button;
+    public static final String EXTRA_INT = "keyname";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,7 +23,9 @@ public class timerActivityMainMenu extends AppCompatActivity {
         });
     }
     private void openTimer() {
+         long startTime = 600000;
         Intent intent = new Intent(this, timerActivity.class);
+        intent.putExtra(EXTRA_INT, startTime );
         startActivity(intent);
     }
 }

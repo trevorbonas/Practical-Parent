@@ -1,5 +1,6 @@
 package com.raspberry.practicalparent;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,17 +13,22 @@ import android.widget.TextView;
 import java.util.Locale;
 
 public class timerActivity extends AppCompatActivity {
-    private static final long START_TIME_IN_MILLIS = 600000; //10 mins
-    
+
+    private static final long START_TIME_IN_MILLIS = 600000;
+
+
     private TextView mTextViewCountDown;
     private Button mButtonStartPause;
     private Button mButtonReset;
     private CountDownTimer mCountDownTimer;
     private boolean mTimerRunning;
     private long mTimeLeftInMillis = START_TIME_IN_MILLIS;
+    private long mEndTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Intent intent = getIntent();
+        long startTimer = intent.getLongExtra(timerActivityMainMenu.EXTRA_INT, 0);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timer);
             
@@ -52,6 +58,7 @@ public class timerActivity extends AppCompatActivity {
     }
 
     private void startTimer() {
+        mEndTime = System.currentTimeMillis() + mTimeLeftInMillis;
         mCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -62,16 +69,16 @@ public class timerActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 mTimerRunning = false;
-                mButtonStartPause.setText("Start");
-                mButtonStartPause.setVisibility(View.INVISIBLE);
-                mButtonReset.setVisibility(View.VISIBLE);
+//                mButtonStartPause.setText("Start");
+//                mButtonStartPause.setVisibility(View.INVISIBLE);
+//                mButtonReset.setVisibility(View.VISIBLE);
+                updateButtons();
                 //TODO: add android notification
             }
         }.start();
 
         mTimerRunning = true;
-        mButtonStartPause.setText("pause");
-        mButtonReset.setVisibility(View.INVISIBLE);  //set reset buttton to invisible
+        updateButtons();
     }
 
 
@@ -79,15 +86,13 @@ public class timerActivity extends AppCompatActivity {
     private void pauseTimer() {
         mCountDownTimer.cancel();
         mTimerRunning = false;
-        mButtonStartPause.setText("Start");
-        mButtonReset.setVisibility(View.VISIBLE);
+        updateButtons();
     }
     
     private  void resetTimer() {
         mTimeLeftInMillis = START_TIME_IN_MILLIS;
         updateCountDownText();
-        mButtonReset.setVisibility(View.INVISIBLE);
-        mButtonStartPause.setVisibility(View.VISIBLE);
+        updateButtons();
     }
 
     private void updateCountDownText() {
@@ -98,5 +103,49 @@ public class timerActivity extends AppCompatActivity {
         mTextViewCountDown.setText(timeLeftFormated);
     }
 
+    private void updateButtons() {
+        if (mTimerRunning) {
+            mButtonReset.setVisibility(View.INVISIBLE);
+            mButtonStartPause.setText("Pause");
+        } else {
+            mButtonStartPause.setText("Start");
 
+            if(mTimeLeftInMillis < 1000) {
+                mButtonStartPause.setVisibility(View.INVISIBLE);
+            } else {
+                mButtonStartPause.setVisibility(View.VISIBLE);
+            }
+
+            if(mTimeLeftInMillis < START_TIME_IN_MILLIS) {
+                mButtonReset.setVisibility(View.VISIBLE);
+            } else {
+                mButtonReset.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
+    //to allow orientation changes
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong("millisLeft", mTimeLeftInMillis);
+        outState.putBoolean("timerRunning", mTimerRunning);
+        outState.putLong("endTime", mEndTime);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mTimeLeftInMillis = savedInstanceState.getLong("millisLeft");
+        mTimerRunning = savedInstanceState.getBoolean("timerRunning");
+        updateCountDownText();
+        updateButtons();
+
+        if(mTimerRunning) {
+            mEndTime = savedInstanceState.getLong("endTime");
+            mTimeLeftInMillis = mEndTime - System.currentTimeMillis();
+            startTimer();
+        }
+
+    }
 }
