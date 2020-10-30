@@ -3,35 +3,16 @@ package com.raspberry.practicalparent.model;
 import java.util.ArrayList;
 import java.util.List;
 
-// Kid
-class Kid {
-    int age; // Optional addition information
-    String name;
-    //Result stats; // To be added: personal stats for given kid
-    public Kid(String name) {
-        this.name = name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setAge(int age) {
-        if (age < 0 || age > 18) {
-            return;
-        }
-        this.age = age;
-    }
-}
-
 // A manager class to keep track of all kids
 // Allows addition, editing and deletion
 public class KidManager {
     private static KidManager instance;
     private List<Kid> kids = new ArrayList<>();
     private int num; // Number of kids in the KidManager
+    private Kid currentKid; // The current kid whose qualities will be changed
+    private int currentIndex; // The index of the current kid in the ArrayList
 
-    public KidManager getInstance() {
+    static public KidManager getInstance() {
         if (instance == null) {
             instance = new KidManager();
         }
@@ -47,21 +28,74 @@ public class KidManager {
         Kid kid = new Kid(name);
         kids.add(kid);
         num++;
+        // If we had an empty list make this first added kid the
+        // current kid (whose turn it is)
+        if (num == 1) {
+            changeKid(0);
+        }
     }
 
     public void deleteKid(int i) {
-        if (i < 0 || i > num) {
+        if (i < 0 || i >= num) {
             return;
         }
-        kids.remove(i);
+        kids.remove(currentIndex);
         num--;
+        // If the kid we just deleted was our current kid (whose turn it is)
+        // go to the next kid
+        if (i == currentIndex && num > 0) {
+            nextKid();
+        }
+        // If the kid we just deleted was the only kid
+        // make current values uninitialized
+        else if (i == currentIndex && num <= 0) {
+            currentIndex = -1; // No current index
+            currentKid = null; // No current kid selected
+        }
     }
 
-    public void changeName(int i, String name) {
-        if (i < 0 || i > num) {
+    public void changeName(String name) {
+        if (currentKid == null) {
             return;
         }
-        kids.get(i).setName(name);
+        kids.get(currentIndex).setName(name);
+    }
+
+    public void changeKid(int i) {
+        if (i < 0 || i >= num) {
+            return;
+        }
+        currentIndex = i;
+        currentKid = kids.get(currentIndex);
+    }
+
+    // Makes the current kid whose qualities are being changed
+    // the next kid in the list
+    // Loops around
+    public void nextKid() {
+        currentIndex = (currentIndex + 1) % num;
+        currentKid = kids.get(currentIndex);
+    }
+
+    // Gets the current kid's Result
+    // so it can be displayed or edited
+    /*public Result getStats() {
+        return currentKid.getResult();
+    }*/
+
+    public int getNum() {
+        return num;
+    }
+
+    public String getName() {
+        return currentKid.getName();
+    }
+
+    public Kid getKidAt(int i) {
+        if (i < 0 || i >= num) {
+            return null;
+        }
+        return kids.get(i);
     }
 
 }
