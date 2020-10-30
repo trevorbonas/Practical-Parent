@@ -41,6 +41,8 @@ public class KidOptionsActivity extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true); // Enable back button
 
+        kids = KidManager.getInstance();
+
         FloatingActionButton fab = findViewById(R.id.addButton);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
