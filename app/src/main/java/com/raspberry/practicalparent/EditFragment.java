@@ -50,7 +50,7 @@ public class EditFragment extends AppCompatDialogFragment {
 
         // Getting all information passed in by KidOptionsActivity
         Bundle bundle = this.getArguments();
-        this.index = bundle.getInt("Index");
+        this.index = bundle.getInt("Kid index");
         kidName = bundle.getString("Kid name");
 
         Button cancelBtn = v.findViewById(R.id.cancelBtn);

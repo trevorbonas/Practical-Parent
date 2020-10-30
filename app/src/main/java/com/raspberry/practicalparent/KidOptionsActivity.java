@@ -82,6 +82,7 @@ public class KidOptionsActivity extends AppCompatActivity {
                 TextView textView = (TextView)view;
                 Bundle bundle = new Bundle();
                 bundle.putString("Kid name", kids.getKidAt(position).getName());
+                bundle.putInt("Kid index", position);
                 FragmentManager manager = getSupportFragmentManager();
                 EditFragment dialog = new EditFragment();
                 dialog.setArguments(bundle);
