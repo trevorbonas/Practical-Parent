@@ -41,10 +41,6 @@ public class KidOptionsActivity extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true); // Enable back button
 
-        // All of this would be done in MainActivity
-        // upon launch
-        setupKidManager();
-
         FloatingActionButton fab = findViewById(R.id.addButton);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,24 +54,6 @@ public class KidOptionsActivity extends AppCompatActivity {
 
         setupListView();
         registerListClick();
-    }
-
-    // To be done in MainActivity upon app launch
-    // User may not go into options
-    private void setupKidManager() {
-        kids = KidManager.getInstance();
-
-        SharedPreferences prefs = getSharedPreferences("Kids", MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = prefs.getString("List", "");
-        if (json.length() > 0) {
-            Type listType = new TypeToken<ArrayList<Kid>>(){}.getType();
-            List<Kid> list = gson.fromJson(json, listType);
-            kids.setList(list);
-            json = prefs.getString("Index", "");
-            int index = gson.fromJson(json, Integer.class);
-            kids.changeKid(index);
-        }
     }
 
     public void setupListView() {

@@ -10,23 +10,25 @@
         android:id="@+id/mainMenuTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="28dp"
+        android:layout_marginBottom="24dp"
+        android:fontFamily="@font/lobster"
         android:text="Practical Parent"
         android:textAlignment="center"
+        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/menuImage"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/menuImage"
-        android:layout_width="208dp"
-        android:layout_height="141dp"
+        android:layout_width="205dp"
+        android:layout_height="205dp"
         android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@drawable/ic_launcher_background" />
 
     <Button
         android:id="@+id/flipBtn"
@@ -34,8 +36,9 @@
         android:layout_height="55dp"
         android:layout_marginTop="24dp"
         android:text="Flip a Coin"
-        app:layout_constraintTop_toTopOf="@+id/guideline"
-        tools:layout_editor_absoluteX="122dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
 
     <Button
         android:id="@+id/kidsBtn"
