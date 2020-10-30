@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import java.util.Random;
 
+//xml animations adapted from https://www.youtube.com/watch?v=DnXWcGmLHHs
 
 public class FlipCoinAnimation extends AppCompatActivity {
 
