@@ -19,14 +19,11 @@ import java.util.Random;
 //xml animations adapted from https://www.youtube.com/watch?v=DnXWcGmLHHs
 
 public class FlipCoinAnimation extends AppCompatActivity {
-
-    private boolean isHeads = true;
-
     //0 for heads, 1 for tails
     private int intCurrentFace = 0;
 
-    private ImageView currFace = null;
-    private ImageView otherFace = null;
+    private ImageView currFace;
+    private ImageView otherFace;
 
     public static Intent makeIntent(Context context) {
         Intent intent = new Intent(context, FlipCoinAnimation.class);
@@ -45,7 +42,7 @@ public class FlipCoinAnimation extends AppCompatActivity {
         playAnimationXML();
     }
 
-    private int rng() {
+    private int flipCoinResult() {
         Random rand = new Random();
         int n = rand.nextInt(2);
 
@@ -73,9 +70,9 @@ public class FlipCoinAnimation extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (intCurrentFace == 0) {
-                    playAnimation(heads, tails, isSameFace(intCurrentFace, rng()), btn, view);
+                    playAnimation(heads, tails, isSameFace(intCurrentFace, flipCoinResult()), btn, view);
                 } else {
-                    playAnimation(tails, heads, isSameFace(intCurrentFace, rng()), btn, view);
+                    playAnimation(tails, heads, isSameFace(intCurrentFace, flipCoinResult()), btn, view);
                 }
             }
         });
@@ -90,6 +87,7 @@ public class FlipCoinAnimation extends AppCompatActivity {
             backAnimatorSet = (AnimatorSet) AnimatorInflater.loadAnimator(view.getContext(), R.animator.flip_second_half);
             frontAnimatorSet.setTarget(currentFace);
             backAnimatorSet.setTarget(otherF);
+            //Swap current and other faces
             currFace = otherF;
             otherFace = currentFace;
             if (intCurrentFace == 1) {
@@ -117,7 +115,6 @@ public class FlipCoinAnimation extends AppCompatActivity {
         });
         frontAnimatorSet.start();
         backAnimatorSet.start();
-        isHeads = false;
     }
 
     private boolean isSameFace(int currFaceIs, int newFaceIs) {
