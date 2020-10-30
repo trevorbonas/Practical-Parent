@@ -32,10 +32,13 @@
         android:id="@+id/flipBtn"
         android:layout_width="166dp"
         android:layout_height="55dp"
+        android:layout_marginStart="122dp"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="123dp"
         android:text="Flip a Coin"
-        app:layout_constraintTop_toTopOf="@+id/guideline"
-        tools:layout_editor_absoluteX="122dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
 
     <Button
         android:id="@+id/kidsBtn"
