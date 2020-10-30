@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -53,18 +54,15 @@ public class KidOptionsActivity extends AppCompatActivity {
     }
 
     private void setupKidManager() {
+        kids = KidManager.getInstance();
+
         SharedPreferences prefs = getPreferences(MODE_PRIVATE);
         Gson gson = new Gson();
         String json = prefs.getString("Kids", "");
         kids = gson.fromJson(json, KidManager.class);
-        if (kids == null) {
-            kids = KidManager.getInstance();
-        }
     }
 
     public void setupListView() {
-        KidManager kids = KidManager.getInstance();
-
         List<String> kidText = new ArrayList<String>();
 
         ListView listView = findViewById(R.id.childrenListView);
@@ -80,7 +78,6 @@ public class KidOptionsActivity extends AppCompatActivity {
     }
 
     private void registerListClick() {
-        final KidManager kids = KidManager.getInstance();
         ListView listView = findViewById(R.id.childrenListView);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
