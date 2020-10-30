@@ -12,6 +12,7 @@ import java.lang.reflect.Type;
 import com.raspberry.practicalparent.model.Kid;
 import com.raspberry.practicalparent.model.KidManager;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
@@ -27,6 +28,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+// Activity to allow users to edit, add, or delete kids
 public class KidOptionsActivity extends AppCompatActivity {
     private KidManager kids;
 
@@ -36,6 +38,8 @@ public class KidOptionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_kid_options);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true); // Enable back button
 
         // All of this would be done in MainActivity
         // upon launch
@@ -56,6 +60,8 @@ public class KidOptionsActivity extends AppCompatActivity {
         registerListClick();
     }
 
+    // To be done in MainActivity upon app launch
+    // User may not go into options
     private void setupKidManager() {
         kids = KidManager.getInstance();
 

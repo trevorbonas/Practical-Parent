@@ -19,8 +19,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+// The activity to add a kid to the application
+// launched from KidOptions
 public class AddKidActivity extends AppCompatActivity {
-    private String kidsName;
+    private String kidsName; // The input kid's name
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,14 +31,19 @@ public class AddKidActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
+        ab.setDisplayHomeAsUpEnabled(true); // Enable back button
 
+        // Instance of the singleton KidManager holding all the kids
         final KidManager kids = KidManager.getInstance();
 
         final EditText name = findViewById(R.id.inputKidName);
         final Button okayBtn = findViewById(R.id.okayBtn);
         okayBtn.setEnabled(false);
 
+        // Save button
+        // Upon clicking will add the input name into the list of kids
+        // and save to SharedPreferences the singleton variables
+        /// and disable the save button until the text field is changed again
         okayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,12 +59,15 @@ public class AddKidActivity extends AppCompatActivity {
                 prefEditor.putString("Index", json); // Saving current index
                 prefEditor.apply();
 
+                // Put up a little Toast telling the user their kid has been saved
+                // since the save button doesn't end AddKidActivity
                 Toast.makeText(AddKidActivity.this,
                         kidsName + " added", Toast.LENGTH_SHORT).show();
-                okayBtn.setEnabled(false);
+                okayBtn.setEnabled(false); // Disable adding same kid more than once
             }
         });
 
+        // Watches the EditText in order to give the user the option of saving
         name.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

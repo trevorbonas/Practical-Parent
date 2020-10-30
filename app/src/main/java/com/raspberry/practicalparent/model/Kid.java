@@ -1,6 +1,9 @@
 package com.raspberry.practicalparent.model;
 
-// Kid
+/**
+ * A Kid class that holds a given kid's name and age
+ * Age to be added in later just in case
+ */
 public class Kid {
     int age; // Optional addition information
     String name;

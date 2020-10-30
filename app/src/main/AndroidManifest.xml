@@ -16,6 +16,7 @@
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".KidOptionsActivity"
+            android:parentActivityName=".MainActivity"
             android:label="Options"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

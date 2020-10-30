@@ -31,12 +31,15 @@ import com.google.gson.Gson;
 import com.raspberry.practicalparent.model.Kid;
 import com.raspberry.practicalparent.model.KidManager;
 
+// Edit fragment pops up in KidOptionsActivity
+// upon clicking on a kid from the list
+// Allows editing of name, deletion, or simply exiting the fragment
 public class EditFragment extends AppCompatDialogFragment {
-    private int index;
-    private String kidName;
-    private EditText name;
-    private View v;
-    private KidManager kids = KidManager.getInstance();
+    private int index; // Index of child in ListView passed in through a bundle
+    private String kidName; // Current name of child in ListView passed in through a bundle
+    private EditText name; // The EditText field of the child's name
+    private View v; // Current view
+    private KidManager kids = KidManager.getInstance(); // An instance of the singleton
 
     @Override
     @Nullable
@@ -45,6 +48,7 @@ public class EditFragment extends AppCompatDialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(v);
 
+        // Getting all information passed in by KidOptionsActivity
         Bundle bundle = this.getArguments();
         this.index = bundle.getInt("Index");
         kidName = bundle.getString("Kid name");
@@ -54,6 +58,8 @@ public class EditFragment extends AppCompatDialogFragment {
 
         setupInputField();
 
+        // Back button
+        // Pressing this dismisses the fragment
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,7 +67,8 @@ public class EditFragment extends AppCompatDialogFragment {
             }
         });
 
-
+        // Delete button
+        // Deletes the child
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,22 +85,22 @@ public class EditFragment extends AppCompatDialogFragment {
                 prefEditor.putString("Index", json); // Saving current index
                 prefEditor.apply();
 
+                // Refreshing the ListView in KidOptionsActivity
                 ((KidOptionsActivity)getActivity()).setupListView();
-                dismiss();
+                dismiss(); // Closing fragment
             }
         });
 
         // Build the alert dialog
 
-        Dialog d = builder.setView(v).create();
+        Dialog d = builder.setView(v).setTitle("Select name to edit").create();
 
         return d;
-
-        /*return new AlertDialog.Builder(getActivity())
-                .setView(v)
-                .create();*/
     }
 
+    // Sets up the EditText to receive input
+    // If the user edits the name and presses the checkmark on their
+    // keyboard it will change the kid's name and save this to SharedPreferences
     private void setupInputField() {
         name = v.findViewById(R.id.childName);
         name.setText(kidName);
@@ -108,7 +115,7 @@ public class EditFragment extends AppCompatDialogFragment {
                 switch(actionId){
                     case EditorInfo.IME_ACTION_DONE:
                     case EditorInfo.IME_ACTION_NEXT:
-                    case EditorInfo.IME_ACTION_PREVIOUS:
+                    case EditorInfo.IME_ACTION_PREVIOUS: // Meaning checkmark has been pressed
                         String newName = name.getText().toString();
 
                         // Changing singleton

@@ -3,8 +3,11 @@ package com.raspberry.practicalparent.model;
 import java.util.ArrayList;
 import java.util.List;
 
-// A manager class to keep track of all kids
-// Allows addition, editing and deletion
+/**
+ * A manager class to keep track of all kids
+ * Allows addition, editing and deletion
+ * Is a singleton
+  */
 public class KidManager {
     private static KidManager instance;
     private List<Kid> kids = new ArrayList<>();
