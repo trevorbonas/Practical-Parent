@@ -40,6 +40,7 @@ public class HistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+
         Intent passedIntent = getIntent();
         this.index = passedIntent.getIntExtra("Index", 0);
 
@@ -78,9 +79,7 @@ public class HistoryActivity extends AppCompatActivity {
         clearRecyclerView();
 
         //Get child information
-
         Kid k = extractChild();
-
         String kidName = k.getName();
 
         //Set on screen text

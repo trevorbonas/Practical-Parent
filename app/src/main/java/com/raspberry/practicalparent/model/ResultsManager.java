@@ -10,8 +10,14 @@ import java.util.List;
 
 public class ResultsManager implements Iterable<Results>{
     private static List<Results> results = new ArrayList<>();
+    private static ResultsManager instance;
 
-    public ResultsManager() { }
+    public static ResultsManager getInstance() {
+        if (instance == null) {
+            instance = new ResultsManager();
+        }
+        return instance;
+    }
 
     public void add(Results result) {
         results.add(result);
