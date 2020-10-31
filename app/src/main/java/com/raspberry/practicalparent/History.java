@@ -13,6 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.raspberry.practicalparent.model.CardViewMaker;
+import com.raspberry.practicalparent.model.Kid;
+import com.raspberry.practicalparent.model.KidManager;
 import com.raspberry.practicalparent.model.Results;
 import com.raspberry.practicalparent.model.ResultsManager;
 
@@ -58,55 +60,52 @@ public class History extends AppCompatActivity {
     }
 
     //Get child class from manager
-/*    private Kid extractChild(Context context) {
-        int kidPosition = extractDataFromIntent();
+    private Kid extractChild() {
+        KidManager manager = KidManager.getInstance();
+        int kidPosition = manager.getCurrentIndex();
 
-        //TODO: get kidmanager from shared prefs
-
-        KidManager manager = KidManger.getInstance();
-        return manager.get(kidPosition);
-    }*/
+        return manager.getKidAt(kidPosition);
+    }
 
     //TODO: populate kid's history (this is the default when viewing history)
     private void populateKidHistory() {
 
         //TODO: remove when populaterecyclerview works
-        clearRecyclerView();
+        //clearRecyclerView();
 
         //Get child information
-        //Kid k = extractChild();
-        //String name = k.getName();
+        Kid k = extractChild();
+        String name = k.getName();
 
         //Set on screen text
-        //historyText.setText(name + "'S FLIPS");
-        historyText.setText("KID'S FLIPS");
+        historyText.setText(name + "'S FLIPS");
+        //historyText.setText("KID'S FLIPS");
         toggleBtn.setText("ALL FLIPS");
         updateText();
 
         //Create child flips history
-        //ResultsManager childHistory = k.getResults();
-        //populateRecyclerView(childHistory);
+        ResultsManager childHistory = k.getResults();
+        populateRecyclerView(childHistory);
 
-        //TODO: example to be removed
+        /*//TODO: example to be removed
         for (int i = 0; i < 4; i++) {
             cardList.add(0, new CardViewMaker(R.drawable.ic_x, "NAME", "LOST", "DATE", "SIDE"));
             adapter.notifyItemInserted(0);
-        }
+        }*/
     }
 
 
     private void showAllHistory() {
 
         //TODO: remove when populaterecyclerview works
-        clearRecyclerView();
+        //clearRecyclerView();
 
-        //String kidName = extractChild().getName();
+        String kidName = extractChild().getName();
         historyText.setText("ALL FLIPS");
-        toggleBtn.setText("KID'S FLIPS");
-        //toggleBtn.setText(kidName + "'s FLIPS");
+        //toggleBtn.setText("KID'S FLIPS");
+        toggleBtn.setText(kidName + "'s FLIPS");
         updateText();
 
-        //all history resultsmanager will be thru shared prefs?
         //Create all flips history
         //ResultsManager allHistory =
         //populateRecyclerView(allHistory);
@@ -179,9 +178,4 @@ public class History extends AppCompatActivity {
         return intent;
     }
 
-/*    //TODO: extract kid position for kidmanager
-    private int extractDataFromIntent() {
-        Intent intent = getIntent();
-        return intent.getIntExtra(POSITION, -1);
-    }*/
 }

@@ -11,7 +11,7 @@ import java.util.List;
 public class ResultsManager implements Iterable<Results>{
     private static List<Results> results = new ArrayList<>();
 
-    private ResultsManager() { }
+    public ResultsManager() { }
 
     public void add(Results result) {
         results.add(result);
