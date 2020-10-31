@@ -1,5 +1,6 @@
 package com.raspberry.practicalparent;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.Animator;
@@ -14,26 +15,55 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.raspberry.practicalparent.model.KidManager;
+import com.raspberry.practicalparent.model.ResultsManager;
+
+import org.w3c.dom.Text;
+
 import java.util.Random;
 
 //xml animations adapted from https://www.youtube.com/watch?v=DnXWcGmLHHs
 
-public class FlipCoinAnimation extends AppCompatActivity {
+public class CoinFlipActivity extends AppCompatActivity {
     //0 for heads, 1 for tails
     private int intCurrentFace = 0;
+
+    // Choice passed in from ChooseActivity
+    // Could have done it as an int but I like the
+    // forwardness of reading "heads" or "tails"
+    private String choice;
+
+    private KidManager kids; // The singleton
 
     private ImageView currFace;
     private ImageView otherFace;
 
     public static Intent makeIntent(Context context) {
-        Intent intent = new Intent(context, FlipCoinAnimation.class);
+        Intent intent = new Intent(context, CoinFlipActivity.class);
         return intent;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_flip_coin_animation);
+        setContentView(R.layout.activity_coin_flip);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true); // Enable back button
+
+        Intent passedIntent = getIntent();
+        choice = passedIntent.getStringExtra("Choice");
+
+        kids = KidManager.getInstance();
+
+        TextView nameTxt = findViewById(R.id.childFlipName);
+
+        if (kids.getNum() <= 0) {
+            nameTxt.setText("No child's turn\nUser chose " + choice);
+        }
+        else {
+            nameTxt.setText(kids.getKidAt(kids.getCurrentIndex()).getName()
+                    + "'s turn\nChose " + choice);
+        }
 
         currFace = findViewById(R.id.ivHeads);
         otherFace = findViewById(R.id.ivTails);
@@ -107,10 +137,13 @@ public class FlipCoinAnimation extends AppCompatActivity {
                 super.onAnimationEnd(animation);
                 if (intCurrentFace == 0) {
                     updateResultText("Heads");
+                    if (choice == "heads" && kids.getNum() > 0) {
+                        //ResultsManager stats = kids.getKidAt(kids.getCurrentIndex()).getResult();
+                    }
                 } else {
                     updateResultText("Tails");
                 }
-                btn.setEnabled(true);
+                //btn.setEnabled(true);
             }
         });
         frontAnimatorSet.start();

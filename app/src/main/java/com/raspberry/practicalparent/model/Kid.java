@@ -1,7 +1,5 @@
 package com.raspberry.practicalparent.model;
 
-import javax.xml.transform.Result;
-
 /**
  * A Kid class that holds a given kid's name and age
  * Age to be added in later just in case

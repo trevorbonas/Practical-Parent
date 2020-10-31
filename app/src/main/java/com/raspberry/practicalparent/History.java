@@ -63,7 +63,6 @@ public class History extends AppCompatActivity {
     private Kid extractChild() {
         KidManager manager = KidManager.getInstance();
         int kidPosition = manager.getCurrentIndex();
-
         return manager.getKidAt(kidPosition);
     }
 
@@ -71,39 +70,40 @@ public class History extends AppCompatActivity {
     private void populateKidHistory() {
 
         //TODO: remove when populaterecyclerview works
-        //clearRecyclerView();
+        clearRecyclerView();
 
         //Get child information
-        Kid k = extractChild();
-        String name = k.getName();
+
+        //Kid k = extractChild();
+        //String name = k.getName();
 
         //Set on screen text
-        historyText.setText(name + "'S FLIPS");
-        //historyText.setText("KID'S FLIPS");
+        //historyText.setText(name + "'S FLIPS");
+        historyText.setText("KID'S FLIPS");
         toggleBtn.setText("ALL FLIPS");
         updateText();
 
         //Create child flips history
-        ResultsManager childHistory = k.getResults();
-        populateRecyclerView(childHistory);
+        //ResultsManager childHistory = k.getResults();
+        //populateRecyclerView(childHistory);
 
-        /*//TODO: example to be removed
+        //TODO: example to be removed
         for (int i = 0; i < 4; i++) {
             cardList.add(0, new CardViewMaker(R.drawable.ic_x, "NAME", "LOST", "DATE", "SIDE"));
             adapter.notifyItemInserted(0);
-        }*/
+        }
     }
 
 
     private void showAllHistory() {
 
         //TODO: remove when populaterecyclerview works
-        //clearRecyclerView();
+        clearRecyclerView();
 
-        String kidName = extractChild().getName();
+        //String kidName = extractChild().getName();
         historyText.setText("ALL FLIPS");
-        //toggleBtn.setText("KID'S FLIPS");
-        toggleBtn.setText(kidName + "'s FLIPS");
+        toggleBtn.setText("KID'S FLIPS");
+        //toggleBtn.setText(kidName + "'s FLIPS");
         updateText();
 
         //Create all flips history
