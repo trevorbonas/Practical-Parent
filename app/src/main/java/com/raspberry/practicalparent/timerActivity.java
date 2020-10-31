@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -22,7 +23,7 @@ public class timerActivity extends AppCompatActivity {
     private Button mButtonReset;
     private CountDownTimer mCountDownTimer;
     private boolean mTimerRunning;
-    private long mTimeLeftInMillis = START_TIME_IN_MILLIS;
+    private long mTimeLeftInMillis;
     private long mEndTime;
 
     @Override
@@ -54,7 +55,6 @@ public class timerActivity extends AppCompatActivity {
             }
         });
 
-        updateCountDownText();
     }
 
     private void startTimer() {
@@ -124,28 +124,50 @@ public class timerActivity extends AppCompatActivity {
         }
     }
 
-    //to allow orientation changes
+
+
+
+    //for timer to run in background
     @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putLong("millisLeft", mTimeLeftInMillis);
-        outState.putBoolean("timerRunning", mTimerRunning);
-        outState.putLong("endTime", mEndTime);
+    protected void onStop() {
+        super.onStop();
+
+        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        //TODO: change strings to constants
+        editor.putLong("millisLeft", mTimeLeftInMillis);
+        editor.putBoolean("timerRunning", mTimerRunning);
+        editor.putLong("endTime", mEndTime);
+
+        editor.apply();
+        mCountDownTimer.cancel(); //cancel timer when time runs out
     }
 
     @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        mTimeLeftInMillis = savedInstanceState.getLong("millisLeft");
-        mTimerRunning = savedInstanceState.getBoolean("timerRunning");
+    protected void onStart() {
+        super.onStart();
+
+        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+        mTimeLeftInMillis = prefs.getLong("millisLeft", START_TIME_IN_MILLIS);
+        mTimerRunning = prefs.getBoolean("timerRunning", false);
+
         updateCountDownText();
         updateButtons();
 
-        if(mTimerRunning) {
-            mEndTime = savedInstanceState.getLong("endTime");
+        if (mTimerRunning){
+            mEndTime = prefs.getLong("endTime", 0);
             mTimeLeftInMillis = mEndTime - System.currentTimeMillis();
-            startTimer();
-        }
 
+            //check if overdue
+            if(mTimeLeftInMillis < 0) {
+                mTimeLeftInMillis = 0;
+                mTimerRunning = false;
+                updateCountDownText();
+                updateButtons();  //make buttons invisible
+            } else {
+                startTimer();
+            }
+        }
     }
 }
