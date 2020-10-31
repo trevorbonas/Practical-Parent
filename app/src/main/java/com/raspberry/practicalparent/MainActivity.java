@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                     openActivityTimer();
-
                 }
             }
 
@@ -42,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openActivityTimer() {
-        Intent intent = new Intent(this, timerActivityMainMenu.class);
+        Intent intent = timerActivity.makeIntent(this);
         startActivity(intent);
     }
 
