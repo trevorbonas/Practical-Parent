@@ -1,6 +1,8 @@
-package com.raspberry.practicalparent;
+package com.raspberry.practicalparent.model;
 
 import androidx.annotation.NonNull;
+
+import com.raspberry.practicalparent.model.Results;
 
 import java.util.ArrayList;
 import java.util.Iterator;

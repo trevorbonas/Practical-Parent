@@ -1,4 +1,4 @@
-package com.raspberry.practicalparent;
+package com.raspberry.practicalparent.model;
 
 public class CardViewMaker {
     private int image;

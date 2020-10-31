@@ -1,7 +1,6 @@
 package com.raspberry.practicalparent;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,6 +11,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.raspberry.practicalparent.model.CardViewMaker;
+import com.raspberry.practicalparent.model.Results;
+import com.raspberry.practicalparent.model.ResultsManager;
 
 import java.util.ArrayList;
 

@@ -7,12 +7,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.raspberry.practicalparent.model.CardViewMaker;
 
+import java.util.ArrayList;
+
+//adapted from https://www.youtube.com/watch?v=Nw9JF55LDzE
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder> {
     private ArrayList<CardViewMaker> cardViewList;
 
