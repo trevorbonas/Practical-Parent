@@ -44,17 +44,16 @@ public class HistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        Intent passedIntent = getIntent();
-        this.kidName = passedIntent.getStringExtra("Kid name");
-
         historyText = findViewById(R.id.tv_history_name);
         toggleBtn = findViewById(R.id.btn_toggle_history);
 
         createRecyclerView();
-        populateKidHistory();
+        extractName();
+        setUpPersonalHistory();
         registerClickCallback();
     }
 
+    //Set up RecyclerView
     private void createRecyclerView() {
         //Setting up RecyclerView
         rv = findViewById(R.id.recyclerview);
@@ -66,66 +65,84 @@ public class HistoryActivity extends AppCompatActivity {
         rv.setAdapter(adapter);
     }
 
-    //Get child class from manager
-    private Kid extractChild() {
-        int kidPosition = kids.getCurrentIndex();
-        return kids.getKidAt(kidPosition);
+    //Get child name from intent
+    private void extractName() {
+        Intent passedIntent = getIntent();
+        this.kidName = passedIntent.getStringExtra("Kid name");
     }
 
-    //TODO: populate kid's history (this is the default when viewing history)
-    private void populateKidHistory() {
-
-        //TODO: remove when populaterecyclerview works
-        clearRecyclerView();
+    //Set up text for personal flip history calls populatePersonal
+    private void setUpPersonalHistory() {
 
         //Set on screen text
         historyText.setText(kidName + "'S FLIPS");
         toggleBtn.setText("ALL FLIPS");
         updateText();
 
-        populatePersonalRecyclerView(history, kidName);
+        populatePersonal(history, kidName);
     }
 
-    private void populatePersonalRecyclerView(ResultsManager manager, String name) {
-        clearRecyclerView();
-        //Populate list
-        for (Results flip: manager) {
-            if (flip.getChildName().equals(name)) {
-
-                //Image is lost flip by default
-                int image = R.drawable.ic_x;
-                Boolean won = flip.isWonFlip();
-                String wonOrLost = "LOST";
-
-                //Check if they won flip
-                if (won) {
-                    image = R.drawable.ic_check;
-                    wonOrLost = "WON";
-                }
-                //Add flip to list
-                cardList.add(0, new CardViewMaker(image, flip.getChildName(), wonOrLost, flip.getDateFlip(), flip.getSideChosen()));
-                adapter.notifyItemInserted(0);
-            }
-        }
-    }
-
-    private void showAllHistory() {
-
-        //TODO: remove when populaterecyclerview works
-        clearRecyclerView();
+    //Set up text for all flips history calls populateAll
+    private void setUpAllHistory() {
 
         historyText.setText("ALL FLIPS");
         toggleBtn.setText(kidName + "'s FLIPS");
         updateText();
 
         // Simply pass in the singleton
-        populateRecyclerView(history);
+        populateAll(history);
     }
 
-    //Update text on toggle
+    //Populates personal flip history calls addToHistory
+    private void populatePersonal(ResultsManager manager, String name) {
+        clearRecyclerView();
+        //Populate list
+        for (Results flip: manager) {
+            if (flip.getChildName().equals(name)) {
+                addToHistory(flip);
+            }
+        }
+    }
+
+    //Populate all flips history calls addToHistory
+    private void populateAll(ResultsManager manager) {
+
+        clearRecyclerView();
+
+        //Populate list
+        for (Results flip: manager) {
+            addToHistory(flip);
+        }
+    }
+
+    //Add flip result to RecyclerView
+    private void addToHistory(Results flip) {
+
+        //Image is lost flip by default
+        int image = R.drawable.ic_x;
+        Boolean won = flip.isWonFlip();
+        String wonOrLost = "LOST";
+
+        //Check if they won flip
+        if (won) {
+            image = R.drawable.ic_check;
+            wonOrLost = "WON";
+        }
+        //Add flip to list
+        cardList.add(0, new CardViewMaker(image, flip.getChildName(), wonOrLost, flip.getDateFlip(), flip.getSideChosen()));
+        adapter.notifyItemInserted(0);
+    }
+
+    //Update text on history toggle
     private void updateText() {
         historyText.invalidate();
         toggleBtn.invalidate();
+    }
+
+    //Clear RecyclerView
+    private void clearRecyclerView() {
+        cardList.clear();
+        adapter.notifyDataSetChanged();
     }
 
     //Register click for toggling history
@@ -136,45 +153,15 @@ public class HistoryActivity extends AppCompatActivity {
                 if (!toggledAll) {
                     Toast.makeText(HistoryActivity.this, "Now showing all flips", Toast.LENGTH_SHORT).show();
                     toggledAll = true;
-                    showAllHistory();
+                    setUpAllHistory();
                 }
                 else {
                     Toast.makeText(HistoryActivity.this, "Now showing child's flips", Toast.LENGTH_SHORT).show();
                     toggledAll = false;
-                    populateKidHistory();
+                    setUpPersonalHistory();
                 }
             }
         });
-    }
-
-    //Populate RecyclerView
-    private void populateRecyclerView(ResultsManager manager) {
-
-        clearRecyclerView();
-
-        //Populate list
-        for (Results flip: manager) {
-
-            //Image is lost flip by default
-            int image = R.drawable.ic_x;
-            Boolean won = flip.isWonFlip();
-            String wonOrLost = "LOST";
-
-            //Check if they won flip
-            if (won) {
-                image = R.drawable.ic_check;
-                wonOrLost = "WON";
-            }
-            //Add flip to list
-            cardList.add(0, new CardViewMaker(image, flip.getChildName(), wonOrLost, flip.getDateFlip(), flip.getSideChosen()));
-            adapter.notifyItemInserted(0);
-        }
-    }
-
-    //Clear RecyclerView
-    private void clearRecyclerView() {
-        cardList.clear();
-        adapter.notifyDataSetChanged();
     }
 
     //Make intent
