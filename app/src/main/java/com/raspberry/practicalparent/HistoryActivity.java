@@ -20,7 +20,7 @@ import com.raspberry.practicalparent.model.ResultsManager;
 
 import java.util.ArrayList;
 
-public class History extends AppCompatActivity {
+public class HistoryActivity extends AppCompatActivity {
 
     private RecyclerView rv;
     private RecyclerView.Adapter adapter;
@@ -129,12 +129,12 @@ public class History extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (!toggledAll) {
-                    Toast.makeText(History.this, "Now showing all flips", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HistoryActivity.this, "Now showing all flips", Toast.LENGTH_SHORT).show();
                     toggledAll = true;
                     showAllHistory();
                 }
                 else {
-                    Toast.makeText(History.this, "Now showing child's flips", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HistoryActivity.this, "Now showing child's flips", Toast.LENGTH_SHORT).show();
                     toggledAll = false;
                     populateKidHistory();
                 }
@@ -174,7 +174,7 @@ public class History extends AppCompatActivity {
 
     //Make intent
     public static Intent makeLaunchIntent(Context context) {
-        Intent intent = new Intent(context, History.class);
+        Intent intent = new Intent(context, HistoryActivity.class);
         return intent;
     }
 

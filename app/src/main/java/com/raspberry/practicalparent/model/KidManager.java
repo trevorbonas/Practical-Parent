@@ -41,16 +41,20 @@ public class KidManager {
         }
         // If the kid we just deleted was our current kid (whose turn it is)
         // go to the next kid
-        if (i == currentIndex && kids.size() > 0) {
+        if (i == currentIndex && kids.size() > 1) {
+            kids.remove(i);
             nextKid();
         }
         // If the kid we just deleted was the only kid
         // make current values uninitialized
-        else if (i == currentIndex && kids.size() <= 0) {
+        else if (i == currentIndex && kids.size() <= 1) {
             currentIndex = -1; // No current index
             currentKid = null; // No current kid selected
+            kids.remove(i);
         }
-        kids.remove(i);
+        else {
+            kids.remove(i);
+        }
     }
 
     public void changeName(String name) {

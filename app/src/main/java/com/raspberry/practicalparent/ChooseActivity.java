@@ -41,7 +41,8 @@ public class ChooseActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent headIntent = new Intent(ChooseActivity.this,
                         CoinFlipActivity.class);
-                headIntent.putExtra("Choice", "heads");
+                String value = "heads";
+                headIntent.putExtra("Choice", value);
                 startActivity(headIntent);
                 finish(); // A finish so we can't go back to this activity in CoinFlip
             }
@@ -52,7 +53,8 @@ public class ChooseActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent tailsIntent = new Intent(ChooseActivity.this,
                         CoinFlipActivity.class);
-                tailsIntent.putExtra("Choice", "tails");
+                String value = "tails";
+                tailsIntent.putExtra("Choice", value);
                 startActivity(tailsIntent);
                 finish(); // A finish so we can't go back to this activity in CoinFlip
             }

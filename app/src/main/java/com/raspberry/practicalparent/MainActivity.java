@@ -41,8 +41,16 @@ public class MainActivity extends AppCompatActivity {
         coinBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent coinFlipIntent = new Intent(MainActivity.this,
-                        ChooseActivity.class);
+                Intent coinFlipIntent;
+                KidManager kids = KidManager.getInstance();
+                if (kids.getNum() == 0) {
+                    coinFlipIntent = new Intent(MainActivity.this,
+                            CoinFlipActivity.class);
+                }
+                else {
+                    coinFlipIntent = new Intent(MainActivity.this,
+                            ChooseActivity.class);
+                }
                 startActivity(coinFlipIntent);
             }
         });
