@@ -59,11 +59,7 @@ public class AddKidActivity extends AppCompatActivity {
                 prefEditor.putString("Index", json); // Saving current index
                 prefEditor.apply();
 
-                // Put up a little Toast telling the user their kid has been saved
-                // since the save button doesn't end AddKidActivity
-                Toast.makeText(AddKidActivity.this,
-                        kidsName + " added", Toast.LENGTH_SHORT).show();
-                okayBtn.setEnabled(false); // Disable adding same kid more than once
+                finish();
             }
         });
 

@@ -10,15 +10,33 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ChooseActivity"
+            android:label="@string/title_activity_choose"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".CoinFlipActivity"
+            android:label="Coin Flip"
+            android:parentActivityName=".MainActivity">
+        </activity>
+        <activity
             android:name=".AddKidActivity"
-            android:parentActivityName=".KidOptionsActivity"
             android:label="Add Child"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:parentActivityName=".KidOptionsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
         <activity
             android:name=".KidOptionsActivity"
-            android:parentActivityName=".MainActivity"
             android:label="Options"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+        <activity
+            android:name=".HistoryActivity"
+            android:label="History"
+            android:parentActivityName=".MainActivity">
         </activity>
         <activity
             android:name=".MainActivity"
@@ -26,6 +44,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
