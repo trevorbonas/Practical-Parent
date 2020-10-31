@@ -10,6 +10,7 @@ import android.animation.AnimatorSet;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -144,6 +145,9 @@ public class CoinFlipActivity extends AppCompatActivity {
 
     private void playAnimation(ImageView currentFace, ImageView otherF, boolean sameFace, final Button btn, View view) {
         btn.setEnabled(false);
+        MediaPlayer mp;
+        mp = MediaPlayer.create(CoinFlipActivity.this, R.raw.coin_flip_sound);
+        mp.start();
         AnimatorSet frontAnimatorSet;
         AnimatorSet backAnimatorSet;
         if (!(sameFace)) {
