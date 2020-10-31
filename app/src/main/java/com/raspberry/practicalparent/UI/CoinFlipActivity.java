@@ -189,7 +189,7 @@ public class CoinFlipActivity extends AppCompatActivity {
                         updateResultText("heads");
 
                         // Kid chose heads and won
-                        if (choice.equals("heads")) {
+                        if (choice.equals("Heads")) {
                             wonFlip = true;
                         }
                     }
@@ -199,7 +199,7 @@ public class CoinFlipActivity extends AppCompatActivity {
                         updateResultText("tails");
 
                         // Kid chose tails and won
-                        if (choice.equals("tails")) {
+                        if (choice.equals("Tails")) {
                             wonFlip = true;
                         }
                     }
