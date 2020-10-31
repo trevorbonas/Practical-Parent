@@ -79,9 +79,9 @@ public class HistoryActivity extends AppCompatActivity {
 
         //Get child information
 
-        //Kid k = extractChild();
+        Kid k = extractChild();
 
-        String kidName = kids.getKidAt(index).getName();
+        String kidName = k.getName();
 
         //Set on screen text
         historyText.setText(kidName + "'S FLIPS");
@@ -89,7 +89,7 @@ public class HistoryActivity extends AppCompatActivity {
         updateText();
 
         //Create child flips history
-        ResultsManager childHistory = kids.getKidAt(index).getResults();
+        ResultsManager childHistory = k.getResults();
         populateRecyclerView(childHistory);
 
         //TODO: example to be removed
@@ -105,7 +105,7 @@ public class HistoryActivity extends AppCompatActivity {
         //TODO: remove when populaterecyclerview works
         clearRecyclerView();
 
-        String kidName = kids.getKidAt(index).getName();
+        String kidName = kids.getKidAt(kids.getCurrentIndex()).getName();
         historyText.setText("ALL FLIPS");
         toggleBtn.setText(kidName + "'s FLIPS");
         updateText();

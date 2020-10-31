@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.raspberry.practicalparent.model.Kid;
 import com.raspberry.practicalparent.model.KidManager;
 import com.raspberry.practicalparent.model.Results;
 import com.raspberry.practicalparent.model.ResultsManager;
@@ -112,7 +113,7 @@ public class CoinFlipActivity extends AppCompatActivity {
             //Heads
             tv.setText("Rng: Heads");
         } else {
-            tv.setText("Rnd: Tails");
+            tv.setText("Rng: Tails");
         }
         return n;
     }
@@ -166,70 +167,42 @@ public class CoinFlipActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                // In case of getting heads
-                if (intCurrentFace == 0) {
-                    updateResultText("Heads");
 
-                    // Kid chose heads and won
-                    if (choice.equals("heads") && kids.getNum() > 0) {
-                        ResultsManager stats = kids.getKidAt(kids.getCurrentIndex()).getResults();
-                        Results results = new Results(true,
-                                "heads", date,
-                                kids.getKidAt(kids.getCurrentIndex()).getName());
-                        stats.add(results);
-                        kids.nextKid();
-                        saveKidManager();
-                        btn.setEnabled(false);
-                    }
-
-                    // Kid chose tails and lost
-                    else if (choice.equals("tails") && kids.getNum() > 0) {
-                        ResultsManager stats = kids.getKidAt(kids.getCurrentIndex()).getResults();
-                        Results results = new Results(false,
-                                "tails", date,
-                                kids.getKidAt(kids.getCurrentIndex()).getName());
-                        stats.add(results);
-                        kids.nextKid();
-                        saveKidManager();
-                        btn.setEnabled(false);
-                    }
-
-                    // There isn't a kid choosing, user can flip as many times as they want
-                    else {
-                        btn.setEnabled(true);
-                    }
+                // There isn't a kid choosing, user can flip as many times as they want
+                if (kids.getNum() <= 0) {
+                    btn.setEnabled(true);
                 }
 
-                // In case of getting tails
                 else {
-                    updateResultText("Tails");
-                    // Kid chose tails and won
-                    if (choice == "tails" && kids.getNum() > 0) {
-                        ResultsManager stats = kids.getKidAt(kids.getCurrentIndex()).getResults();
-                        Results results = new Results(true,
-                                "tails", date,
-                                kids.getKidAt(kids.getCurrentIndex()).getName());
-                        stats.add(results);
-                        kids.nextKid();
-                        saveKidManager();
-                        btn.setEnabled(false);
+                    Kid kid = kids.getKidAt(kids.getCurrentIndex());
+                    ResultsManager stats = kid.getResults();
+                    boolean wonFlip = false; //lose by default
+
+                    // In case of getting heads
+                    if (intCurrentFace == 0) {
+                        updateResultText("Heads");
+
+                        // Kid chose heads and won
+                        if (choice.equals("Heads")) {
+                            wonFlip = true;
+                        }
                     }
 
-                    // Kid chose heads and lost
-                    else if (choice.equals("heads") && kids.getNum() > 0) {
-                        ResultsManager stats = kids.getKidAt(kids.getCurrentIndex()).getResults();
-                        Results results = new Results(false,
-                                "heads", date,
-                                kids.getKidAt(kids.getCurrentIndex()).getName());
-                        stats.add(results);
-                        kids.nextKid();
-                        saveKidManager();
-                        btn.setEnabled(false);
-                    }
-                    // There isn't a kid choosing, user can flip as many times as they want
+                    // In case of getting tails
                     else {
-                        btn.setEnabled(true);
+                        updateResultText("Tails");
+
+                        // Kid chose tails and won
+                        if (choice.equals("Tails")) {
+                            wonFlip = true;
+                        }
                     }
+                    //Saving results
+                    Results results = new Results(wonFlip, choice, date, kid.getName());
+                    stats.add(results);
+                    kids.nextKid();
+                    saveKidManager();
+                    btn.setEnabled(false);
                 }
             }
         });
