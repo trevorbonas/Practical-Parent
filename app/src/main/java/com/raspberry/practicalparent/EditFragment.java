@@ -38,8 +38,10 @@ public class EditFragment extends AppCompatDialogFragment {
     private int index; // Index of child in ListView passed in through a bundle
     private String kidName; // Current name of child in ListView passed in through a bundle
     private EditText name; // The EditText field of the child's name
+    private String newName; // The changed name of the child
     private View v; // Current view
     private KidManager kids = KidManager.getInstance(); // An instance of the singleton
+    Button saveBtn;
 
     @Override
     @Nullable
@@ -55,6 +57,33 @@ public class EditFragment extends AppCompatDialogFragment {
 
         Button cancelBtn = v.findViewById(R.id.cancelBtn);
         Button deleteBtn = v.findViewById(R.id.deleteBtn);
+        saveBtn = v.findViewById(R.id.saveBtn);
+        // Until name has been edited make it not enabled
+        saveBtn.setEnabled(false);
+
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Changing singleton
+                kids.getKidAt(index).setName(newName);
+                name.clearFocus();
+
+                // Saving KidManager into SharedPreferences
+                SharedPreferences prefs = getActivity()
+                        .getSharedPreferences("Kids", Context.MODE_PRIVATE);
+                SharedPreferences.Editor prefEditor = prefs.edit();
+                Gson gson = new Gson();
+                String json = gson.toJson(kids.getList()); // Saving list
+                prefEditor.putString("List", json);
+                json = gson.toJson(kids.getCurrentIndex()); // Saving list
+                prefEditor.putString("Index", json); // Saving current index
+                prefEditor.apply();
+
+                // Refreshing activity list
+                ((KidOptionsActivity)getActivity()).setupListView();
+                dismiss();
+            }
+        });
 
         setupInputField();
 
@@ -116,26 +145,15 @@ public class EditFragment extends AppCompatDialogFragment {
                     case EditorInfo.IME_ACTION_DONE:
                     case EditorInfo.IME_ACTION_NEXT:
                     case EditorInfo.IME_ACTION_PREVIOUS: // Meaning checkmark has been pressed
-                        String newName = name.getText().toString();
-
-                        // Changing singleton
-                        kids.getKidAt(index).setName(newName);
-                        name.clearFocus();
-
-                        // Saving KidManager into SharedPreferences
-                        SharedPreferences prefs = getActivity()
-                                .getSharedPreferences("Kids", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor prefEditor = prefs.edit();
-                        Gson gson = new Gson();
-                        String json = gson.toJson(kids.getList()); // Saving list
-                        prefEditor.putString("List", json);
-                        json = gson.toJson(kids.getCurrentIndex()); // Saving list
-                        prefEditor.putString("Index", json); // Saving current index
-                        prefEditor.apply();
-
-                        // Refreshing activity list
-                        ((KidOptionsActivity)getActivity()).setupListView();
-                        dismiss();
+                        newName = name.getText().toString();
+                        // If the input name is empty or just a space
+                        // Don't enable saving
+                        if (newName.length() == 0 || newName.charAt(0) == ' ') {
+                            saveBtn.setEnabled(false);
+                        }
+                        else {
+                            saveBtn.setEnabled(true);
+                        }
                         return true;
                 }
                 return true;

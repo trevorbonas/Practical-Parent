@@ -58,6 +58,12 @@ public class KidOptionsActivity extends AppCompatActivity {
         registerListClick();
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        setupListView();
+    }
+
     public void setupListView() {
         List<String> kidText = new ArrayList<String>();
 
