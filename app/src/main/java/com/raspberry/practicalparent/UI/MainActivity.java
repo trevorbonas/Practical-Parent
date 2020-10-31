@@ -1,4 +1,4 @@
-package com.raspberry.practicalparent;
+package com.raspberry.practicalparent.UI;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.raspberry.practicalparent.R;
 import com.raspberry.practicalparent.model.Kid;
 import com.raspberry.practicalparent.model.KidManager;
 import com.raspberry.practicalparent.model.Results;

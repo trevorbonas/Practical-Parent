@@ -1,4 +1,4 @@
-package com.raspberry.practicalparent;
+package com.raspberry.practicalparent.UI;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.raspberry.practicalparent.R;
 import com.raspberry.practicalparent.model.CardViewMaker;
 
 import java.util.ArrayList;

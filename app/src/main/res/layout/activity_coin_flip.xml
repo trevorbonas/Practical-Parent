@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CoinFlipActivity">
+    tools:context=".UI.CoinFlipActivity">
 
     <include layout="@layout/content_coin_flip" />
 

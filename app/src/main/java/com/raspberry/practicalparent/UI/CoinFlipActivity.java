@@ -1,4 +1,4 @@
-package com.raspberry.practicalparent;
+package com.raspberry.practicalparent.UI;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.raspberry.practicalparent.R;
 import com.raspberry.practicalparent.model.Kid;
 import com.raspberry.practicalparent.model.KidManager;
 import com.raspberry.practicalparent.model.Results;
