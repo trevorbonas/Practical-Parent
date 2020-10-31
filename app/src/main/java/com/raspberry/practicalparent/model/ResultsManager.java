@@ -19,6 +19,18 @@ public class ResultsManager implements Iterable<Results>{
         return instance;
     }
 
+    public List<Results> getList() {
+        return results;
+    }
+
+    public void setList(List<Results> list) {
+        results = list;
+    }
+
+    private ResultsManager() {
+        // Private for singleton support
+    }
+
     public void add(Results result) {
         results.add(result);
     }

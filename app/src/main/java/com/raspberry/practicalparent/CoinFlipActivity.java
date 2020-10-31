@@ -40,8 +40,9 @@ public class CoinFlipActivity extends AppCompatActivity {
     // forwardness of reading "heads" or "tails"
     private String choice;
 
-    private KidManager kids; // The singleton
-    private int index;
+    private KidManager kids; // Singleton
+    private ResultsManager history; // Singleton
+    private String kidName; // Needs to be class variable since current name may change
 
     private DateFormat df = new SimpleDateFormat("EEE, MMM. d, yyyy"); // Format for date
     private String date = df.format(Calendar.getInstance().getTime()); // Current date
@@ -62,6 +63,7 @@ public class CoinFlipActivity extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true); // Enable back button
 
         kids = KidManager.getInstance();
+        history = ResultsManager.getInstance();
 
         TextView nameTxt = findViewById(R.id.childFlipName);
         Button historyBtn = findViewById(R.id.historyBtn);
@@ -72,7 +74,7 @@ public class CoinFlipActivity extends AppCompatActivity {
             nameTxt.setText("No child's turn");
         }
         else {
-            this.index = kids.getCurrentIndex();
+            this.kidName = kids.getKidAt(kids.getCurrentIndex()).getName();
             Intent passedIntent = getIntent();
             this.choice = passedIntent.getStringExtra("Choice");
             nameTxt.setText(kids.getKidAt(kids.getCurrentIndex()).getName()
@@ -90,7 +92,7 @@ public class CoinFlipActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent historyIntent = new Intent(CoinFlipActivity.this,
                         HistoryActivity.class);
-                historyIntent.putExtra("Index", index);
+                historyIntent.putExtra("Kid name", kidName);
                 startActivity(historyIntent);
                 finish();
             }
@@ -175,33 +177,33 @@ public class CoinFlipActivity extends AppCompatActivity {
 
                 else {
                     Kid kid = kids.getKidAt(kids.getCurrentIndex());
-                    ResultsManager stats = kid.getResults();
                     boolean wonFlip = false; //lose by default
 
                     // In case of getting heads
                     if (intCurrentFace == 0) {
-                        updateResultText("Heads");
+                        updateResultText("heads");
 
                         // Kid chose heads and won
-                        if (choice.equals("Heads")) {
+                        if (choice.equals("heads")) {
                             wonFlip = true;
                         }
                     }
 
                     // In case of getting tails
                     else {
-                        updateResultText("Tails");
+                        updateResultText("tails");
 
                         // Kid chose tails and won
-                        if (choice.equals("Tails")) {
+                        if (choice.equals("tails")) {
                             wonFlip = true;
                         }
                     }
                     //Saving results
                     Results results = new Results(wonFlip, choice, date, kid.getName());
-                    stats.add(results);
+                    history.add(results);
                     kids.nextKid();
                     saveKidManager();
+                    saveResultsManager();
                     btn.setEnabled(false);
                 }
             }
@@ -212,7 +214,6 @@ public class CoinFlipActivity extends AppCompatActivity {
 
     private void saveKidManager() {
         // Save the KidManager interior values
-        // Saving KidManager into SharedPreferences
         SharedPreferences prefs = getSharedPreferences("Kids", MODE_PRIVATE);
         SharedPreferences.Editor prefEditor = prefs.edit();
         Gson gson = new Gson();
@@ -220,6 +221,16 @@ public class CoinFlipActivity extends AppCompatActivity {
         prefEditor.putString("List", json);
         json = gson.toJson(kids.getCurrentIndex()); // Saving list
         prefEditor.putString("Index", json); // Saving current index
+        prefEditor.apply();
+    }
+
+    private void saveResultsManager() {
+        // Save the ResultsManager interior list of Results
+        SharedPreferences prefs = getSharedPreferences("History", MODE_PRIVATE);
+        SharedPreferences.Editor prefEditor = prefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(history.getList()); // Saving list
+        prefEditor.putString("List", json);
         prefEditor.apply();
     }
 

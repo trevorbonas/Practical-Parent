@@ -8,7 +8,6 @@ public class Kid {
 
     private int age; // Optional addition information
     private String name;
-    private ResultsManager stats = new ResultsManager(); //personal stats for given kid
 
     public Kid(String name) {
         this.name = name;
@@ -27,11 +26,5 @@ public class Kid {
 
     public String getName() {
         return name;
-    }
-
-    // Returns the kid's Result
-    // so it can be changed or displayed
-    public ResultsManager getResults() {
-        return stats;
     }
 }
