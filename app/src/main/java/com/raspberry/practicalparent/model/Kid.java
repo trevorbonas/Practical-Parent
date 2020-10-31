@@ -7,7 +7,7 @@ package com.raspberry.practicalparent.model;
 public class Kid {
     int age; // Optional addition information
     String name;
-    //ResultManager stats = new ResultManger(); // To be added: personal stats for given kid
+    //ResultsManager stats = new ResultsManager();
     public Kid(String name) {
         this.name = name;
     }
@@ -29,7 +29,7 @@ public class Kid {
 
     // Returns the kid's Result
     // so it can be changed or displayed
-    /*public ResultManager getResult() {
+    /*public ResultsManager getResult() {
         return stats;
     }*/
 }

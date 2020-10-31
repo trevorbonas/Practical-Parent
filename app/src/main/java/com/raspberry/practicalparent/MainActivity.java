@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent coinFlipIntent = new Intent(MainActivity.this,
-                        CoinFlipActivity.class);
+                        ChooseActivity.class);
                 startActivity(coinFlipIntent);
             }
         });
