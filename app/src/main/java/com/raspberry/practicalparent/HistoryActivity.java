@@ -90,13 +90,30 @@ public class HistoryActivity extends AppCompatActivity {
 
         //Create child flips history
         ResultsManager childHistory = k.getResults();
-        populateRecyclerView(childHistory);
+        populatePersonalRecyclerView(childHistory, kidName);
+    }
 
-        //TODO: example to be removed
-        /*for (int i = 0; i < 4; i++) {
-            cardList.add(0, new CardViewMaker(R.drawable.ic_x, "NAME", "LOST", "DATE", "SIDE"));
-            adapter.notifyItemInserted(0);
-        }*/
+    private void populatePersonalRecyclerView(ResultsManager manager, String name) {
+        clearRecyclerView();
+        //Populate list
+        for (Results flip: manager) {
+            if (flip.getChildName().equals(name)) {
+
+                //Image is lost flip by default
+                int image = R.drawable.ic_x;
+                Boolean won = flip.isWonFlip();
+                String wonOrLost = "LOST";
+
+                //Check if they won flip
+                if (won) {
+                    image = R.drawable.ic_check;
+                    wonOrLost = "WON";
+                }
+                //Add flip to list
+                cardList.add(0, new CardViewMaker(image, flip.getChildName(), wonOrLost, flip.getDateFlip(), flip.getSideChosen()));
+                adapter.notifyItemInserted(0);
+            }
+        }
     }
 
 
