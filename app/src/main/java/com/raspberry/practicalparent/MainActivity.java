@@ -1,10 +1,16 @@
 package com.raspberry.practicalparent;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.raspberry.practicalparent.model.Kid;
+import com.raspberry.practicalparent.model.KidManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -13,6 +19,11 @@ import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import android.widget.Button;
 
 /**
@@ -28,12 +39,15 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Button btnFlipCoin = findViewById(R.id.flipBtn);
-        btnFlipCoin.setOnClickListener(new View.OnClickListener() {
+        setupKidManager();
+
+        Button kidBtn = findViewById(R.id.kidsBtn);
+        kidBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = FlipCoinAnimation.makeIntent(MainActivity.this);
-                startActivity(intent);
+            public void onClick(View v) {
+                Intent optionsIntent = new Intent(MainActivity.this,
+                        KidOptionsActivity.class);
+                startActivity(optionsIntent);
             }
         });
 
@@ -59,5 +73,22 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    // Loads KidManager singleton from saved SharedPreferences
+    private void setupKidManager() {
+        KidManager kids = KidManager.getInstance(); // Just used to edit the singleton
+
+        SharedPreferences prefs = getSharedPreferences("Kids", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = prefs.getString("List", "");
+        if (json.length() > 0) {
+            Type listType = new TypeToken<ArrayList<Kid>>(){}.getType();
+            List<Kid> list = gson.fromJson(json, listType);
+            kids.setList(list);
+            json = prefs.getString("Index", "");
+            int index = gson.fromJson(json, Integer.class);
+            kids.changeKid(index);
+        }
     }
 }
