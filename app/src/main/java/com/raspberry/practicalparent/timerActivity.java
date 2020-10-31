@@ -2,6 +2,7 @@ package com.raspberry.practicalparent;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -29,6 +30,10 @@ public class timerActivity extends AppCompatActivity {
     private long mStartTimeInMillis;
     private long mTimeLeftInMillis;
     private long mEndTime;
+
+    public static Intent makeIntent(Context context) {
+        return new Intent(context, timerActivity.class);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,15 +142,15 @@ public class timerActivity extends AppCompatActivity {
         int hours = (int) (mTimeLeftInMillis / 1000) / 3600; //turns hours to mins
         int minutes = (int) ((mTimeLeftInMillis / 1000) % 3600)/ 60; //turns millis to mins
         int seconds = (int) (mTimeLeftInMillis / 1000) % 60; //turns millis to secs
-        String timeLeftFormated;
+        String timeLeftFormatted;
         if(hours > 0){
-            timeLeftFormated = String.format(Locale.getDefault(),
+            timeLeftFormatted = String.format(Locale.getDefault(),
                     "%d:%02d:%02d", hours,  minutes, seconds);
         } else {
-            timeLeftFormated = String.format(Locale.getDefault(),
+            timeLeftFormatted = String.format(Locale.getDefault(),
                     "%02d:%02d", minutes, seconds);
         }
-        mTextViewCountDown.setText(timeLeftFormated);
+        mTextViewCountDown.setText(timeLeftFormatted);
     }
 
     private void updateWatchInterface() {
