@@ -36,7 +36,7 @@
         <activity
             android:name=".HistoryActivity"
             android:label="History"
-            android:parentActivityName=".CoinFlipActivity">
+            android:parentActivityName=".MainActivity">
         </activity>
         <activity
             android:name=".MainActivity"

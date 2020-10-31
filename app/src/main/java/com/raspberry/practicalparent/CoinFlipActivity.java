@@ -29,13 +29,6 @@ import java.util.Random;
 
 //xml animations adapted from https://www.youtube.com/watch?v=DnXWcGmLHHs
 
-/*TODO:     1. Make KidManager pass to the next kid but show the history of the kid who just flipped
-   in HistoryActivity (maybe by passing in the Kid's entire Results in an Intent)
-        2. Make going back from HistoryActivity prevent further flips (As new child would have to
-   pick H/T and we're not sure they'd want to do another flip right after the previous)
-   Maybe it would be simpler to have the HistoryActivity exit to main menu, but for some reason
-   that feels wrong
- */
 
 public class CoinFlipActivity extends AppCompatActivity {
     //0 for heads, 1 for tails
@@ -47,7 +40,7 @@ public class CoinFlipActivity extends AppCompatActivity {
     private String choice;
 
     private KidManager kids; // The singleton
-    private String kidName; // Name of kid to be passed to History
+    private int index;
 
     private DateFormat df = new SimpleDateFormat("EEE, MMM. d, yyyy"); // Format for date
     private String date = df.format(Calendar.getInstance().getTime()); // Current date
@@ -74,16 +67,16 @@ public class CoinFlipActivity extends AppCompatActivity {
         historyBtn.setEnabled(false);
 
         if (kids.getNum() <= 0) {
-            nameTxt.setText("No child's turn");
             this.choice = "Not set";
+            nameTxt.setText("No child's turn");
         }
         else {
-            nameTxt.setText(kids.getKidAt(kids.getCurrentIndex()).getName()
-                    + "'s turn\nChose " + choice);
-            kidName = kids.getKidAt(kids.getCurrentIndex()).getName();
-            historyBtn.setEnabled(true);
+            this.index = kids.getCurrentIndex();
             Intent passedIntent = getIntent();
             this.choice = passedIntent.getStringExtra("Choice");
+            nameTxt.setText(kids.getKidAt(kids.getCurrentIndex()).getName()
+                    + "'s turn\nChose " + choice);
+            historyBtn.setEnabled(true);
         }
 
         Log.println(Log.DEBUG, "Number of kids in KidManager",
@@ -96,7 +89,9 @@ public class CoinFlipActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent historyIntent = new Intent(CoinFlipActivity.this,
                         HistoryActivity.class);
+                historyIntent.putExtra("Index", index);
                 startActivity(historyIntent);
+                finish();
             }
         });
 
@@ -182,6 +177,7 @@ public class CoinFlipActivity extends AppCompatActivity {
                                 "heads", date,
                                 kids.getKidAt(kids.getCurrentIndex()).getName());
                         stats.add(results);
+                        kids.nextKid();
                         saveKidManager();
                         btn.setEnabled(false);
                     }
@@ -193,6 +189,7 @@ public class CoinFlipActivity extends AppCompatActivity {
                                 "tails", date,
                                 kids.getKidAt(kids.getCurrentIndex()).getName());
                         stats.add(results);
+                        kids.nextKid();
                         saveKidManager();
                         btn.setEnabled(false);
                     }
@@ -213,6 +210,7 @@ public class CoinFlipActivity extends AppCompatActivity {
                                 "tails", date,
                                 kids.getKidAt(kids.getCurrentIndex()).getName());
                         stats.add(results);
+                        kids.nextKid();
                         saveKidManager();
                         btn.setEnabled(false);
                     }
@@ -224,6 +222,7 @@ public class CoinFlipActivity extends AppCompatActivity {
                                 "heads", date,
                                 kids.getKidAt(kids.getCurrentIndex()).getName());
                         stats.add(results);
+                        kids.nextKid();
                         saveKidManager();
                         btn.setEnabled(false);
                     }

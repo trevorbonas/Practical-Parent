@@ -30,11 +30,18 @@ public class HistoryActivity extends AppCompatActivity {
     private Button toggleBtn;
     private boolean toggledAll = false;
 
+    // Things for KidManager
+    // Passed in index for the kid who just played
+    private int index;
+    KidManager kids = KidManager.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+        Intent passedIntent = getIntent();
+        this.index = passedIntent.getIntExtra("Index", 0);
 
         //TODO: Examples to be removed
         cardList.add(0, new CardViewMaker(R.drawable.ic_check, "NAME", "WIN", "DATE", "SIDE"));
@@ -61,11 +68,9 @@ public class HistoryActivity extends AppCompatActivity {
 
     //Get child class from manager
     private Kid extractChild() {
-        KidManager manager = KidManager.getInstance();
-        int kidPosition = manager.getCurrentIndex();
-        return manager.getKidAt(kidPosition);
+        int kidPosition = kids.getCurrentIndex();
+        return kids.getKidAt(kidPosition);
     }
-
     //TODO: populate kid's history (this is the default when viewing history)
     private void populateKidHistory() {
 
@@ -75,23 +80,23 @@ public class HistoryActivity extends AppCompatActivity {
         //Get child information
 
         //Kid k = extractChild();
-        //String name = k.getName();
+
+        String kidName = kids.getKidAt(index).getName();
 
         //Set on screen text
-        //historyText.setText(name + "'S FLIPS");
-        historyText.setText("KID'S FLIPS");
+        historyText.setText(kidName + "'S FLIPS");
         toggleBtn.setText("ALL FLIPS");
         updateText();
 
         //Create child flips history
-        //ResultsManager childHistory = k.getResults();
-        //populateRecyclerView(childHistory);
+        ResultsManager childHistory = kids.getKidAt(index).getResults();
+        populateRecyclerView(childHistory);
 
         //TODO: example to be removed
-        for (int i = 0; i < 4; i++) {
+        /*for (int i = 0; i < 4; i++) {
             cardList.add(0, new CardViewMaker(R.drawable.ic_x, "NAME", "LOST", "DATE", "SIDE"));
             adapter.notifyItemInserted(0);
-        }
+        }*/
     }
 
 
@@ -100,10 +105,9 @@ public class HistoryActivity extends AppCompatActivity {
         //TODO: remove when populaterecyclerview works
         clearRecyclerView();
 
-        //String kidName = extractChild().getName();
+        String kidName = kids.getKidAt(index).getName();
         historyText.setText("ALL FLIPS");
-        toggleBtn.setText("KID'S FLIPS");
-        //toggleBtn.setText(kidName + "'s FLIPS");
+        toggleBtn.setText(kidName + "'s FLIPS");
         updateText();
 
         //Create all flips history
