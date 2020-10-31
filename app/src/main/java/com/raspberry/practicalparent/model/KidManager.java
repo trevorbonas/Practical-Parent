@@ -39,6 +39,7 @@ public class KidManager {
         if (i < 0 || i >= kids.size()) {
             return;
         }
+        kids.remove(i);
         // If the kid we just deleted was our current kid (whose turn it is)
         // go to the next kid
         if (i == currentIndex && kids.size() > 1) {

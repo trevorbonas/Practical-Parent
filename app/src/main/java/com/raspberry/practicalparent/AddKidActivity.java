@@ -78,7 +78,11 @@ public class AddKidActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 kidsName = name.getText().toString();
-                okayBtn.setEnabled(true);
+                if (!kidsName.trim().isEmpty()) {
+                    okayBtn.setEnabled(true);
+                } else {
+                    okayBtn.setEnabled(false);
+                }
             }
         });
     }
