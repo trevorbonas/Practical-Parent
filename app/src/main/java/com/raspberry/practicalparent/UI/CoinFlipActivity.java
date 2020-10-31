@@ -92,8 +92,7 @@ public class CoinFlipActivity extends AppCompatActivity {
         historyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent historyIntent = new Intent(CoinFlipActivity.this,
-                        HistoryActivity.class);
+                Intent historyIntent = HistoryActivity.makeLaunchIntent(CoinFlipActivity.this);
                 historyIntent.putExtra("Kid name", kidName);
                 startActivity(historyIntent);
                 finish();

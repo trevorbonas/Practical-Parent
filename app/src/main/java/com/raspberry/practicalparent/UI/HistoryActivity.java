@@ -32,12 +32,8 @@ public class HistoryActivity extends AppCompatActivity {
     private boolean toggledAll = false;
 
     // Things for KidManager
-    // Passed in index for the kid who just played
     private String kidName;
-    KidManager kids = KidManager.getInstance();
-
     ResultsManager history = ResultsManager.getInstance();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +51,7 @@ public class HistoryActivity extends AppCompatActivity {
 
     //Set up RecyclerView
     private void createRecyclerView() {
+
         //Setting up RecyclerView
         rv = findViewById(R.id.recyclerview);
         rv.setHasFixedSize(true);
@@ -95,7 +92,9 @@ public class HistoryActivity extends AppCompatActivity {
 
     //Populates personal flip history calls addToHistory
     private void populatePersonal(ResultsManager manager, String name) {
+
         clearRecyclerView();
+
         //Populate list
         for (Results flip: manager) {
             if (flip.getChildName().equals(name)) {
@@ -128,6 +127,7 @@ public class HistoryActivity extends AppCompatActivity {
             image = R.drawable.ic_check;
             wonOrLost = "WON";
         }
+
         //Add flip to list
         cardList.add(0, new CardViewMaker(image, flip.getChildName(), wonOrLost, flip.getDateFlip(), flip.getSideChosen()));
         adapter.notifyItemInserted(0);
@@ -166,8 +166,7 @@ public class HistoryActivity extends AppCompatActivity {
 
     //Make intent
     public static Intent makeLaunchIntent(Context context) {
-        Intent intent = new Intent(context, HistoryActivity.class);
-        return intent;
+        return new Intent(context, HistoryActivity.class);
     }
 
 }
