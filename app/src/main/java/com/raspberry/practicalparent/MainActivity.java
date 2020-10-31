@@ -2,11 +2,8 @@ package com.raspberry.practicalparent;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.raspberry.practicalparent.model.Kid;
@@ -24,7 +21,6 @@ import android.widget.Button;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import android.widget.Button;
 
 /**
  * Main menu and launching activity
@@ -40,6 +36,16 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         setupKidManager();
+
+        Button coinBtn = findViewById(R.id.flipBtn);
+        coinBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent coinFlipIntent = new Intent(MainActivity.this,
+                        CoinFlipActivity.class);
+                startActivity(coinFlipIntent);
+            }
+        });
 
         Button kidBtn = findViewById(R.id.kidsBtn);
         kidBtn.setOnClickListener(new View.OnClickListener() {

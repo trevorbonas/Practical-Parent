@@ -1,5 +1,6 @@
 package com.raspberry.practicalparent;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.Animator;
@@ -18,7 +19,7 @@ import java.util.Random;
 
 //xml animations adapted from https://www.youtube.com/watch?v=DnXWcGmLHHs
 
-public class FlipCoinAnimation extends AppCompatActivity {
+public class CoinFlipActivity extends AppCompatActivity {
     //0 for heads, 1 for tails
     private int intCurrentFace = 0;
 
@@ -26,14 +27,16 @@ public class FlipCoinAnimation extends AppCompatActivity {
     private ImageView otherFace;
 
     public static Intent makeIntent(Context context) {
-        Intent intent = new Intent(context, FlipCoinAnimation.class);
+        Intent intent = new Intent(context, CoinFlipActivity.class);
         return intent;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_flip_coin_animation);
+        setContentView(R.layout.activity_coin_flip);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true); // Enable back button
 
         currFace = findViewById(R.id.ivHeads);
         otherFace = findViewById(R.id.ivTails);

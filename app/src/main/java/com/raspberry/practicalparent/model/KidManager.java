@@ -39,7 +39,6 @@ public class KidManager {
         if (i < 0 || i >= kids.size()) {
             return;
         }
-        kids.remove(currentIndex);
         // If the kid we just deleted was our current kid (whose turn it is)
         // go to the next kid
         if (i == currentIndex && kids.size() > 0) {
@@ -51,6 +50,7 @@ public class KidManager {
             currentIndex = -1; // No current index
             currentKid = null; // No current kid selected
         }
+        kids.remove(i);
     }
 
     public void changeName(String name) {
