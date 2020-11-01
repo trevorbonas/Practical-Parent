@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".timerActivity"></activity>
+        <activity
+            android:name=".timerActivity"
+            android:label="Timeout Timer"/>
         <activity android:name=".timerActivityMainMenu" />
         <activity
             android:name=".MainActivity"
