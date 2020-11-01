@@ -1,10 +1,18 @@
 package com.raspberry.practicalparent;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
@@ -38,18 +46,21 @@ public class timerActivity extends AppCompatActivity {
     private RadioGroup presetTimesRadioGroup;
     private int radioButtonIndex;
 
+    private String CHANNEL_ID = "my_channel5";
+
     public static Intent makeIntent(Context context) {
         return new Intent(context, timerActivity.class);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Intent intent = getIntent();
-        long startTimer = intent.getLongExtra(timerActivityMainMenu.EXTRA_INT, 0);
+        //Intent intent = getIntent();
+        //long startTimer = intent.getLongExtra(timerActivityMainMenu.EXTRA_INT, 0);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timer);
 
         setupPresetTimesRadioGroup();
+        createNotificationChannel();
 
         //setting time in minutes
         mEditTextInput = findViewById(R.id.edit_text_input);
@@ -102,8 +113,6 @@ public class timerActivity extends AppCompatActivity {
             }
         });
 
-
-        
         mButtonStartPause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,7 +154,11 @@ public class timerActivity extends AppCompatActivity {
             @Override
             public void onTick(long millisUntilFinished) {
                 mTimeLeftInMillis = millisUntilFinished;
+                int hours = (int) (mTimeLeftInMillis / 1000) / 3600; //turns hours to mins
+                int minutes = (int) ((mTimeLeftInMillis / 1000) % 3600)/ 60; //turns millis to mins
+                int seconds = (int) (mTimeLeftInMillis / 1000) % 60; //turns millis to secs
                 updateCountDownText();
+                createNotification(hours, minutes, seconds);
             }
 
             @Override
@@ -156,11 +169,47 @@ public class timerActivity extends AppCompatActivity {
 //                mButtonReset.setVisibility(View.VISIBLE);
                 updateWatchInterface();
                 //TODO: add android notification
+                deleteNotification();
             }
         }.start();
 
         mTimerRunning = true;
         updateWatchInterface();
+    }
+
+    private void createNotification(int hours, int minutes, int seconds) {
+        String timeFormatted = formatTimer(hours, minutes, seconds);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_android_black_24dp)
+                .setContentTitle("Time Remaining")
+                .setContentText(timeFormatted)
+                .setPriority(NotificationCompat.PRIORITY_LOW);
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
+        notificationManagerCompat.notify(101, builder.build());
+    }
+
+    private void updateNotification() {
+
+    }
+
+    private void deleteNotification() {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(101);
+    }
+
+    private void createNotificationChannel() {
+        //from https://developer.android.com/training/notify-user/build-notification
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            channel.setSound(null, null);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
     }
 
 
@@ -181,6 +230,11 @@ public class timerActivity extends AppCompatActivity {
         int hours = (int) (mTimeLeftInMillis / 1000) / 3600; //turns hours to mins
         int minutes = (int) ((mTimeLeftInMillis / 1000) % 3600)/ 60; //turns millis to mins
         int seconds = (int) (mTimeLeftInMillis / 1000) % 60; //turns millis to secs
+        String timeLeftFormatted = formatTimer(hours, minutes, seconds);
+        mTextViewCountDown.setText(timeLeftFormatted);
+    }
+
+    private String formatTimer(int hours, int minutes, int seconds) {
         String timeLeftFormatted;
         if(hours > 0){
             timeLeftFormatted = String.format(Locale.getDefault(),
@@ -189,7 +243,7 @@ public class timerActivity extends AppCompatActivity {
             timeLeftFormatted = String.format(Locale.getDefault(),
                     "%02d:%02d", minutes, seconds);
         }
-        mTextViewCountDown.setText(timeLeftFormatted);
+        return timeLeftFormatted;
     }
 
     private void updateWatchInterface() {
