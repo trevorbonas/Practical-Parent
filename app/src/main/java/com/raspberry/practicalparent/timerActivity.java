@@ -7,10 +7,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +35,9 @@ public class timerActivity extends AppCompatActivity {
     private long mTimeLeftInMillis;
     private long mEndTime;
 
+    private RadioGroup presetTimesRadioGroup;
+    private int radioButtonIndex;
+
     public static Intent makeIntent(Context context) {
         return new Intent(context, timerActivity.class);
     }
@@ -41,6 +48,8 @@ public class timerActivity extends AppCompatActivity {
         long startTimer = intent.getLongExtra(timerActivityMainMenu.EXTRA_INT, 0);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timer);
+
+        setupPresetTimesRadioGroup();
 
         //setting time in minutes
         mEditTextInput = findViewById(R.id.edit_text_input);
@@ -68,6 +77,28 @@ public class timerActivity extends AppCompatActivity {
 
                 setTime(millisInput);
                 mEditTextInput.setText("");
+            }
+        });
+
+        //Remove checked radio button if user is inputting a custom time
+        mEditTextInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                presetTimesRadioGroup.clearCheck();
+                if (!(mEditTextInput.getText().toString().isEmpty())) {
+                    String input = mEditTextInput.getText().toString();
+                    long millisInput = Long.parseLong(input) * 60000;
+                    autoSetTimeFromEditTextField(millisInput);
+                }
             }
         });
 
@@ -100,7 +131,15 @@ public class timerActivity extends AppCompatActivity {
         closeKeyboard();
     }
 
+    private void autoSetTimeFromEditTextField(long milliseconds) {
+        mStartTimeInMillis = milliseconds;
+        resetTimer();
+    }
+
     private void startTimer() {
+        closeKeyboard();
+        mEditTextInput.setText("");
+
         mEndTime = System.currentTimeMillis() + mTimeLeftInMillis;
         mCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
             @Override
@@ -158,10 +197,13 @@ public class timerActivity extends AppCompatActivity {
             mEditTextInput.setVisibility(View.INVISIBLE);
             mButtonSet.setVisibility(View.INVISIBLE);  //set button and text input to invisible
             mButtonReset.setVisibility(View.INVISIBLE);
+            presetTimesRadioGroup.setVisibility(View.INVISIBLE);
+            presetTimesRadioGroup.clearCheck();
             mButtonStartPause.setText("Pause");
         } else {
             mEditTextInput.setVisibility(View.VISIBLE);
             mButtonSet.setVisibility(View.VISIBLE);  //set button and text input to visible
+            presetTimesRadioGroup.setVisibility(View.VISIBLE);
             mButtonStartPause.setText("Start");
 
             if(mTimeLeftInMillis < 1000) {
@@ -187,6 +229,31 @@ public class timerActivity extends AppCompatActivity {
         }
     }
 
+    private void setupPresetTimesRadioGroup() {
+        presetTimesRadioGroup = findViewById(R.id.rgPresetTimes);
+        final int[] presetTimes = getResources().getIntArray(R.array.preset_times);
+
+        for (int i = 0; i < presetTimes.length; i++) {
+            final int minutes = presetTimes[i];
+            RadioButton button = new RadioButton(this);
+            button.setText(minutes + " minute(s)");
+            final int finalI = i;
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    radioButtonIndex = finalI;
+                    if (!(mEditTextInput.getText().toString().isEmpty())) {
+                        mEditTextInput.getText().clear();
+                        //Re-check the clicked radio button
+                        ((RadioButton) presetTimesRadioGroup.getChildAt(radioButtonIndex)).setChecked(true);
+                    }
+                    int minutesToMilliseconds = minutes * 60000;
+                    setTime(minutesToMilliseconds);
+                }
+            });
+            presetTimesRadioGroup.addView(button);
+        }
+    }
 
     //for timer to run in background
     @Override
