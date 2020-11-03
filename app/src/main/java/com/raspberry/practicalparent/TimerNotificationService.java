@@ -2,7 +2,9 @@ package com.raspberry.practicalparent;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,9 +20,7 @@ import androidx.core.app.NotificationManagerCompat;
 public class TimerNotificationService extends Service {
 
     CountDownTimer countDownTimer;
-    private long mStartTimeInMillis;
     private long mTimeLeftInMillis;
-    private long mEndTime;
     NotificationCompat.Builder builderTimerRunning;
     NotificationCompat.Builder builderTimerComplete;
 
@@ -30,17 +30,16 @@ public class TimerNotificationService extends Service {
         Log.d("TAG", "Created Timer Notification Service");
         createNotificationChannelTimerRunning();
         createNotificationChannelTimerComplete();
-        createTimerRunningNotification(1, 2, 1);
+        createTimerRunningNotification();
         startForeground(333, builderTimerRunning.build());
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
-        mStartTimeInMillis = prefs.getLong("startTimeInMillis", 600000);
+        long mStartTimeInMillis = prefs.getLong("startTimeInMillis", 600000);
         mTimeLeftInMillis = prefs.getLong("millisLeft", mStartTimeInMillis);
-        //assume timer is running
-        mEndTime = prefs.getLong("endTime", 0);
+        long mEndTime = prefs.getLong("endTime", 0);
         mTimeLeftInMillis = mEndTime - System.currentTimeMillis();
 
         countDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
@@ -108,13 +107,19 @@ public class TimerNotificationService extends Service {
         }
     }
 
-    private void createTimerRunningNotification(int hours, int minutes, int seconds) {
-        String contentTitle = "Time: " + hours + ":" + minutes + ":" + seconds;
+    private void createTimerRunningNotification() {
+        Intent intent = new Intent(this, timerActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        //Inflate back stack
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addNextIntentWithParentStack(intent);
+        PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         builderTimerRunning = new NotificationCompat.Builder(this, "CHANNEL_ID")
                 .setSmallIcon(R.drawable.ic_baseline_timer_24)
                 .setContentText("Time Remaining")
-                .setContentTitle(contentTitle)
-                .setPriority(NotificationCompat.PRIORITY_LOW);
+                .setContentTitle("Staring Timer")
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setContentIntent(pendingIntent);
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
         notificationManagerCompat.notify(333, builderTimerRunning.build());
     }
@@ -129,15 +134,12 @@ public class TimerNotificationService extends Service {
         notificationManagerCompat.notify(444, builderTimerComplete.build());
     }
 
-
     private void updateTimerRunningNotification(int hours, int minutes, int seconds) {
-        String contentTitle = "Time: " + hours + ":" + minutes + ":" + seconds;
+        String timeLeftFormatted = timerActivity.formatTimer(hours, minutes, seconds);
         if (builderTimerRunning != null) {
-            builderTimerRunning.setContentTitle(contentTitle);
+            builderTimerRunning.setContentTitle(timeLeftFormatted);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(333, builderTimerRunning.build());
         }
     }
-
-
 }
