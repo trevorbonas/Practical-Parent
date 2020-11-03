@@ -43,9 +43,7 @@ public class timerActivity extends AppCompatActivity {
     private RadioGroup presetTimesRadioGroup;
     private int radioButtonIndex;
 
-    private String CHANNEL_ID_TIMER_RUNNING = "my_channel5";
     private String CHANNEL_ID_TIMER_COMPLETE = "timer_complete_channel";
-    private NotificationCompat.Builder builderTimerRunning;
     private NotificationCompat.Builder builderTimerComplete;
 
 
@@ -61,7 +59,6 @@ public class timerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_timer);
 
         setupPresetTimesRadioGroup();
-        createNotificationChannelTimerRunning();
         createNotificationChannelTimerComplete();
 
         //setting time in minutes
@@ -123,10 +120,6 @@ public class timerActivity extends AppCompatActivity {
                         deleteTimerRunningNotification();
                     } else {
                         startTimer();
-                        int hours = (int) (mTimeLeftInMillis / 1000) / 3600; //turns hours to mins
-                        int minutes = (int) ((mTimeLeftInMillis / 1000) % 3600)/ 60; //turns millis to mins
-                        int seconds = (int) (mTimeLeftInMillis / 1000) % 60; //turns millis to secs
-                        createTimerRunningNotification(hours, minutes, seconds);
                     }
             }
         });
@@ -161,11 +154,7 @@ public class timerActivity extends AppCompatActivity {
             @Override
             public void onTick(long millisUntilFinished) {
                 mTimeLeftInMillis = millisUntilFinished;
-                int hours = (int) (mTimeLeftInMillis / 1000) / 3600; //turns hours to mins
-                int minutes = (int) ((mTimeLeftInMillis / 1000) % 3600)/ 60; //turns millis to mins
-                int seconds = (int) (mTimeLeftInMillis / 1000) % 60; //turns millis to secs
                 updateCountDownText();
-                updateTimerRunningNotification(hours, minutes, seconds);
             }
 
             @Override
@@ -185,17 +174,6 @@ public class timerActivity extends AppCompatActivity {
         updateWatchInterface();
     }
 
-    private void createTimerRunningNotification(int hours, int minutes, int seconds) {
-        String timeFormatted = formatTimer(hours, minutes, seconds);
-        builderTimerRunning = new NotificationCompat.Builder(this, CHANNEL_ID_TIMER_RUNNING)
-                .setSmallIcon(R.drawable.ic_baseline_timer_24)
-                .setContentText("Time Remaining")
-                .setContentTitle(timeFormatted)
-                .setPriority(NotificationCompat.PRIORITY_LOW);
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
-        notificationManagerCompat.notify(101, builderTimerRunning.build());
-    }
-
     private void createTimerCompleteNotification() {
         builderTimerComplete = new NotificationCompat.Builder(this, CHANNEL_ID_TIMER_COMPLETE)
                 .setSmallIcon(R.drawable.ic_baseline_timer_24)
@@ -206,32 +184,9 @@ public class timerActivity extends AppCompatActivity {
         notificationManagerCompat.notify(102, builderTimerComplete.build());
     }
 
-    private void updateTimerRunningNotification(int hours, int minutes, int seconds) {
-        String timeFormatted = formatTimer(hours, minutes, seconds);
-        if (builderTimerRunning != null) {
-            builderTimerRunning.setContentTitle(timeFormatted);
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(101, builderTimerRunning.build());
-        }
-    }
-
     private void deleteTimerRunningNotification() {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(101);
-    }
-
-    private void createNotificationChannelTimerRunning() {
-        //from https://developer.android.com/training/notify-user/build-notification
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = getString(R.string.channel_name_timer_running);
-            String description = getString(R.string.channel_description_timer_running);
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID_TIMER_RUNNING, name, importance);
-            channel.setDescription(description);
-            channel.setSound(null, null);
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
     }
 
     private void createNotificationChannelTimerComplete() {
@@ -405,10 +360,6 @@ public class timerActivity extends AppCompatActivity {
                 updateWatchInterface();  //make buttons invisible
             } else {
                 startTimer();
-                int hours = (int) (mTimeLeftInMillis / 1000) / 3600; //turns hours to mins
-                int minutes = (int) ((mTimeLeftInMillis / 1000) % 3600)/ 60; //turns millis to mins
-                int seconds = (int) (mTimeLeftInMillis / 1000) % 60; //turns millis to secs
-                createTimerRunningNotification(hours, minutes, seconds);
             }
         }
     }
