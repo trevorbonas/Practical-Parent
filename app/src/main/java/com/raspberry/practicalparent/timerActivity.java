@@ -247,7 +247,11 @@ public class timerActivity extends AppCompatActivity {
         }
     }
 
-
+    private void startTimerNotificationService() {
+        Intent intent = new Intent(this, TimerNotificationService.class);
+        startService(intent);
+        Toast.makeText(this, "Starting Service:", Toast.LENGTH_SHORT).show();
+    }
 
     private void pauseTimer() {
         mCountDownTimer.cancel();
@@ -359,16 +363,27 @@ public class timerActivity extends AppCompatActivity {
         editor.putLong("endTime", mEndTime);
 
         editor.apply();
-
+        if (mTimerRunning) {
+            //startTimerNotificationService();
+            if (Build.VERSION.SDK_INT >= 26) {
+                Intent intent = new Intent(this, TimerNotificationService.class);
+                startForegroundService(intent);
+            } else {
+                startTimerNotificationService();
+            }
+        }
         if(mCountDownTimer != null){
             mCountDownTimer.cancel(); //cancel timer when time runs out
         }
     }
 
 
+
     @Override
     protected void onStart() {
         super.onStart();
+
+        stopService(new Intent(this, TimerNotificationService.class));
 
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
         mStartTimeInMillis = prefs.getLong("startTimeInMillis", 600000);
