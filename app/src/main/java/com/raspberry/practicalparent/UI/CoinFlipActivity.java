@@ -46,7 +46,7 @@ public class CoinFlipActivity extends AppCompatActivity {
     private ResultsManager history; // Singleton
     private String kidName; // Needs to be class variable since current name may change
 
-    private DateFormat df = new SimpleDateFormat("EEE, MMM. d, yyyy"); // Format for date
+    private DateFormat df = new SimpleDateFormat("h:mm a MMM. d, yyyy"); // Format for date
     private String date = df.format(Calendar.getInstance().getTime()); // Current date
 
     private ImageView currFace;
@@ -203,7 +203,7 @@ public class CoinFlipActivity extends AppCompatActivity {
                         }
                     }
                     //Saving results
-                    Results results = new Results(wonFlip, choice, date, kid.getName());
+                    Results results = new Results(wonFlip, choice, getDate(), kid.getName());
                     history.add(results);
                     kids.nextKid();
                     saveKidManager();
@@ -214,6 +214,13 @@ public class CoinFlipActivity extends AppCompatActivity {
         });
         frontAnimatorSet.start();
         backAnimatorSet.start();
+    }
+
+    // Returns string of current time and date at moment of calling
+    // Used for storing date in Results
+    private String getDate() {
+        // df is pre-defined DateFormat "hour:minutes AM/PM Month. day, year"
+        return df.format(Calendar.getInstance().getTime());
     }
 
     private void saveKidManager() {
