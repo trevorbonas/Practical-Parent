@@ -145,7 +145,7 @@ public class TimerNotificationService extends Service {
         } else {
             mEndTime = System.currentTimeMillis() + mTimeLeftInMillis;
         }
-
+        isTimerRunning = true;
         countDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
             @Override
             public void onTick(long l) {
