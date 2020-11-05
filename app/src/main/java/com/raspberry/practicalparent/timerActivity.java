@@ -9,6 +9,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -48,8 +49,6 @@ public class timerActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //Intent intent = getIntent();
-        //long startTimer = intent.getLongExtra(timerActivityMainMenu.EXTRA_INT, 0);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timer);
 
@@ -135,7 +134,7 @@ public class timerActivity extends AppCompatActivity {
                 mTimerRunning = false;
                 updateWatchInterface();
                 Intent timerComplete = new Intent(timerActivity.this, TimerCompleteNotificationBroadcastReceiver.class);
-                timerComplete.setAction("TimerFinishActivity");
+                timerComplete.setAction(getString(R.string.intent_action_timer_finished_from_activity));
                 sendBroadcast(timerComplete);
             }
         }.start();
@@ -147,7 +146,6 @@ public class timerActivity extends AppCompatActivity {
     private void startTimerNotificationService() {
         Intent intent = new Intent(this, TimerNotificationService.class);
         startService(intent);
-        Toast.makeText(this, "Starting Service:", Toast.LENGTH_SHORT).show();
     }
 
     private void pauseTimer() {
@@ -194,11 +192,11 @@ public class timerActivity extends AppCompatActivity {
             mButtonReset.setVisibility(View.INVISIBLE);
             presetTimesRadioGroup.setVisibility(View.INVISIBLE);
             presetTimesRadioGroup.clearCheck();
-            mButtonStartPause.setText("Pause");
+            mButtonStartPause.setText(R.string.pause);
         } else {
             mEditTextInput.setVisibility(View.VISIBLE);
             presetTimesRadioGroup.setVisibility(View.VISIBLE);
-            mButtonStartPause.setText("Start");
+            mButtonStartPause.setText(R.string.start);
 
             if(mTimeLeftInMillis < 1000) {
                 mButtonStartPause.setVisibility(View.INVISIBLE);
@@ -230,7 +228,7 @@ public class timerActivity extends AppCompatActivity {
         for (int i = 0; i < presetTimes.length; i++) {
             final int minutes = presetTimes[i];
             RadioButton button = new RadioButton(this);
-            button.setText(minutes + " minute(s)");
+            button.setText(getResources().getQuantityString(R.plurals.radio_buttons_text_in_minutes, minutes, minutes));
             final int finalI = i;
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -249,7 +247,7 @@ public class timerActivity extends AppCompatActivity {
             presetTimesRadioGroup.addView(button);
         }
 
-        //Quick 5s, TODO delete before submission
+        //quick s for testing TODO delete before submission
         RadioButton button = new RadioButton(this);
         button.setText(3 + "s");
         button.setOnClickListener(new View.OnClickListener() {

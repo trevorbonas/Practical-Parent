@@ -23,10 +23,9 @@ public class TimerCompleteNotificationBroadcastReceiver extends BroadcastReceive
     @Override
     public void onReceive(Context context, Intent intent) {
         createNotificationChannelTimerComplete(context);
-        if (intent.getAction().equals("TimerFinish")) {
-            Log.d("TAG", "BROAD");
+        if (intent.getAction().equals(context.getString(R.string.intent_action_timer_finished))) {
             createTimerCompleteNotification(context);
-        } else if (intent.getAction().equals("TimerFinishActivity")) {
+        } else if (intent.getAction().equals(context.getString(R.string.intent_action_timer_finished_from_activity))) {
             createTimerCompleteNotificationActivityStillOnTop(context);
         }
     }
@@ -37,7 +36,7 @@ public class TimerCompleteNotificationBroadcastReceiver extends BroadcastReceive
             CharSequence name = context.getString(R.string.channel_name_timer_complete);
             String description = context.getString(R.string.channel_description_timer_complete);
             int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel("CHANNEL_ID_2", name, importance);
+            NotificationChannel channel = new NotificationChannel(context.getString(R.string.channel_id_timer_complete), name, importance);
             channel.setDescription(description);
 
             Uri notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
@@ -76,7 +75,7 @@ public class TimerCompleteNotificationBroadcastReceiver extends BroadcastReceive
                 notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             }
         }
-        builderTimerComplete = new NotificationCompat.Builder(context, "CHANNEL_ID_2")
+        builderTimerComplete = new NotificationCompat.Builder(context, context.getString(R.string.channel_id_timer_complete))
                 .setSmallIcon(R.drawable.ic_baseline_timer_24)
                 .setContentText("Done")
                 .setContentTitle("Done")
@@ -91,6 +90,8 @@ public class TimerCompleteNotificationBroadcastReceiver extends BroadcastReceive
         notificationManagerCompat.notify(444, notification);
     }
 
+    //Intent.FLAG_ACTIVITY_SINGLE_TOP is not working for some reason, so create a
+    //separate notification without any tap actions
     private void createTimerCompleteNotificationActivityStillOnTop(Context context) {
         Uri notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         if (notificationSound == null) {
@@ -99,7 +100,7 @@ public class TimerCompleteNotificationBroadcastReceiver extends BroadcastReceive
                 notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             }
         }
-        builderTimerComplete = new NotificationCompat.Builder(context, "CHANNEL_ID_2")
+        builderTimerComplete = new NotificationCompat.Builder(context, context.getString(R.string.channel_id_timer_complete))
                 .setSmallIcon(R.drawable.ic_baseline_timer_24)
                 .setContentText("Done")
                 .setContentTitle("Done")

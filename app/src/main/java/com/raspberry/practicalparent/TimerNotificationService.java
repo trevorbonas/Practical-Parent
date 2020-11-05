@@ -35,21 +35,19 @@ public class TimerNotificationService extends Service {
     private long mStartTimeInMillis;
     private boolean isTimerRunning = true;
     private NotificationCompat.Builder builderTimerRunning;
-    private NotificationCompat.Builder builderTimerComplete;
 
     @Override
     public void onCreate() {
         super.onCreate();
         Log.d("TAG", "Created Timer Notification Service");
         createNotificationChannelTimerRunning();
-        //createNotificationChannelTimerComplete();
         createTimerRunningNotification();
         startForeground(333, builderTimerRunning.build());
 
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        filter.addAction("Stop Timer");
-        filter.addAction("Start Timer");
-        filter.addAction("Reset Timer");
+        filter.addAction(getString(R.string.intent_action_stop_timer));
+        filter.addAction(getString(R.string.intent_action_start_timer));
+        filter.addAction(getString(R.string.intent_action_reset_timer));
         this.registerReceiver(broadcastReceiver, filter);
 
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
@@ -89,7 +87,7 @@ public class TimerNotificationService extends Service {
             CharSequence name = getString(R.string.channel_name_timer_running);
             String description = getString(R.string.channel_description_timer_running);
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("CHANNEL_ID", name, importance);
+            NotificationChannel channel = new NotificationChannel(getString(R.string.channel_id_timer_running), name, importance);
             channel.setDescription(description);
             channel.setSound(null, null);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
@@ -106,26 +104,26 @@ public class TimerNotificationService extends Service {
         PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         //Add actions
         Intent stopTimerIntent = new Intent(this, TimerNotificationServiceBroadcastReceiver.class);
-        stopTimerIntent.setAction("Stop Timer");
+        stopTimerIntent.setAction(getString(R.string.intent_action_stop_timer));
         PendingIntent stopPendingTimerIntent = PendingIntent.getBroadcast(this, 0, stopTimerIntent, 0);
 
         Intent startTimerIntent = new Intent(this, TimerNotificationServiceBroadcastReceiver.class);
-        startTimerIntent.setAction("Start Timer");
+        startTimerIntent.setAction(getString(R.string.intent_action_start_timer));
         PendingIntent startPendingTimerIntent = PendingIntent.getBroadcast(this, 0, startTimerIntent, 0);
 
         Intent resetTimerIntent = new Intent(this, TimerNotificationServiceBroadcastReceiver.class);
-        resetTimerIntent.setAction("Reset Timer");
+        resetTimerIntent.setAction(getString(R.string.intent_action_reset_timer));
         PendingIntent resetPendingTimerIntent = PendingIntent.getBroadcast(this, 0, resetTimerIntent, 0);
 
-        builderTimerRunning = new NotificationCompat.Builder(this, "CHANNEL_ID")
+        builderTimerRunning = new NotificationCompat.Builder(this, getString(R.string.channel_id_timer_running))
                 .setSmallIcon(R.drawable.ic_baseline_timer_24)
-                .setContentText("Time Remaining")
-                .setContentTitle("Staring Timer")
+                .setContentText(getString(R.string.time_remaining))
+                .setContentTitle(getString(R.string.starting_timer))
                 .setPriority(NotificationCompat.PRIORITY_LOW)
                 .setContentIntent(pendingIntent)
-                .addAction(R.drawable.ic_baseline_timer_24, "Stop", stopPendingTimerIntent)
-                .addAction(R.drawable.ic_baseline_timer_24, "Start", startPendingTimerIntent)
-                .addAction(R.drawable.ic_baseline_timer_24, "Reset", resetPendingTimerIntent);
+                .addAction(R.drawable.ic_baseline_timer_24, getString(R.string.intent_action_stop_button), stopPendingTimerIntent)
+                .addAction(R.drawable.ic_baseline_timer_24, getString(R.string.intent_action_start_button), startPendingTimerIntent)
+                .addAction(R.drawable.ic_baseline_timer_24, getString(R.string.intent_action_reset_button), resetPendingTimerIntent);
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
         notificationManagerCompat.notify(333, builderTimerRunning.build());
     }
@@ -147,8 +145,6 @@ public class TimerNotificationService extends Service {
             public void onTick(long l) {
                 int[] times = timerActivity.countdownTimerHoursMinutesSeconds(l);
                 Log.d("TAG", "Timing is ticking: " + times[0] + ":" + times[1] + ":" + times[2]);
-                //Log.d("TAG", "Timer: " + (mEndTime - System.currentTimeMillis()));
-                //Log.d("TAG", "Timer s: " + (mEndTime - System.currentTimeMillis())/1000%60);
 
                 editor.putLong("millisLeft", mEndTime - System.currentTimeMillis());
                 editor.putLong("endTime", mEndTime);
@@ -159,7 +155,7 @@ public class TimerNotificationService extends Service {
             @Override
             public void onFinish() {
                 Intent timerComplete = new Intent(TimerNotificationService.this, TimerCompleteNotificationBroadcastReceiver.class);
-                timerComplete.setAction("TimerFinish");
+                timerComplete.setAction(getString(R.string.intent_action_timer_finished));
                 sendBroadcast(timerComplete);
 
                 onDestroy();
@@ -188,19 +184,19 @@ public class TimerNotificationService extends Service {
         public void onReceive(Context context, Intent intent) {
             SharedPreferences prefs = context.getSharedPreferences("prefs", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
-            if (intent.getAction().equals("Stop Timer")) {
+            if (intent.getAction().equals(getString(R.string.intent_action_stop_timer))) {
                 Log.d("TAG", "Stopping timer from Notification");
                 cancelTimer();
                 editor.putBoolean("timerRunning", false);
                 editor.apply();
-            } else if (intent.getAction().equals("Start Timer")) {
+            } else if (intent.getAction().equals(getString(R.string.intent_action_start_timer))) {
                 if (!isTimerRunning) {
                     Log.d("TAG", "Starting timer from notification");
                     startTimer();
                     editor.putBoolean("timerRunning", true);
                     editor.apply();
                 }
-            } else if (intent.getAction().equals("Reset Timer")) {
+            } else if (intent.getAction().equals(getString(R.string.intent_action_reset_timer))) {
                 Log.d("TAG", "Resetting timer from notification");
                 cancelTimer();
                 mTimeLeftInMillis = mStartTimeInMillis;
