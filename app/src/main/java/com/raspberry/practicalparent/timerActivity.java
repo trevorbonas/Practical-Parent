@@ -30,7 +30,6 @@ public class timerActivity extends AppCompatActivity {
 
 
     private EditText mEditTextInput;
-    private Button mButtonSet;
 
     private TextView mTextViewCountDown;
     private Button mButtonStartPause;
@@ -68,27 +67,6 @@ public class timerActivity extends AppCompatActivity {
 
         mButtonStartPause = findViewById(R.id.button_start_pause);
         mButtonReset = findViewById(R.id.button_reset);
-
-        mButtonSet.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                String input = mEditTextInput.getText().toString();
-                if(input.length() == 0) {
-                    Toast.makeText(timerActivity.this, "Field can't be empty", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                long millisInput = Long.parseLong(input) * 60000;
-
-                if(millisInput == 0){
-                    Toast.makeText(timerActivity.this, "Please enter a positive number", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                setTime(millisInput);
-                mEditTextInput.setText("");
-            }
-        });
 
         //Remove checked radio button if user is inputting a custom time
         mEditTextInput.addTextChangedListener(new TextWatcher() {
@@ -243,14 +221,12 @@ public class timerActivity extends AppCompatActivity {
     private void updateWatchInterface() {
         if (mTimerRunning) {
             mEditTextInput.setVisibility(View.INVISIBLE);
-            mButtonSet.setVisibility(View.INVISIBLE);  //set button and text input to invisible
             mButtonReset.setVisibility(View.INVISIBLE);
             presetTimesRadioGroup.setVisibility(View.INVISIBLE);
             presetTimesRadioGroup.clearCheck();
             mButtonStartPause.setText("Pause");
         } else {
             mEditTextInput.setVisibility(View.VISIBLE);
-            mButtonSet.setVisibility(View.VISIBLE);  //set button and text input to visible
             presetTimesRadioGroup.setVisibility(View.VISIBLE);
             mButtonStartPause.setText("Start");
 
