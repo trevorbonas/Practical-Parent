@@ -28,7 +28,6 @@ import java.util.Locale;
 
 public class timerActivity extends AppCompatActivity {
 
-
     private EditText mEditTextInput;
 
     private TextView mTextViewCountDown;
@@ -43,10 +42,6 @@ public class timerActivity extends AppCompatActivity {
     private RadioGroup presetTimesRadioGroup;
     private int radioButtonIndex;
 
-    private String CHANNEL_ID_TIMER_COMPLETE = "timer_complete_channel";
-    private NotificationCompat.Builder builderTimerComplete;
-
-
     public static Intent makeIntent(Context context) {
         return new Intent(context, timerActivity.class);
     }
@@ -59,7 +54,6 @@ public class timerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_timer);
 
         setupPresetTimesRadioGroup();
-        createNotificationChannelTimerComplete();
 
         //setting time in minutes
         mEditTextInput = findViewById(R.id.edit_text_input);
@@ -82,6 +76,7 @@ public class timerActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 presetTimesRadioGroup.clearCheck();
+                cancelNotification(444);
                 if (!(mEditTextInput.getText().toString().isEmpty())) {
                     String input = mEditTextInput.getText().toString();
                     long millisInput = Long.parseLong(input) * 60000;
@@ -95,7 +90,6 @@ public class timerActivity extends AppCompatActivity {
             public void onClick(View v) {
                     if(mTimerRunning) {
                         pauseTimer();
-                        deleteTimerRunningNotification();
                     } else {
                         startTimer();
                     }
@@ -106,6 +100,7 @@ public class timerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 resetTimer();
+                cancelNotification(444);
             }
         });
 
@@ -138,46 +133,15 @@ public class timerActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 mTimerRunning = false;
-//                mButtonStartPause.setText("Start");
-//                mButtonStartPause.setVisibility(View.INVISIBLE);
-//                mButtonReset.setVisibility(View.VISIBLE);
                 updateWatchInterface();
-                //TODO: add android notification
-                deleteTimerRunningNotification();
-                createTimerCompleteNotification();
+                Intent timerComplete = new Intent(timerActivity.this, TimerCompleteNotificationBroadcastReceiver.class);
+                timerComplete.setAction("TimerFinishActivity");
+                sendBroadcast(timerComplete);
             }
         }.start();
 
         mTimerRunning = true;
         updateWatchInterface();
-    }
-
-    private void createTimerCompleteNotification() {
-        builderTimerComplete = new NotificationCompat.Builder(this, CHANNEL_ID_TIMER_COMPLETE)
-                .setSmallIcon(R.drawable.ic_baseline_timer_24)
-                .setContentText("Done")
-                .setContentTitle("Done")
-                .setPriority(NotificationCompat.PRIORITY_HIGH);
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
-        notificationManagerCompat.notify(102, builderTimerComplete.build());
-    }
-
-    private void deleteTimerRunningNotification() {
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancel(101);
-    }
-
-    private void createNotificationChannelTimerComplete() {
-        //from https://developer.android.com/training/notify-user/build-notification
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = getString(R.string.channel_name_timer_complete);
-            String description = getString(R.string.channel_description_timer_complete);
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID_TIMER_COMPLETE, name, importance);
-            channel.setDescription(description);
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
     }
 
     private void startTimerNotificationService() {
@@ -199,11 +163,17 @@ public class timerActivity extends AppCompatActivity {
     }
 
     private void updateCountDownText() {
-        int hours = (int) (mTimeLeftInMillis / 1000) / 3600; //turns hours to mins
-        int minutes = (int) ((mTimeLeftInMillis / 1000) % 3600)/ 60; //turns millis to mins
-        int seconds = (int) (mTimeLeftInMillis / 1000) % 60; //turns millis to secs
-        String timeLeftFormatted = formatTimer(hours, minutes, seconds);
+        int[] times = countdownTimerHoursMinutesSeconds(mTimeLeftInMillis);
+        String timeLeftFormatted = formatTimer(times[0], times[1], times[2]);
         mTextViewCountDown.setText(timeLeftFormatted);
+    }
+
+    //Returns an array filled with times in hours, minutes, and seconds from time (in millis)
+    public static int[] countdownTimerHoursMinutesSeconds(long time) {
+        int hours = (int) (time / 1000) / 3600;
+        int minutes = (int) ((time / 1000) % 3600)/ 60;
+        int seconds = (int) (time / 1000) % 60;
+        return new int[]{hours, minutes, seconds};
     }
 
     public static String formatTimer(int hours, int minutes, int seconds) {
@@ -265,6 +235,7 @@ public class timerActivity extends AppCompatActivity {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    cancelNotification(444);
                     radioButtonIndex = finalI;
                     if (!(mEditTextInput.getText().toString().isEmpty())) {
                         mEditTextInput.getText().clear();
@@ -277,6 +248,24 @@ public class timerActivity extends AppCompatActivity {
             });
             presetTimesRadioGroup.addView(button);
         }
+
+        //Quick 5s, TODO delete before submission
+        RadioButton button = new RadioButton(this);
+        button.setText(3 + "s");
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                radioButtonIndex = 5;
+                if (!(mEditTextInput.getText().toString().isEmpty())) {
+                    mEditTextInput.getText().clear();
+                    //Re-check the clicked radio button
+                    ((RadioButton) presetTimesRadioGroup.getChildAt(radioButtonIndex)).setChecked(true);
+                }
+                int minutesToMilliseconds = 3000;
+                setTime(minutesToMilliseconds);
+            }
+        });
+        presetTimesRadioGroup.addView(button);
     }
 
     //for timer to run in background
@@ -315,6 +304,7 @@ public class timerActivity extends AppCompatActivity {
         super.onStart();
 
         stopService(new Intent(this, TimerNotificationService.class));
+        cancelNotification(444);
 
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
         mStartTimeInMillis = prefs.getLong("startTimeInMillis", 600000);
@@ -338,5 +328,10 @@ public class timerActivity extends AppCompatActivity {
                 startTimer();
             }
         }
+    }
+
+    private void cancelNotification(int notificationId) {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.cancel(notificationId);
     }
 }
