@@ -25,6 +25,7 @@
             </intent-filter>
         </activity>
         <service android:name=".TimerNotificationService"/>
+        <receiver android:name=".TimerNotificationServiceBroadcastReceiver"/>
     </application>
 
 </manifest>
