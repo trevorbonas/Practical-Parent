@@ -19,8 +19,9 @@ import androidx.core.app.NotificationManagerCompat;
 
 public class TimerNotificationService extends Service {
 
-    CountDownTimer countDownTimer;
+    private static CountDownTimer countDownTimer;
     private long mTimeLeftInMillis;
+    private long mEndTime;
     NotificationCompat.Builder builderTimerRunning;
     NotificationCompat.Builder builderTimerComplete;
 
@@ -36,38 +37,14 @@ public class TimerNotificationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
-        long mStartTimeInMillis = prefs.getLong("startTimeInMillis", 600000);
-        mTimeLeftInMillis = prefs.getLong("millisLeft", mStartTimeInMillis);
-        long mEndTime = prefs.getLong("endTime", 0);
-        mTimeLeftInMillis = mEndTime - System.currentTimeMillis();
-
-        countDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
-            @Override
-            public void onTick(long l) {
-                int hours = (int) (l / 1000) / 3600; //turns hours to mins
-                int minutes = (int) ((l / 1000) % 3600)/ 60; //turns millis to mins
-                int seconds = (int) (l / 1000) % 60; //turns millis to secs
-                Log.d("TAG", "Timing is ticking: " + hours + ":" + minutes + ":" + seconds);
-                updateTimerRunningNotification(hours, minutes, seconds);
-            }
-
-            @Override
-            public void onFinish() {
-                createTimerCompleteNotification();
-                onDestroy();
-            }
-        }.start();
-
+        startTimer();
         return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
         Log.d("TAG", "Destroying Service");
-        if (countDownTimer != null) {
-            countDownTimer.cancel();
-        }
+        cancelTimer();
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(333);
         stopSelf();
@@ -108,28 +85,87 @@ public class TimerNotificationService extends Service {
     }
 
     private void createTimerRunningNotification() {
-        Intent intent = new Intent(this, timerActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        Intent touchActionIntent = new Intent(this, timerActivity.class);
+        touchActionIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         //Inflate back stack
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addNextIntentWithParentStack(intent);
+        stackBuilder.addNextIntentWithParentStack(touchActionIntent);
         PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        //Add actions
+        //Use broadcastreceiver??
+        Intent stopTimerIntent = new Intent(this, TimerNotificationServiceBroadcastReceiver.class);
+        stopTimerIntent.setAction("Stop Timer");
+        PendingIntent stopPendingTimerIntent = PendingIntent.getBroadcast(this, 0, stopTimerIntent, 0);
+
+        Intent startTimerIntent = new Intent(this, TimerNotificationServiceBroadcastReceiver.class);
+        startTimerIntent.setAction("Start Timer");
+        PendingIntent startPendingTimerIntent = PendingIntent.getBroadcast(this, 0, startTimerIntent, 0);
+
         builderTimerRunning = new NotificationCompat.Builder(this, "CHANNEL_ID")
                 .setSmallIcon(R.drawable.ic_baseline_timer_24)
                 .setContentText("Time Remaining")
                 .setContentTitle("Staring Timer")
                 .setPriority(NotificationCompat.PRIORITY_LOW)
-                .setContentIntent(pendingIntent);
+                .setContentIntent(pendingIntent)
+                .addAction(R.drawable.ic_baseline_timer_24, "Stop", stopPendingTimerIntent)
+                .addAction(R.drawable.ic_baseline_timer_24, "Start", startPendingTimerIntent);
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
         notificationManagerCompat.notify(333, builderTimerRunning.build());
     }
 
+    private void startTimer() {
+        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+        final SharedPreferences.Editor editor = prefs.edit();
+        long mStartTimeInMillis = prefs.getLong("startTimeInMillis", 600000);
+        mTimeLeftInMillis = prefs.getLong("millisLeft", mStartTimeInMillis);
+        mEndTime = prefs.getLong("endTime", 0);
+        mTimeLeftInMillis = mEndTime - System.currentTimeMillis();
+
+        countDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
+            @Override
+            public void onTick(long l) {
+                int hours = (int) (l / 1000) / 3600; //turns hours to mins
+                int minutes = (int) ((l / 1000) % 3600)/ 60; //turns millis to mins
+                int seconds = (int) (l / 1000) % 60; //turns millis to secs
+                Log.d("TAG", "Timing is ticking: " + hours + ":" + minutes + ":" + seconds);
+                editor.putLong("millisLeft", mEndTime - System.currentTimeMillis());
+                editor.apply();
+                updateTimerRunningNotification(hours, minutes, seconds);
+            }
+
+            @Override
+            public void onFinish() {
+                createTimerCompleteNotification();
+                onDestroy();
+            }
+        }.start();
+    }
+
+    public static void cancelTimer() {
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+    }
+
+    public static void startTimerFromBroadcast() {
+
+    }
+
     private void createTimerCompleteNotification() {
+        Intent touchActionIntent = new Intent(this, timerActivity.class);
+        touchActionIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        //Inflate back stack
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addNextIntentWithParentStack(touchActionIntent);
+        PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
         builderTimerComplete = new NotificationCompat.Builder(this, "CHANNEL_ID_2")
                 .setSmallIcon(R.drawable.ic_baseline_timer_24)
                 .setContentText("Done")
                 .setContentTitle("Done")
-                .setPriority(NotificationCompat.PRIORITY_HIGH);
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
         notificationManagerCompat.notify(444, builderTimerComplete.build());
     }

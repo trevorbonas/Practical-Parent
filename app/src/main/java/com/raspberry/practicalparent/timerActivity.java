@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -228,7 +229,7 @@ public class timerActivity extends AppCompatActivity {
         mTextViewCountDown.setText(timeLeftFormatted);
     }
 
-    private String formatTimer(int hours, int minutes, int seconds) {
+    public static String formatTimer(int hours, int minutes, int seconds) {
         String timeLeftFormatted;
         if(hours > 0){
             timeLeftFormatted = String.format(Locale.getDefault(),
