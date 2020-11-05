@@ -5,9 +5,12 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.app.TaskStackBuilder;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.IBinder;
@@ -19,11 +22,13 @@ import androidx.core.app.NotificationManagerCompat;
 
 public class TimerNotificationService extends Service {
 
-    private static CountDownTimer countDownTimer;
+    private CountDownTimer countDownTimer;
     private long mTimeLeftInMillis;
     private long mEndTime;
-    NotificationCompat.Builder builderTimerRunning;
-    NotificationCompat.Builder builderTimerComplete;
+    private long mStartTimeInMillis;
+    private boolean isTimerRunning = true;
+    private NotificationCompat.Builder builderTimerRunning;
+    private NotificationCompat.Builder builderTimerComplete;
 
     @Override
     public void onCreate() {
@@ -33,6 +38,13 @@ public class TimerNotificationService extends Service {
         createNotificationChannelTimerComplete();
         createTimerRunningNotification();
         startForeground(333, builderTimerRunning.build());
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        filter.addAction("Stop Timer");
+        filter.addAction("Start Timer");
+        filter.addAction("Reset Timer");
+        this.registerReceiver(broadcastReceiver, filter);
+        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+        mStartTimeInMillis = prefs.getLong("startTimeInMillis", 0);
     }
 
     @Override
@@ -47,6 +59,11 @@ public class TimerNotificationService extends Service {
         cancelTimer();
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(333);
+        try {
+            this.unregisterReceiver(broadcastReceiver);
+        } catch (Exception e) {
+            //Already unregistered
+        }
         stopSelf();
     }
 
@@ -92,7 +109,6 @@ public class TimerNotificationService extends Service {
         stackBuilder.addNextIntentWithParentStack(touchActionIntent);
         PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         //Add actions
-        //Use broadcastreceiver??
         Intent stopTimerIntent = new Intent(this, TimerNotificationServiceBroadcastReceiver.class);
         stopTimerIntent.setAction("Stop Timer");
         PendingIntent stopPendingTimerIntent = PendingIntent.getBroadcast(this, 0, stopTimerIntent, 0);
@@ -101,6 +117,10 @@ public class TimerNotificationService extends Service {
         startTimerIntent.setAction("Start Timer");
         PendingIntent startPendingTimerIntent = PendingIntent.getBroadcast(this, 0, startTimerIntent, 0);
 
+        Intent resetTimerIntent = new Intent(this, TimerNotificationServiceBroadcastReceiver.class);
+        resetTimerIntent.setAction("Reset Timer");
+        PendingIntent resetPendingTimerIntent = PendingIntent.getBroadcast(this, 0, resetTimerIntent, 0);
+
         builderTimerRunning = new NotificationCompat.Builder(this, "CHANNEL_ID")
                 .setSmallIcon(R.drawable.ic_baseline_timer_24)
                 .setContentText("Time Remaining")
@@ -108,7 +128,8 @@ public class TimerNotificationService extends Service {
                 .setPriority(NotificationCompat.PRIORITY_LOW)
                 .setContentIntent(pendingIntent)
                 .addAction(R.drawable.ic_baseline_timer_24, "Stop", stopPendingTimerIntent)
-                .addAction(R.drawable.ic_baseline_timer_24, "Start", startPendingTimerIntent);
+                .addAction(R.drawable.ic_baseline_timer_24, "Start", startPendingTimerIntent)
+                .addAction(R.drawable.ic_baseline_timer_24, "Reset", resetPendingTimerIntent);
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
         notificationManagerCompat.notify(333, builderTimerRunning.build());
     }
@@ -118,8 +139,12 @@ public class TimerNotificationService extends Service {
         final SharedPreferences.Editor editor = prefs.edit();
         long mStartTimeInMillis = prefs.getLong("startTimeInMillis", 600000);
         mTimeLeftInMillis = prefs.getLong("millisLeft", mStartTimeInMillis);
-        mEndTime = prefs.getLong("endTime", 0);
-        mTimeLeftInMillis = mEndTime - System.currentTimeMillis();
+        if (isTimerRunning) {
+            mEndTime = prefs.getLong("endTime", 0);
+            mTimeLeftInMillis = mEndTime - System.currentTimeMillis();
+        } else {
+            mEndTime = System.currentTimeMillis() + mTimeLeftInMillis;
+        }
 
         countDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
             @Override
@@ -128,7 +153,11 @@ public class TimerNotificationService extends Service {
                 int minutes = (int) ((l / 1000) % 3600)/ 60; //turns millis to mins
                 int seconds = (int) (l / 1000) % 60; //turns millis to secs
                 Log.d("TAG", "Timing is ticking: " + hours + ":" + minutes + ":" + seconds);
+                //Log.d("TAG", "Timer: " + (mEndTime - System.currentTimeMillis()));
+                //Log.d("TAG", "Timer s: " + (mEndTime - System.currentTimeMillis())/1000%60);
+
                 editor.putLong("millisLeft", mEndTime - System.currentTimeMillis());
+                editor.putLong("endTime", mEndTime);
                 editor.apply();
                 updateTimerRunningNotification(hours, minutes, seconds);
             }
@@ -141,14 +170,11 @@ public class TimerNotificationService extends Service {
         }.start();
     }
 
-    public static void cancelTimer() {
+    private void cancelTimer() {
         if (countDownTimer != null) {
             countDownTimer.cancel();
+            isTimerRunning = false;
         }
-    }
-
-    public static void startTimerFromBroadcast() {
-
     }
 
     private void createTimerCompleteNotification() {
@@ -178,4 +204,38 @@ public class TimerNotificationService extends Service {
             notificationManager.notify(333, builderTimerRunning.build());
         }
     }
+
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            SharedPreferences prefs = context.getSharedPreferences("prefs", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            if (intent.getAction().equals("Stop Timer")) {
+                Log.d("TAG", "Stopping timer from Notification");
+                cancelTimer();
+                editor.putBoolean("timerRunning", false);
+                editor.apply();
+            } else if (intent.getAction().equals("Start Timer")) {
+                if (!isTimerRunning) {
+                    Log.d("TAG", "Starting timer from notification");
+                    startTimer();
+                    editor.putBoolean("timerRunning", true);
+                    editor.apply();
+                }
+            } else if (intent.getAction().equals("Reset Timer")) {
+                Log.d("TAG", "Resetting timer from notification");
+                cancelTimer();
+                mTimeLeftInMillis = mStartTimeInMillis;
+                mEndTime = System.currentTimeMillis() + mStartTimeInMillis;
+                editor.putBoolean("timerRunning", false);
+                editor.putLong("millisLeft", mTimeLeftInMillis);
+                editor.putLong("endTime", mEndTime);
+                editor.apply();
+                int hours = (int) (mTimeLeftInMillis / 1000) / 3600; //turns hours to mins
+                int minutes = (int) ((mTimeLeftInMillis / 1000) % 3600)/ 60; //turns millis to mins
+                int seconds = (int) (mTimeLeftInMillis / 1000) % 60; //turns millis to secs
+                updateTimerRunningNotification(hours, minutes, seconds);
+            }
+        }
+    };
 }
