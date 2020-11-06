@@ -56,6 +56,10 @@
         <service android:name=".TimerNotificationClasses.TimerNotificationService"/>
         <receiver android:name=".TimerNotificationClasses.TimerNotificationServiceBroadcastReceiver"/>
         <receiver android:name=".TimerNotificationClasses.TimerCompleteNotificationBroadcastReceiver"/>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

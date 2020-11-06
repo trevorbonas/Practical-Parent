@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        android:text="Select a child to edit or delete"
+        android:text="@string/select_a_child_to_edit_or_delete"
         app:layout_constraintBottom_toTopOf="@+id/childrenListView"
         app:layout_constraintStart_toStartOf="@+id/childrenListView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

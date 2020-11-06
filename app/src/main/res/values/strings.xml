@@ -39,6 +39,22 @@
     <string name="shared_preferences_end_time">endTime</string>
     <string name="default_timer_value">00:00</string>
     <string name="custom_duration">Custom (minutes)</string>
+    <string name="flip_coin">Flip Coin</string>
+    <string name="you_flipped">You Flipped:</string>
+    <string name="history">History</string>
+    <string name="select_a_child_to_edit_or_delete">Select a child to edit or delete</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="heads">Heads</string>
+    <string name="tails">Tails</string>
+    <string name="or">or</string>
+    <string name="name">Name</string>
+    <string name="cardname">NAME</string>
+    <string name="win_loss">WIN/LOSS</string>
+    <string name="side">SIDE</string>
+    <string name="card_date">DATE</string>
+    <string name="outcome">Outcome</string>
 
     <plurals name="radio_buttons_text_in_minutes">
         <item quantity="one">%d minute</item>

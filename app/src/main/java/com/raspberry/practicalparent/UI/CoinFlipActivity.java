@@ -10,6 +10,8 @@ import android.animation.AnimatorSet;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
@@ -67,20 +69,16 @@ public class CoinFlipActivity extends AppCompatActivity {
         kids = KidManager.getInstance();
         history = ResultsManager.getInstance();
 
-        TextView nameTxt = findViewById(R.id.childFlipName);
         Button historyBtn = findViewById(R.id.historyBtn);
         historyBtn.setEnabled(false);
 
         if (kids.getNum() <= 0) {
             this.choice = "Not set";
-            nameTxt.setText("No child's turn");
         }
         else {
             this.kidName = kids.getKidAt(kids.getCurrentIndex()).getName();
             Intent passedIntent = getIntent();
             this.choice = passedIntent.getStringExtra("Choice");
-            nameTxt.setText(kids.getKidAt(kids.getCurrentIndex()).getName()
-                    + "'s turn\nChose " + choice);
             historyBtn.setEnabled(true);
         }
 
@@ -111,19 +109,25 @@ public class CoinFlipActivity extends AppCompatActivity {
         Random rand = new Random();
         int n = rand.nextInt(2);
 
-        TextView tv = findViewById(R.id.txtRng);
-        if (n == 0) {
-            //Heads
-            tv.setText("Rng: Heads");
-        } else {
-            tv.setText("Rng: Tails");
-        }
         return n;
     }
 
     private void updateResultText(String result) {
         TextView textView = findViewById(R.id.txtResult);
-        textView.setText("You Flipped: " + result);
+        String winOrLose = "";
+        if (kids.getNum() <= 0) {
+            textView.setText(result);
+            return;
+        }
+        if (choice.equals(result)) {
+            winOrLose = "You win!";
+            textView.setTextColor(Color.GREEN);
+        }
+        else if (!choice.equals(result)) {
+            winOrLose = "You lose";
+            textView.setTextColor(Color.RED);
+        }
+        textView.setText(result + "\n" + winOrLose);
     }
 
     private void playAnimationXML() {
@@ -177,6 +181,12 @@ public class CoinFlipActivity extends AppCompatActivity {
                 // There isn't a kid choosing, user can flip as many times as they want
                 if (kids.getNum() <= 0) {
                     btn.setEnabled(true);
+                    if (intCurrentFace == 0) {
+                        updateResultText("Heads");
+                    }
+                    else if (intCurrentFace == 1) {
+                        updateResultText("Tails");
+                    }
                 }
 
                 else {
@@ -185,7 +195,7 @@ public class CoinFlipActivity extends AppCompatActivity {
 
                     // In case of getting heads
                     if (intCurrentFace == 0) {
-                        updateResultText("heads");
+                        updateResultText("Heads");
 
                         // Kid chose heads and won
                         if (choice.equals("Heads")) {
@@ -195,7 +205,7 @@ public class CoinFlipActivity extends AppCompatActivity {
 
                     // In case of getting tails
                     else {
-                        updateResultText("tails");
+                        updateResultText("Tails");
 
                         // Kid chose tails and won
                         if (choice.equals("Tails")) {
