@@ -17,8 +17,8 @@
         </activity>
         <activity
             android:name=".UI.ChooseActivity"
-            android:label="@string/title_activity_choose"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label=""
+            android:parentActivityName=".UI.MainActivity">
         </activity>
         <activity
             android:name=".UI.CoinFlipActivity"

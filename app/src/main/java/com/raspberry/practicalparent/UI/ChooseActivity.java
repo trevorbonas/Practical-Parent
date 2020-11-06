@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.raspberry.practicalparent.R;
 import com.raspberry.practicalparent.model.KidManager;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
@@ -18,6 +19,8 @@ public class ChooseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true); // Enable back button
 
         KidManager kids = KidManager.getInstance();
 

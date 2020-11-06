@@ -47,7 +47,7 @@ public class CoinFlipActivity extends AppCompatActivity {
     private String kidName; // Needs to be class variable since current name may change
 
     private DateFormat df = new SimpleDateFormat("h:mm a MMM. d, yyyy"); // Format for date
-    private String date = df.format(Calendar.getInstance().getTime()); // Current date
+
 
     private ImageView currFace;
     private ImageView otherFace;
