@@ -246,24 +246,6 @@ public class timerActivity extends AppCompatActivity {
             });
             presetTimesRadioGroup.addView(button);
         }
-
-        //quick s for testing TODO delete before submission
-        RadioButton button = new RadioButton(this);
-        button.setText(3 + "s");
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                radioButtonIndex = 5;
-                if (!(mEditTextInput.getText().toString().isEmpty())) {
-                    mEditTextInput.getText().clear();
-                    //Re-check the clicked radio button
-                    ((RadioButton) presetTimesRadioGroup.getChildAt(radioButtonIndex)).setChecked(true);
-                }
-                int minutesToMilliseconds = 3000;
-                setTime(minutesToMilliseconds);
-            }
-        });
-        presetTimesRadioGroup.addView(button);
     }
 
     //for timer to run in background
@@ -274,7 +256,6 @@ public class timerActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
-        //TODO: change strings to constants
         editor.putLong(getString(R.string.shared_preferences_start_time_in_millis), mStartTimeInMillis);
         editor.putLong(getString(R.string.shared_preferences_time_left_in_millis), mTimeLeftInMillis);
         editor.putBoolean(getString(R.string.shared_preferences_timer_running), mTimerRunning);
