@@ -19,11 +19,14 @@
     <string name="starting_timer">Starting Timer</string>
     <string name="pause">Pause</string>
     <string name="start">Start</string>
+    <string name="reset">reset</string>
 
     <string name="shared_preferences_start_time_in_millis">startTimeInMillis</string>
     <string name="shared_preferences_time_left_in_millis">millisLeft</string>
     <string name="shared_preferences_timer_running">timerRunning</string>
     <string name="shared_preferences_end_time">endTime</string>
+    <string name="default_timer_value">00:00</string>
+    <string name="custom_duration">Custom (minutes)</string>
 
     <plurals name="radio_buttons_text_in_minutes">
         <item quantity="one">%d minute</item>
