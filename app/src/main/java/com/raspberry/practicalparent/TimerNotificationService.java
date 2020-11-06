@@ -1,6 +1,5 @@
 package com.raspberry.practicalparent;
 
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -11,17 +10,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.media.AudioAttributes;
-import android.media.MediaPlayer;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.IBinder;
-import android.os.health.TimerStat;
 import android.util.Log;
+
+import com.raspberry.practicalparent.UI.TimerActivity;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -96,7 +91,7 @@ public class TimerNotificationService extends Service {
     }
 
     private void createTimerRunningNotification() {
-        Intent touchActionIntent = new Intent(this, timerActivity.class);
+        Intent touchActionIntent = new Intent(this, TimerActivity.class);
         touchActionIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         //Inflate back stack
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
@@ -143,7 +138,7 @@ public class TimerNotificationService extends Service {
         countDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
             @Override
             public void onTick(long l) {
-                int[] times = timerActivity.countdownTimerHoursMinutesSeconds(l);
+                int[] times = TimerActivity.countdownTimerHoursMinutesSeconds(l);
                 Log.d("TAG", "Timing is ticking: " + times[0] + ":" + times[1] + ":" + times[2]);
 
                 editor.putLong(getString(R.string.shared_preferences_time_left_in_millis), mEndTime - System.currentTimeMillis());
@@ -171,7 +166,7 @@ public class TimerNotificationService extends Service {
     }
 
     private void updateTimerRunningNotification(int hours, int minutes, int seconds) {
-        String timeLeftFormatted = timerActivity.formatTimer(hours, minutes, seconds);
+        String timeLeftFormatted = TimerActivity.formatTimer(hours, minutes, seconds);
         if (builderTimerRunning != null) {
             builderTimerRunning.setContentTitle(timeLeftFormatted);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -205,7 +200,7 @@ public class TimerNotificationService extends Service {
                 editor.putLong(getString(R.string.shared_preferences_time_left_in_millis), mTimeLeftInMillis);
                 editor.putLong(getString(R.string.shared_preferences_end_time), mEndTime);
                 editor.apply();
-                int[] times = timerActivity.countdownTimerHoursMinutesSeconds(mTimeLeftInMillis);
+                int[] times = TimerActivity.countdownTimerHoursMinutesSeconds(mTimeLeftInMillis);
                 updateTimerRunningNotification(times[0], times[1], times[2]);
             }
         }

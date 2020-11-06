@@ -1,10 +1,9 @@
-package com.raspberry.practicalparent;
+package com.raspberry.practicalparent.UI;
 
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.raspberry.practicalparent.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -20,7 +19,6 @@ import android.widget.Button;
  *
  */
 public class MainActivity extends AppCompatActivity {
-    private Button button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -28,8 +26,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        button = (Button) findViewById(R.id.timeoutBtn);
-        button.setOnClickListener( new View.OnClickListener() {
+        Button btnTimeoutTimer = (Button) findViewById(R.id.timeoutBtn);
+        btnTimeoutTimer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                     openActivityTimer();
@@ -41,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openActivityTimer() {
-        Intent intent = timerActivity.makeIntent(this);
+        Intent intent = TimerActivity.makeIntent(this);
         startActivity(intent);
     }
 

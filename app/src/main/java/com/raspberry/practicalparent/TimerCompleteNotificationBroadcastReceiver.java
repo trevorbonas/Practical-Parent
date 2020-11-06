@@ -12,7 +12,8 @@ import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.util.Log;
+
+import com.raspberry.practicalparent.UI.TimerActivity;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -61,7 +62,7 @@ public class TimerCompleteNotificationBroadcastReceiver extends BroadcastReceive
     }
 
     private void createTimerCompleteNotification(Context context) {
-        Intent touchActionIntent = new Intent(context, timerActivity.class);
+        Intent touchActionIntent = new Intent(context, TimerActivity.class);
         touchActionIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         //Inflate back stack
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);

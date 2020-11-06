@@ -1,21 +1,16 @@
-package com.raspberry.practicalparent;
+package com.raspberry.practicalparent.UI;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -23,11 +18,14 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.raspberry.practicalparent.R;
+import com.raspberry.practicalparent.TimerCompleteNotificationBroadcastReceiver;
+import com.raspberry.practicalparent.TimerNotificationService;
 
 import java.util.Locale;
 
-public class timerActivity extends AppCompatActivity {
+public class TimerActivity extends AppCompatActivity {
 
     private EditText mEditTextInput;
 
@@ -44,7 +42,7 @@ public class timerActivity extends AppCompatActivity {
     private int radioButtonIndex;
 
     public static Intent makeIntent(Context context) {
-        return new Intent(context, timerActivity.class);
+        return new Intent(context, TimerActivity.class);
     }
 
     @Override
@@ -133,7 +131,7 @@ public class timerActivity extends AppCompatActivity {
             public void onFinish() {
                 mTimerRunning = false;
                 updateWatchInterface();
-                Intent timerComplete = new Intent(timerActivity.this, TimerCompleteNotificationBroadcastReceiver.class);
+                Intent timerComplete = new Intent(TimerActivity.this, TimerCompleteNotificationBroadcastReceiver.class);
                 timerComplete.setAction(getString(R.string.intent_action_timer_finished_from_activity));
                 sendBroadcast(timerComplete);
             }
