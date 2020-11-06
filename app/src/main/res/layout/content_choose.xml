@@ -20,20 +20,32 @@
 
     <Button
         android:id="@+id/headBtn"
+        style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="207dp"
         android:layout_height="72dp"
         android:layout_marginBottom="40dp"
+        android:background="@drawable/outlined_button"
+        android:fontFamily="sans-serif-medium"
+        android:foreground="?android:attr/selectableItemBackground"
         android:text="@string/heads"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="#6E6E6E"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/tailsBtn"
+        style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="207dp"
         android:layout_height="72dp"
         android:layout_marginTop="40dp"
+        android:background="@drawable/outlined_button"
+        android:fontFamily="sans-serif-medium"
+        android:foreground="?android:attr/selectableItemBackground"
         android:text="@string/tails"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="#6E6E6E"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline4" />
@@ -43,6 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/or"
+        android:textColor="#6E6E6E"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/tailsBtn"
         app:layout_constraintEnd_toEndOf="parent"

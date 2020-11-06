@@ -32,21 +32,33 @@
 
     <Button
         android:id="@+id/button_start_pause"
+        style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="112dp"
         android:layout_marginTop="8dp"
+        android:background="@drawable/outlined_button"
+        android:fontFamily="sans-serif-medium"
+        android:foreground="?android:attr/selectableItemBackground"
         android:text="@string/start"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="#6E6E6E"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_view_countdown" />
 
     <Button
         android:id="@+id/button_reset"
+        style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:background="@drawable/outlined_button"
+        android:fontFamily="sans-serif-medium"
+        android:foreground="?android:attr/selectableItemBackground"
         android:text="@string/reset"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="#6E6E6E"
         android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/button_start_pause"
         app:layout_constraintTop_toBottomOf="@+id/text_view_countdown"

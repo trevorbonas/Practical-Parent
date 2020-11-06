@@ -31,7 +31,7 @@
     <string name="starting_timer">Starting Timer</string>
     <string name="pause">Pause</string>
     <string name="start">Start</string>
-    <string name="reset">reset</string>
+    <string name="reset">Reset</string>
 
     <string name="shared_preferences_start_time_in_millis">startTimeInMillis</string>
     <string name="shared_preferences_time_left_in_millis">millisLeft</string>
@@ -41,7 +41,6 @@
     <string name="custom_duration">Custom (minutes)</string>
     <string name="flip_coin">Flip Coin</string>
     <string name="you_flipped">You Flipped:</string>
-    <string name="history">History</string>
     <string name="select_a_child_to_edit_or_delete">Select a child to edit or delete</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
@@ -55,6 +54,8 @@
     <string name="side">SIDE</string>
     <string name="card_date">DATE</string>
     <string name="outcome">Outcome</string>
+    <string name="history">History</string>
+    <string name="all_history">All history</string>
 
     <plurals name="radio_buttons_text_in_minutes">
         <item quantity="one">%d minute</item>

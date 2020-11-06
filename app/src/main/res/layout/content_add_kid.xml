@@ -8,10 +8,15 @@
 
     <Button
         android:id="@+id/okayBtn"
+        style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
+        android:background="@drawable/outlined_button"
+        android:fontFamily="sans-serif-medium"
+        android:foreground="?android:attr/selectableItemBackground"
         android:text="@string/save"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline2" />

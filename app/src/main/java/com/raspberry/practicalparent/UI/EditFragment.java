@@ -9,6 +9,7 @@ import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -112,7 +113,6 @@ public class EditFragment extends AppCompatDialogFragment {
         });
 
         // Build the alert dialog
-
         Dialog d = builder.setView(v).setTitle("Select name to edit").create();
 
         return d;

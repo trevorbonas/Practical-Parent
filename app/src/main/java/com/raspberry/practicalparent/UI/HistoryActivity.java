@@ -72,8 +72,8 @@ public class HistoryActivity extends AppCompatActivity {
     private void setUpPersonalHistory() {
 
         //Set on screen text
-        historyText.setText(kidName + "'S FLIPS");
-        toggleBtn.setText("ALL FLIPS");
+        historyText.setText(kidName + "'s flips");
+        toggleBtn.setText("All flips");
         updateText();
 
         populatePersonal(history, kidName);
@@ -82,8 +82,8 @@ public class HistoryActivity extends AppCompatActivity {
     //Set up text for all flips history calls populateAll
     private void setUpAllHistory() {
 
-        historyText.setText("ALL FLIPS");
-        toggleBtn.setText(kidName + "'s FLIPS");
+        historyText.setText("All flips");
+        toggleBtn.setText(kidName + "'s flips");
         updateText();
 
         // Simply pass in the singleton
