@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:radius="10dp" />
+    <stroke android:width="6px" android:color="#bbbbbb" />
+    <color android:backgroundTint="#FFFFFF"/>
+    <!-- Copied from https://stackoverflow.com/questions/7690416/android-border-for-button -->
+    android:foreground="?android:attr/selectableItemBackground"
+</shape>

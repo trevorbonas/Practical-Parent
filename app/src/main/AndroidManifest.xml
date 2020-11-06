@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/family_icon"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -56,6 +56,10 @@
         <service android:name=".TimerNotificationClasses.TimerNotificationService"/>
         <receiver android:name=".TimerNotificationClasses.TimerNotificationServiceBroadcastReceiver"/>
         <receiver android:name=".TimerNotificationClasses.TimerCompleteNotificationBroadcastReceiver"/>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

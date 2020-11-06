@@ -1,15 +1,9 @@
 package com.raspberry.practicalparent.UI;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -18,6 +12,16 @@ import com.raspberry.practicalparent.model.Kid;
 import com.raspberry.practicalparent.model.KidManager;
 import com.raspberry.practicalparent.model.Results;
 import com.raspberry.practicalparent.model.ResultsManager;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+
+import android.view.View;
+
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Button;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -84,20 +88,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     // Loads KidManager singleton from saved SharedPreferences
     private void setupKidManager() {
@@ -132,5 +122,20 @@ public class MainActivity extends AppCompatActivity {
             List<Results> list = gson.fromJson(json, listType);
             history.setList(list);
         }
+    }
+
+    static public void disableBtn(Button btn, Context context) {
+        btn.setEnabled(false);
+        btn.setBackground(ContextCompat.getDrawable(context,
+                R.drawable.disabled_button));
+        btn.setTextColor(context.getResources().getColor(R.color.buttonDisabled,
+                context.getTheme()));
+    }
+    static public void enableBtn(Button btn, Context context) {
+        btn.setEnabled(true);
+        btn.setBackground(ContextCompat.getDrawable(context,
+                R.drawable.outlined_button));
+        btn.setTextColor(context.getResources().getColor(R.color.buttonTxt,
+                context.getTheme()));
     }
 }

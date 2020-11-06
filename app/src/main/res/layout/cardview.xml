@@ -17,7 +17,7 @@
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/imageview"
             android:layout_marginStart="8dp"
-            android:text="NAME"
+            android:text="@string/cardname"
             android:textColor="@android:color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -29,7 +29,7 @@
             android:layout_below="@+id/tv_child_name"
             android:layout_marginStart="8dp"
             android:layout_toEndOf="@+id/imageview"
-            android:text="WIN/LOSS"
+            android:text="@string/win_loss"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -40,7 +40,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_marginEnd="8dp"
-            android:text="SIDE"
+            android:text="@string/side"
             android:textColor="@android:color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -52,7 +52,7 @@
             android:layout_below="@+id/tv_side_chosen"
             android:layout_alignParentRight="true"
             android:layout_marginEnd="8dp"
-            android:text="DATE"
+            android:text="@string/card_date"
             android:textSize="16sp"
             android:textStyle="bold" />
 
