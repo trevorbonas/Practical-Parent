@@ -1,4 +1,4 @@
-package com.raspberry.practicalparent;
+package com.raspberry.practicalparent.TimerNotificationClasses;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

@@ -24,9 +24,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".TimerNotificationService"/>
-        <receiver android:name=".TimerNotificationServiceBroadcastReceiver"/>
-        <receiver android:name=".TimerCompleteNotificationBroadcastReceiver"/>
+        <service android:name=".TimerNotificationClasses.TimerNotificationService"/>
+        <receiver android:name=".TimerNotificationClasses.TimerNotificationServiceBroadcastReceiver"/>
+        <receiver android:name=".TimerNotificationClasses.TimerCompleteNotificationBroadcastReceiver"/>
     </application>
 
 </manifest>

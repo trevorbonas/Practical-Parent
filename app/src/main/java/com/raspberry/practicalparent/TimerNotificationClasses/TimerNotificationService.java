@@ -1,4 +1,4 @@
-package com.raspberry.practicalparent;
+package com.raspberry.practicalparent.TimerNotificationClasses;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -16,6 +16,7 @@ import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.raspberry.practicalparent.R;
 import com.raspberry.practicalparent.UI.TimerActivity;
 
 import androidx.annotation.Nullable;

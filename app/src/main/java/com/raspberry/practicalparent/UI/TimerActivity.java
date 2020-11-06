@@ -20,8 +20,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.raspberry.practicalparent.R;
-import com.raspberry.practicalparent.TimerCompleteNotificationBroadcastReceiver;
-import com.raspberry.practicalparent.TimerNotificationService;
+import com.raspberry.practicalparent.TimerNotificationClasses.TimerCompleteNotificationBroadcastReceiver;
+import com.raspberry.practicalparent.TimerNotificationClasses.TimerNotificationService;
 
 import java.util.Locale;
 

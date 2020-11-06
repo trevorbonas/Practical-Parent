@@ -1,4 +1,4 @@
-package com.raspberry.practicalparent;
+package com.raspberry.practicalparent.TimerNotificationClasses;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -13,6 +13,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 
+import com.raspberry.practicalparent.R;
 import com.raspberry.practicalparent.UI.TimerActivity;
 
 import androidx.core.app.NotificationCompat;
