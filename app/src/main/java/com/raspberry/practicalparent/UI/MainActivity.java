@@ -37,6 +37,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Button btnTimeoutTimer = (Button) findViewById(R.id.timeoutBtn);
+        btnTimeoutTimer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivityTimer();
+            }
+        });
 
         // Load the two singletons with info if there is info to load
         setupKidManager();
@@ -109,6 +116,11 @@ public class MainActivity extends AppCompatActivity {
             int index = gson.fromJson(json, Integer.class);
             kids.changeKid(index);
         }
+    }
+
+    private void openActivityTimer() {
+        Intent intent = TimerActivity.makeIntent(this);
+        startActivity(intent);
     }
 
     private void setupResultsManager() {

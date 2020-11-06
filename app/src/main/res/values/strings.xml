@@ -13,4 +13,36 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="channel_name_timer_running">Timer Running</string>
+    <string name="channel_description_timer_running">Notification when timer is running</string>
+    <string name="channel_name_timer_complete">Timer Complete</string>
+    <string name="channel_description_timer_complete">Notification when time completes</string>
+    <string name="channel_id_timer_running">CHANNEL_ID_TIMER_RUNNING</string>
+    <string name="channel_id_timer_complete">CHANNEL_ID_TIMER_COMPLETE</string>
+    <string name="intent_action_stop_timer">Pause Timer</string>
+    <string name="intent_action_start_timer">Start Timer</string>
+    <string name="intent_action_reset_timer">Reset Timer</string>
+    <string name="intent_action_stop_button">Pause</string>
+    <string name="intent_action_start_button">Start</string>
+    <string name="intent_action_reset_button">Reset</string>
+    <string name="intent_action_timer_finished">Timer Finish</string>
+    <string name="intent_action_timer_finished_from_activity">Timer Finish Activity</string>
+    <string name="time_remaining">Time Remaining</string>
+    <string name="starting_timer">Starting Timer</string>
+    <string name="pause">Pause</string>
+    <string name="start">Start</string>
+    <string name="reset">reset</string>
+
+    <string name="shared_preferences_start_time_in_millis">startTimeInMillis</string>
+    <string name="shared_preferences_time_left_in_millis">millisLeft</string>
+    <string name="shared_preferences_timer_running">timerRunning</string>
+    <string name="shared_preferences_end_time">endTime</string>
+    <string name="default_timer_value">00:00</string>
+    <string name="custom_duration">Custom (minutes)</string>
+
+    <plurals name="radio_buttons_text_in_minutes">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+
 </resources>
