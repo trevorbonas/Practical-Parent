@@ -51,7 +51,7 @@ public class TimerNotificationService extends Service {
         this.registerReceiver(broadcastReceiver, filter);
 
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
-        mStartTimeInMillis = prefs.getLong("startTimeInMillis", 0);
+        mStartTimeInMillis = prefs.getLong(getString(R.string.shared_preferences_start_time_in_millis), 0);
     }
 
     @Override
@@ -131,10 +131,10 @@ public class TimerNotificationService extends Service {
     private void startTimer() {
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
         final SharedPreferences.Editor editor = prefs.edit();
-        long mStartTimeInMillis = prefs.getLong("startTimeInMillis", 600000);
-        mTimeLeftInMillis = prefs.getLong("millisLeft", mStartTimeInMillis);
+        long mStartTimeInMillis = prefs.getLong(getString(R.string.shared_preferences_start_time_in_millis), 600000);
+        mTimeLeftInMillis = prefs.getLong(getString(R.string.shared_preferences_time_left_in_millis), mStartTimeInMillis);
         if (isTimerRunning) {
-            mEndTime = prefs.getLong("endTime", 0);
+            mEndTime = prefs.getLong(getString(R.string.shared_preferences_end_time), 0);
             mTimeLeftInMillis = mEndTime - System.currentTimeMillis();
         } else {
             mEndTime = System.currentTimeMillis() + mTimeLeftInMillis;
@@ -146,8 +146,8 @@ public class TimerNotificationService extends Service {
                 int[] times = timerActivity.countdownTimerHoursMinutesSeconds(l);
                 Log.d("TAG", "Timing is ticking: " + times[0] + ":" + times[1] + ":" + times[2]);
 
-                editor.putLong("millisLeft", mEndTime - System.currentTimeMillis());
-                editor.putLong("endTime", mEndTime);
+                editor.putLong(getString(R.string.shared_preferences_time_left_in_millis), mEndTime - System.currentTimeMillis());
+                editor.putLong(getString(R.string.shared_preferences_end_time), mEndTime);
                 editor.apply();
                 updateTimerRunningNotification(times[0], times[1], times[2]);
             }
@@ -187,13 +187,13 @@ public class TimerNotificationService extends Service {
             if (intent.getAction().equals(getString(R.string.intent_action_stop_timer))) {
                 Log.d("TAG", "Stopping timer from Notification");
                 cancelTimer();
-                editor.putBoolean("timerRunning", false);
+                editor.putBoolean(getString(R.string.shared_preferences_timer_running), false);
                 editor.apply();
             } else if (intent.getAction().equals(getString(R.string.intent_action_start_timer))) {
                 if (!isTimerRunning) {
                     Log.d("TAG", "Starting timer from notification");
                     startTimer();
-                    editor.putBoolean("timerRunning", true);
+                    editor.putBoolean(getString(R.string.shared_preferences_timer_running), true);
                     editor.apply();
                 }
             } else if (intent.getAction().equals(getString(R.string.intent_action_reset_timer))) {
@@ -201,9 +201,9 @@ public class TimerNotificationService extends Service {
                 cancelTimer();
                 mTimeLeftInMillis = mStartTimeInMillis;
                 mEndTime = System.currentTimeMillis() + mStartTimeInMillis;
-                editor.putBoolean("timerRunning", false);
-                editor.putLong("millisLeft", mTimeLeftInMillis);
-                editor.putLong("endTime", mEndTime);
+                editor.putBoolean(getString(R.string.shared_preferences_timer_running), false);
+                editor.putLong(getString(R.string.shared_preferences_time_left_in_millis), mTimeLeftInMillis);
+                editor.putLong(getString(R.string.shared_preferences_end_time), mEndTime);
                 editor.apply();
                 int[] times = timerActivity.countdownTimerHoursMinutesSeconds(mTimeLeftInMillis);
                 updateTimerRunningNotification(times[0], times[1], times[2]);

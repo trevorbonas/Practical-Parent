@@ -20,6 +20,11 @@
     <string name="pause">Pause</string>
     <string name="start">Start</string>
 
+    <string name="shared_preferences_start_time_in_millis">startTimeInMillis</string>
+    <string name="shared_preferences_time_left_in_millis">millisLeft</string>
+    <string name="shared_preferences_timer_running">timerRunning</string>
+    <string name="shared_preferences_end_time">endTime</string>
+
     <plurals name="radio_buttons_text_in_minutes">
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>

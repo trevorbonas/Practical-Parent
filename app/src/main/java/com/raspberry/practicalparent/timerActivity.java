@@ -275,10 +275,10 @@ public class timerActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = prefs.edit();
 
         //TODO: change strings to constants
-        editor.putLong("startTimeInMillis", mStartTimeInMillis);
-        editor.putLong("millisLeft", mTimeLeftInMillis);
-        editor.putBoolean("timerRunning", mTimerRunning);
-        editor.putLong("endTime", mEndTime);
+        editor.putLong(getString(R.string.shared_preferences_start_time_in_millis), mStartTimeInMillis);
+        editor.putLong(getString(R.string.shared_preferences_time_left_in_millis), mTimeLeftInMillis);
+        editor.putBoolean(getString(R.string.shared_preferences_timer_running), mTimerRunning);
+        editor.putLong(getString(R.string.shared_preferences_end_time), mEndTime);
 
         editor.apply();
         if (mTimerRunning) {
@@ -305,15 +305,15 @@ public class timerActivity extends AppCompatActivity {
         cancelNotification(444);
 
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
-        mStartTimeInMillis = prefs.getLong("startTimeInMillis", 600000);
-        mTimeLeftInMillis = prefs.getLong("millisLeft", mStartTimeInMillis);
-        mTimerRunning = prefs.getBoolean("timerRunning", false);
+        mStartTimeInMillis = prefs.getLong(getString(R.string.shared_preferences_start_time_in_millis), 600000);
+        mTimeLeftInMillis = prefs.getLong(getString(R.string.shared_preferences_time_left_in_millis), mStartTimeInMillis);
+        mTimerRunning = prefs.getBoolean(getString(R.string.shared_preferences_timer_running), false);
 
         updateCountDownText();
         updateWatchInterface();
 
         if (mTimerRunning){
-            mEndTime = prefs.getLong("endTime", 0);
+            mEndTime = prefs.getLong(getString(R.string.shared_preferences_end_time), 0);
             mTimeLeftInMillis = mEndTime - System.currentTimeMillis();
 
             //check if overdue
