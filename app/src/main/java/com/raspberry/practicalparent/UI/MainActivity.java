@@ -1,5 +1,6 @@
 package com.raspberry.practicalparent.UI;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import com.raspberry.practicalparent.model.ResultsManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import android.view.View;
 
@@ -120,5 +122,20 @@ public class MainActivity extends AppCompatActivity {
             List<Results> list = gson.fromJson(json, listType);
             history.setList(list);
         }
+    }
+
+    static public void disableBtn(Button btn, Context context) {
+        btn.setEnabled(false);
+        btn.setBackground(ContextCompat.getDrawable(context,
+                R.drawable.disabled_button));
+        btn.setTextColor(context.getResources().getColor(R.color.buttonDisabled,
+                context.getTheme()));
+    }
+    static public void enableBtn(Button btn, Context context) {
+        btn.setEnabled(true);
+        btn.setBackground(ContextCompat.getDrawable(context,
+                R.drawable.outlined_button));
+        btn.setTextColor(context.getResources().getColor(R.color.buttonTxt,
+                context.getTheme()));
     }
 }

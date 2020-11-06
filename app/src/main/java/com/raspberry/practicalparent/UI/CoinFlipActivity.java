@@ -2,6 +2,7 @@ package com.raspberry.practicalparent.UI;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
@@ -70,7 +71,7 @@ public class CoinFlipActivity extends AppCompatActivity {
         history = ResultsManager.getInstance();
 
         Button historyBtn = findViewById(R.id.historyBtn);
-        historyBtn.setEnabled(false);
+        MainActivity.disableBtn(historyBtn, this);
 
         if (kids.getNum() <= 0) {
             this.choice = "Not set";
@@ -79,7 +80,7 @@ public class CoinFlipActivity extends AppCompatActivity {
             this.kidName = kids.getKidAt(kids.getCurrentIndex()).getName();
             Intent passedIntent = getIntent();
             this.choice = passedIntent.getStringExtra("Choice");
-            historyBtn.setEnabled(true);
+            MainActivity.enableBtn(historyBtn, this);
         }
 
         Log.println(Log.DEBUG, "Number of kids in KidManager",
@@ -148,7 +149,7 @@ public class CoinFlipActivity extends AppCompatActivity {
     }
 
     private void playAnimation(ImageView currentFace, ImageView otherF, boolean sameFace, final Button btn, View view) {
-        btn.setEnabled(false);
+        MainActivity.disableBtn(btn, this);
         MediaPlayer mp;
         mp = MediaPlayer.create(CoinFlipActivity.this, R.raw.coin_flip_sound);
         mp.start();
@@ -180,7 +181,8 @@ public class CoinFlipActivity extends AppCompatActivity {
 
                 // There isn't a kid choosing, user can flip as many times as they want
                 if (kids.getNum() <= 0) {
-                    btn.setEnabled(true);
+                    //btn.setEnabled(true);
+                    MainActivity.enableBtn(btn, CoinFlipActivity.this);
                     if (intCurrentFace == 0) {
                         updateResultText("Heads");
                     }
@@ -218,7 +220,8 @@ public class CoinFlipActivity extends AppCompatActivity {
                     kids.nextKid();
                     saveKidManager();
                     saveResultsManager();
-                    btn.setEnabled(false);
+                    //btn.setEnabled(false);
+                    MainActivity.enableBtn(btn, CoinFlipActivity.this);
                 }
             }
         });

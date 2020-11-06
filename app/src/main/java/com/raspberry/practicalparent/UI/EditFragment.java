@@ -140,10 +140,12 @@ public class EditFragment extends AppCompatDialogFragment {
                         // If the input name is empty or just a space
                         // Don't enable saving
                         if (newName.length() == 0 || newName.charAt(0) == ' ') {
-                            saveBtn.setEnabled(false);
+                            //saveBtn.setEnabled(false);
+                            MainActivity.disableBtn(saveBtn, getActivity());
                         }
                         else {
-                            saveBtn.setEnabled(true);
+                            //saveBtn.setEnabled(true);
+                            MainActivity.enableBtn(saveBtn, getActivity());
                         }
                         return true;
                 }
