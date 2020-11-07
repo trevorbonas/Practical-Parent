@@ -1,6 +1,7 @@
 package com.raspberry.practicalparent.UI;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.NotificationManager;
 import android.content.Context;
@@ -90,8 +91,10 @@ public class TimerActivity extends AppCompatActivity {
             public void onClick(View v) {
                     if(mTimerRunning) {
                         pauseTimer();
+                        removeCalmImage();
                     } else {
                         startTimer();
+                        showCalmImage();
                     }
             }
         });
@@ -104,6 +107,16 @@ public class TimerActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void showCalmImage() {
+        ConstraintLayout constraintLayout = findViewById(R.id.activity_timer_constraint_layout);
+        constraintLayout.setBackgroundResource(R.drawable.calm_imagejpg);
+    }
+
+    private void removeCalmImage() {
+        ConstraintLayout constraintLayout = findViewById(R.id.activity_timer_constraint_layout);
+        constraintLayout.setBackgroundResource(0);
     }
 
     //setting custom time
@@ -297,6 +310,7 @@ public class TimerActivity extends AppCompatActivity {
         if (mTimerRunning){
             mEndTime = prefs.getLong(getString(R.string.shared_preferences_end_time), 0);
             mTimeLeftInMillis = mEndTime - System.currentTimeMillis();
+            showCalmImage();
 
             //check if overdue
             if(mTimeLeftInMillis < 0) {
