@@ -14,7 +14,7 @@
         android:layout_marginTop="28dp"
         android:background="@drawable/outlined_button"
         android:fontFamily="sans-serif-medium"
-        android:foreground="?android:attr/selectableItemBackground"
+        android:foreground="@drawable/ripple_mask"
         android:text="@string/save"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"

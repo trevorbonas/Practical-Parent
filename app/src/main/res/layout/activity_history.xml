@@ -31,7 +31,7 @@
         android:layout_marginStart="48dp"
         android:background="@drawable/outlined_button"
         android:fontFamily="sans-serif-medium"
-        android:foreground="?android:attr/selectableItemBackground"
+        android:foreground="@drawable/ripple_mask"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:text="@string/all_history"
