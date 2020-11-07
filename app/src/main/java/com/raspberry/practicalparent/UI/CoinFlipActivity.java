@@ -219,7 +219,7 @@ public class CoinFlipActivity extends AppCompatActivity {
                     kids.nextKid();
                     saveKidManager();
                     saveResultsManager();
-                    MainActivity.enableBtn(btn, CoinFlipActivity.this);
+                    MainActivity.disableBtn(btn, CoinFlipActivity.this);
                 }
             }
         });
