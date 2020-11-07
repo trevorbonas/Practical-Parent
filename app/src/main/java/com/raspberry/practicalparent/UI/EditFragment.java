@@ -18,6 +18,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
+import androidx.core.content.ContextCompat;
 
 import com.google.gson.Gson;
 import com.raspberry.practicalparent.R;
@@ -51,7 +52,7 @@ public class EditFragment extends AppCompatDialogFragment {
         Button deleteBtn = v.findViewById(R.id.deleteBtn);
         saveBtn = v.findViewById(R.id.saveBtn);
         // Until name has been edited make it not enabled
-        saveBtn.setEnabled(false);
+        MainActivity.disableBtn(saveBtn, v.getContext());
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,12 +141,10 @@ public class EditFragment extends AppCompatDialogFragment {
                         // If the input name is empty or just a space
                         // Don't enable saving
                         if (newName.length() == 0 || newName.charAt(0) == ' ') {
-                            //saveBtn.setEnabled(false);
-                            MainActivity.disableBtn(saveBtn, getActivity());
+                            MainActivity.disableBtn(saveBtn, v.getContext());
                         }
                         else {
-                            //saveBtn.setEnabled(true);
-                            MainActivity.enableBtn(saveBtn, getActivity());
+                           MainActivity.enableBtn(saveBtn, v.getContext());
                         }
                         return true;
                 }

@@ -181,7 +181,6 @@ public class CoinFlipActivity extends AppCompatActivity {
 
                 // There isn't a kid choosing, user can flip as many times as they want
                 if (kids.getNum() <= 0) {
-                    //btn.setEnabled(true);
                     MainActivity.enableBtn(btn, CoinFlipActivity.this);
                     if (intCurrentFace == 0) {
                         updateResultText("Heads");
@@ -220,7 +219,6 @@ public class CoinFlipActivity extends AppCompatActivity {
                     kids.nextKid();
                     saveKidManager();
                     saveResultsManager();
-                    //btn.setEnabled(false);
                     MainActivity.enableBtn(btn, CoinFlipActivity.this);
                 }
             }
