@@ -17,10 +17,8 @@
         android:id="@+id/tv_history_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:text="@string/history"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_toggle_history" />
@@ -30,8 +28,7 @@
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="48dp"
         android:background="@drawable/outlined_button"
         android:fontFamily="sans-serif-medium"
         android:foreground="?android:attr/selectableItemBackground"
@@ -40,18 +37,20 @@
         android:text="@string/all_history"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="#6E6E6E"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/tv_history_name"
+        tools:layout_editor_absoluteY="16dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="403dp"
         android:layout_height="618dp"
+        android:layout_marginTop="8dp"
         android:padding="4dp"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_history_name" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_history_name"
+        app:layout_constraintVertical_bias="0.611" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
