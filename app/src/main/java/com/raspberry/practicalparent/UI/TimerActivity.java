@@ -150,6 +150,7 @@ public class TimerActivity extends AppCompatActivity {
                 Intent timerComplete = new Intent(TimerActivity.this, TimerCompleteNotificationBroadcastReceiver.class);
                 timerComplete.setAction(getString(R.string.intent_action_timer_finished_from_activity));
                 sendBroadcast(timerComplete);
+                removeCalmImage();
             }
         }.start();
 
@@ -318,9 +319,12 @@ public class TimerActivity extends AppCompatActivity {
                 mTimerRunning = false;
                 updateCountDownText();
                 updateWatchInterface();  //make buttons invisible
+                removeCalmImage();
             } else {
                 startTimer();
             }
+        } else {
+            removeCalmImage();
         }
     }
 
