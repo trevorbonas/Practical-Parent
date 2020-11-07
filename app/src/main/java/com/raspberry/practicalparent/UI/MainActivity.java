@@ -51,16 +51,23 @@ public class MainActivity extends AppCompatActivity {
         setupKidManager();
         setupResultsManager();
 
+        // Button to go to coin flipping activity
         Button coinBtn = findViewById(R.id.flipBtn);
         coinBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent coinFlipIntent;
                 KidManager kids = KidManager.getInstance();
+                // If there are no kids pressing the coin flip button
+                // will take the user straight to the coin flipping activity
+                // without heads or tails chosen
                 if (kids.getNum() == 0) {
                     coinFlipIntent = new Intent(MainActivity.this,
                             CoinFlipActivity.class);
                 }
+                // If there are kids then pressing the coin flip button will take
+                // the user to a screen for choosing heads or tails, then on to
+                // the coin flipping activity
                 else {
                     coinFlipIntent = new Intent(MainActivity.this,
                             ChooseActivity.class);
@@ -111,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    // Loads ResultsManager data which is used to display user history
     private void setupResultsManager() {
         ResultsManager history = ResultsManager.getInstance(); // Just used to edit the singleton
 
@@ -124,6 +132,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Static function that can be called by any activity to make a button of its
+    // is disabled both in appearance and functionality
     static public void disableBtn(Button btn, Context context) {
         btn.setEnabled(false);
         btn.setBackground(ContextCompat.getDrawable(context,
@@ -131,6 +141,9 @@ public class MainActivity extends AppCompatActivity {
         btn.setTextColor(context.getResources().getColor(R.color.buttonDisabled,
                 context.getTheme()));
     }
+
+    // Static function that can be called by any activity to make a button of its
+    // is enabled
     static public void enableBtn(Button btn, Context context) {
         btn.setEnabled(true);
         btn.setBackground(ContextCompat.getDrawable(context,

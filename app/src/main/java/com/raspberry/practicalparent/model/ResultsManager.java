@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * A singleton that holds and manages a list of all coin flip Results
+ */
 public class ResultsManager implements Iterable<Results>{
     private static List<Results> results = new ArrayList<>();
     private static ResultsManager instance;

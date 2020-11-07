@@ -51,6 +51,7 @@ public class EditFragment extends AppCompatDialogFragment {
         Button cancelBtn = v.findViewById(R.id.cancelBtn);
         Button deleteBtn = v.findViewById(R.id.deleteBtn);
         saveBtn = v.findViewById(R.id.saveBtn);
+
         // Until name has been edited make it not enabled
         MainActivity.disableBtn(saveBtn, v.getContext());
 

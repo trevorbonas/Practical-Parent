@@ -37,7 +37,7 @@ import java.util.Random;
 
 
 public class CoinFlipActivity extends AppCompatActivity {
-    //0 for heads, 1 for tails
+    // 0 for heads, 1 for tails
     private int intCurrentFace = 0;
 
     // Choice passed in from ChooseActivity
@@ -47,7 +47,7 @@ public class CoinFlipActivity extends AppCompatActivity {
 
     private KidManager kids; // Singleton
     private ResultsManager history; // Singleton
-    private String kidName; // Needs to be class variable since current name may change
+    private String kidName;
 
     private DateFormat df = new SimpleDateFormat("h:mm a MMM. d, yyyy"); // Format for date
 

@@ -81,10 +81,8 @@ public class AddKidActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 kidsName = name.getText().toString();
                 if (!kidsName.trim().isEmpty()) {
-                    //okayBtn.setEnabled(true);
                     MainActivity.enableBtn(okayBtn, AddKidActivity.this);
                 } else {
-                    //okayBtn.setEnabled(false);
                     MainActivity.disableBtn(okayBtn, AddKidActivity.this);
                 }
             }

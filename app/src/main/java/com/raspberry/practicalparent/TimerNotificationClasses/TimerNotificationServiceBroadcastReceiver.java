@@ -9,5 +9,4 @@ public class TimerNotificationServiceBroadcastReceiver extends BroadcastReceiver
     public void onReceive(Context context, Intent intent) {
         context.sendBroadcast(new Intent(intent.getAction()));
     }
-
 }

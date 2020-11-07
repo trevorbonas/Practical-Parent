@@ -1,5 +1,8 @@
 package com.raspberry.practicalparent.model;
 
+/**
+ * A class that holds the outcome of a single flip: the user, win/loss, choice, and time and date
+ */
 public class Results {
     private boolean wonFlip;
     private String sideChosen;

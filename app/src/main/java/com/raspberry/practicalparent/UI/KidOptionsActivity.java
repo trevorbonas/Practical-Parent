@@ -36,8 +36,10 @@ public class KidOptionsActivity extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true); // Enable back button
 
+        // The singleton holding all kids
         kids = KidManager.getInstance();
 
+        // Floating action button used to add a kid
         FloatingActionButton fab = findViewById(R.id.addButton);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,6 +55,8 @@ public class KidOptionsActivity extends AppCompatActivity {
         registerListClick();
     }
 
+    // When returning from another activity or fragment
+    // this will refresh the list of kids
     @Override
     public void onResume(){
         super.onResume();
@@ -60,10 +64,13 @@ public class KidOptionsActivity extends AppCompatActivity {
     }
 
     public void setupListView() {
+        // A list of the kids' names
         List<String> kidText = new ArrayList<String>();
 
+        // The ListView to show the kids
         ListView listView = findViewById(R.id.childrenListView);
 
+        // Adding all stored kids' names to the list
         for (int i = 0; i < kids.getNum(); i++) {
             Kid kid = kids.getKidAt(i);
             kidText.add(kid.getName());
@@ -74,6 +81,8 @@ public class KidOptionsActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
     }
 
+    // Clicking on a kid's name will bring up an AlertDialog that allows
+    // the user to edit or delete the kid
     private void registerListClick() {
         ListView listView = findViewById(R.id.childrenListView);
 
