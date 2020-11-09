@@ -57,6 +57,11 @@
     <string name="history">History</string>
     <string name="all_history">All history</string>
 
+    <string name="choose_coin_heads_tails_no_children">Hi, \nWhat do you choose?</string>
+    <string name="choose_coin_heads_tails_children">Hi %s, \nWhat do you choose?</string>
+    <string name="kid_name_flips">%s\'s flips</string>
+    <string name="all_flips">All flips</string>
+
     <plurals name="radio_buttons_text_in_minutes">
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>

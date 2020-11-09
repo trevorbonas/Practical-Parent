@@ -27,11 +27,10 @@ public class ChooseActivity extends AppCompatActivity {
         TextView greeting = findViewById(R.id.greetingTxt);
 
         if (kids.getNum() <= 0) {
-            greeting.setText("Hi,\nWhat do you choose?");
+            greeting.setText(R.string.choose_coin_heads_tails_no_children);
         }
         else {
-            greeting.setText("Hi " + kids.getKidAt(kids.getCurrentIndex()).getName()
-                    + ",\nWhat do you choose?");
+            greeting.setText(getString(R.string.choose_coin_heads_tails_children, kids.getKidAt(kids.getCurrentIndex()).getName()));
         }
 
         Button heads = findViewById(R.id.headBtn);

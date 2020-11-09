@@ -128,7 +128,7 @@ public class CoinFlipActivity extends AppCompatActivity {
             winOrLose = "You lose";
             textView.setTextColor(Color.RED);
         }
-        textView.setText(result + "\n" + winOrLose);
+        textView.setText(String.format("%s\n%s", result, winOrLose));
     }
 
     private void playAnimationXML() {
