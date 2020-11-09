@@ -1,0 +1,6 @@
+Scrum Roles for Iteration 1
+
+Scrum Master: Shubham Negi
+Product Owner: Jaydon Lau
+Team Member: Herman Luo
+Repo Manager: Trevor Bonas
