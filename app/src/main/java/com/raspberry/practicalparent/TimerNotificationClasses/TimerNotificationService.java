@@ -23,6 +23,11 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+/**
+ * Creates notification when user leaves TimerActivity
+ * Allows user to start, stop, or reset timer from notification
+ */
+
 public class TimerNotificationService extends Service {
 
     private CountDownTimer countDownTimer;

@@ -25,7 +25,7 @@ import com.raspberry.practicalparent.TimerNotificationClasses.TimerCompleteNotif
 import com.raspberry.practicalparent.TimerNotificationClasses.TimerNotificationService;
 
 import java.util.Locale;
-/*
+/**
 * Timer class that displays the clock and updates the ticker
 * inspired by https://www.youtube.com/watch?v=7dQJAkjNEjM
  */

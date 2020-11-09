@@ -19,6 +19,10 @@ import com.raspberry.practicalparent.UI.TimerActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+/**
+ * Creates a notification when timer completes
+ */
+
 public class TimerCompleteNotificationBroadcastReceiver extends BroadcastReceiver {
     private NotificationCompat.Builder builderTimerComplete;
 

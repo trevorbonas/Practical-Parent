@@ -35,6 +35,9 @@ import java.util.Random;
 
 //xml animations adapted from https://www.youtube.com/watch?v=DnXWcGmLHHs
 
+/**
+ * User flips coin and sees result
+ */
 
 public class CoinFlipActivity extends AppCompatActivity {
     // 0 for heads, 1 for tails

@@ -14,6 +14,10 @@ import com.raspberry.practicalparent.model.CardViewMaker;
 
 import java.util.ArrayList;
 
+/**
+ * RecyclerView for history of coin flips
+ */
+
 //adapted from https://www.youtube.com/watch?v=Nw9JF55LDzE
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder> {
     private ArrayList<CardViewMaker> cardViewList;

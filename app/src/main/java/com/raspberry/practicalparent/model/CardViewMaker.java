@@ -1,5 +1,9 @@
 package com.raspberry.practicalparent.model;
 
+/**
+ * Cards for populating history of flip results RecyclerView
+ */
+
 public class CardViewMaker {
     private int image;
     private String childName;

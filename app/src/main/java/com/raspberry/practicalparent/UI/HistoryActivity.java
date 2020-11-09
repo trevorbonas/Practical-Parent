@@ -21,6 +21,10 @@ import com.raspberry.practicalparent.model.ResultsManager;
 
 import java.util.ArrayList;
 
+/**
+ * Displays history of coin flips
+ */
+
 public class HistoryActivity extends AppCompatActivity {
 
     private RecyclerView rv;

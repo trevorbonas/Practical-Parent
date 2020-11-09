@@ -13,6 +13,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+/**
+ * Allows user to choose heads or tails and sends choice to CoinFlipActivity
+ */
+
 public class ChooseActivity extends AppCompatActivity {
 
     @Override
