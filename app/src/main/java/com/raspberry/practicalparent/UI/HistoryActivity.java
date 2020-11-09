@@ -14,8 +14,6 @@ import android.widget.Toast;
 
 import com.raspberry.practicalparent.R;
 import com.raspberry.practicalparent.model.CardViewMaker;
-import com.raspberry.practicalparent.model.Kid;
-import com.raspberry.practicalparent.model.KidManager;
 import com.raspberry.practicalparent.model.Results;
 import com.raspberry.practicalparent.model.ResultsManager;
 
@@ -48,7 +46,7 @@ public class HistoryActivity extends AppCompatActivity {
         toggleBtn = findViewById(R.id.btn_toggle_history);
 
         createRecyclerView();
-        extractName();
+        extractIntentName();
         setUpPersonalHistory();
         registerClickCallback();
     }
@@ -67,7 +65,7 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     //Get child name from intent
-    private void extractName() {
+    private void extractIntentName() {
         Intent passedIntent = getIntent();
         this.kidName = passedIntent.getStringExtra("Kid name");
     }
@@ -80,7 +78,7 @@ public class HistoryActivity extends AppCompatActivity {
         toggleBtn.setText(R.string.all_flips);
         updateText();
 
-        populatePersonal(history, kidName);
+        populatePersonalHistory(history, kidName);
     }
 
     //Set up text for all flips history calls populateAll
@@ -91,35 +89,35 @@ public class HistoryActivity extends AppCompatActivity {
         updateText();
 
         // Simply pass in the singleton
-        populateAll(history);
+        populateAllHistory(history);
     }
 
     //Populates personal flip history calls addToHistory
-    private void populatePersonal(ResultsManager manager, String name) {
+    private void populatePersonalHistory(ResultsManager manager, String name) {
 
         clearRecyclerView();
 
         //Populate list
         for (Results flip: manager) {
             if (flip.getChildName().equals(name)) {
-                addToHistory(flip);
+                addFlipToView(flip);
             }
         }
     }
 
     //Populate all flips history calls addToHistory
-    private void populateAll(ResultsManager manager) {
+    private void populateAllHistory(ResultsManager manager) {
 
         clearRecyclerView();
 
         //Populate list
         for (Results flip: manager) {
-            addToHistory(flip);
+            addFlipToView(flip);
         }
     }
 
     //Add flip result to RecyclerView
-    private void addToHistory(Results flip) {
+    private void addFlipToView(Results flip) {
 
         //Image is lost flip by default
         int image = R.drawable.ic_x;
