@@ -110,8 +110,6 @@ a good idea what the meaning are.
 1.5 Package names
 Package names are usually all lowercase and consist of nouns.
 
- 
-
 2. Format conventions
 Use a formatting convention consistently within a class. For example, the position
 of open braces "{" should be the same throughout the program.
@@ -382,7 +380,6 @@ Using the assert statement instead of an assertion-comment has the advantage of 
 that cause the assertion to be false. Some people advocate leaving assertions in a finished program,
 for just that reason, unless the boolean expression is so complicated that it ends up slowing down
 the program execution.
-
 
 3.8 Loop invariants
 A loop invariant is an assertion that is true before and after each iteration of a
@@ -702,7 +699,7 @@ can be achieved by the following: Whenever a question is asked, move it up one
 position in the array. This changes the representation of the set of
 questions-and-answers, but not the set itself; the user cannot notice the change.
 This is a benevolent side effect.
- 
+
 
 8. Code to interfaces instead of implementations
 In most cases, the client code doesn't care about the implementation of the list
