@@ -57,7 +57,7 @@ public class HelpActivity extends AppCompatActivity {
                 case R.id.btn_credit_icon:
                     //TODO:
                     intent = new Intent(Intent.ACTION_VIEW,
-                            Uri.parse(""));
+                            Uri.parse("https://www.pinterest.ca/pin/367465650825732546/"));
                     startActivity(intent);
                     break;
                 case R.id.btn_credit_menu:
