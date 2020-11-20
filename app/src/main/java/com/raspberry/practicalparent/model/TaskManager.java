@@ -23,8 +23,8 @@ public class TaskManager {
         // Made private for singleton support
     }
 
-    public void addTask(String name) {
-        Task task = new Task(name);
+    public void addTask(String name, String description) {
+        Task task = new Task(name, description);
         tasks.add(task);
     }
 

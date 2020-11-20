@@ -1,5 +1,6 @@
 package com.raspberry.practicalparent.UI;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -25,6 +26,7 @@ import android.widget.Toast;
 // Initial assigned kid will be random
 public class AddTaskActivity extends AppCompatActivity {
     private String taskName; // The input task name
+    private String taskDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +41,9 @@ public class AddTaskActivity extends AppCompatActivity {
         final TaskManager tasks = TaskManager.getInstance();
 
         final EditText name = findViewById(R.id.inputTaskName);
+        final EditText description = findViewById(R.id.inputTaskDescription);
         final Button okayBtn = findViewById(R.id.taskOkayBtn);
+
         MainActivity.disableBtn(okayBtn, this);
 
         // Save button
@@ -49,7 +53,7 @@ public class AddTaskActivity extends AppCompatActivity {
         okayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tasks.addTask(taskName);
+                tasks.addTask(taskName, taskDescription);
 
                 // Saving KidManager into SharedPreferences
                 SharedPreferences prefs = getSharedPreferences("Tasks", MODE_PRIVATE);
@@ -78,12 +82,36 @@ public class AddTaskActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 taskName = name.getText().toString();
-                if (!taskName.trim().isEmpty()) {
-                    MainActivity.enableBtn(okayBtn, AddTaskActivity.this);
-                } else {
-                    MainActivity.disableBtn(okayBtn, AddTaskActivity.this);
-                }
+                taskDescription = description.getText().toString();
+                setButtonEnabledIfStringsNonNull(taskName, taskDescription, okayBtn, AddTaskActivity.this);
             }
         });
+
+        description.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                taskName = name.getText().toString();
+                taskDescription = description.getText().toString();
+                setButtonEnabledIfStringsNonNull(taskName, taskDescription, okayBtn, AddTaskActivity.this);
+            }
+        });
+    }
+
+    public static void setButtonEnabledIfStringsNonNull(String textName, String textDescription, Button button, Context context) {
+        if (!textName.trim().isEmpty() && !textDescription.trim().isEmpty()) {
+            MainActivity.enableBtn(button, context);
+        } else {
+            MainActivity.disableBtn(button, context);
+        }
     }
 }

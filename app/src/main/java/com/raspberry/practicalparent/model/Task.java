@@ -14,7 +14,7 @@ public class Task {
 
     private int i; // Index of kidName in KidManager singleton
 
-    public Task(String name) {
+    public Task(String name, String description) {
         KidManager kids = KidManager.getInstance();
         Random rand = new Random();
         if (name == null) {
@@ -27,6 +27,7 @@ public class Task {
             return;
         }
         this.name = name;
+        this.description = description;
         i = rand.nextInt(kids.getNum());
         this.kidName = kids.getKidAt(i).getName();
     }
