@@ -124,11 +124,11 @@ public class CoinFlipActivity extends AppCompatActivity {
             return;
         }
         if (choice.equals(result)) {
-            winOrLose = "You win!";
+            winOrLose = getString(R.string.you_win);
             textView.setTextColor(Color.GREEN);
         }
         else if (!choice.equals(result)) {
-            winOrLose = "You lose";
+            winOrLose = getString(R.string.you_lose);
             textView.setTextColor(Color.RED);
         }
         textView.setText(String.format("%s\n%s", result, winOrLose));
