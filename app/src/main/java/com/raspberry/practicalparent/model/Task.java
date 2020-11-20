@@ -19,8 +19,9 @@ public class Task {
             return;
         }
         if (kids.getNum() <= 0) {
-            i = -1;
-            this.kidName = "No kids in system";
+            i = 0;
+            this.kidName = "Unassigned";
+            this.name = name;
             return;
         }
         this.name = name;
@@ -55,9 +56,6 @@ public class Task {
     }
 
     public String getKidName() {
-        if (kidName == null) {
-            return "No kid assigned yet";
-        }
         return kidName;
     }
 }

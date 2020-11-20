@@ -74,7 +74,7 @@ public class TaskActivity extends AppCompatActivity {
 
         // Adding all stored task names to the list
         for (int i = 0; i < tasks.getNum(); i++) {
-            taskText.add(tasks.getTaskAt(i).getName() +
+            taskText.add(tasks.getTaskAt(i).getKidName() +
                     " " + tasks.getTaskAt(i).getName());
         }
 
@@ -93,7 +93,6 @@ public class TaskActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TextView textView = (TextView)view;
                 Bundle bundle = new Bundle();
-                bundle.putString("Task name", tasks.getTaskAt(position).getName());
                 bundle.putInt("Task index", position);
                 FragmentManager manager = getSupportFragmentManager();
                 EditTaskFragment dialog = new EditTaskFragment();

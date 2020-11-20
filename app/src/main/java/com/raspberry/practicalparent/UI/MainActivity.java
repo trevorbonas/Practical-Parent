@@ -12,6 +12,8 @@ import com.raspberry.practicalparent.model.Kid;
 import com.raspberry.practicalparent.model.KidManager;
 import com.raspberry.practicalparent.model.Results;
 import com.raspberry.practicalparent.model.ResultsManager;
+import com.raspberry.practicalparent.model.Task;
+import com.raspberry.practicalparent.model.TaskManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         // Load the two singletons with info if there is info to load
         setupKidManager();
         setupResultsManager();
+        setupTaskManager();
 
         // Button to go to coin flipping activity
         Button coinBtn = findViewById(R.id.flipBtn);
@@ -86,6 +89,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button taskBtn = findViewById(R.id.taskBtn);
+        taskBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent taskIntent = new Intent(MainActivity.this,
+                        TaskActivity.class);
+                startActivity(taskIntent);
+            }
+        });
+
     }
 
     @Override
@@ -110,6 +123,19 @@ public class MainActivity extends AppCompatActivity {
             json = prefs.getString("Index", "");
             int index = gson.fromJson(json, Integer.class);
             kids.changeKid(index);
+        }
+    }
+
+    private void setupTaskManager() {
+        TaskManager tasks = TaskManager.getInstance(); // Just used to edit the singleton
+
+        SharedPreferences prefs = getSharedPreferences("Tasks", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = prefs.getString("List", "");
+        if (json.length() > 0) {
+            Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
+            List<Task> list = gson.fromJson(json, listType);
+            tasks.setList(list);
         }
     }
 
