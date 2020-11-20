@@ -66,5 +66,7 @@
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>
     </plurals>
+    <string name="title_activity_task">TaskActivity</string>
+    <string name="title_activity_add_task">AddTaskActivity</string>
 
 </resources>
