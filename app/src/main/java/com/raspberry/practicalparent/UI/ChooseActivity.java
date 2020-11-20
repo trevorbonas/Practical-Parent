@@ -39,6 +39,7 @@ public class ChooseActivity extends AppCompatActivity {
 
         Button heads = findViewById(R.id.headBtn);
         Button tails = findViewById(R.id.tailsBtn);
+        Button choose = findViewById(R.id.changeBtn);
 
         heads.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +62,15 @@ public class ChooseActivity extends AppCompatActivity {
                 tailsIntent.putExtra("Choice", value);
                 startActivity(tailsIntent);
                 finish(); // A finish so we can't go back to this activity in CoinFlip
+            }
+        });
+
+        choose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent tailsIntent = new Intent(ChooseActivity.this,
+                        ChooseTurnActivity.class);
+                startActivity(tailsIntent);
             }
         });
 
