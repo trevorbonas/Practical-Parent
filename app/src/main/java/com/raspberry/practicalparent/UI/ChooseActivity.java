@@ -18,6 +18,7 @@ import android.widget.TextView;
  */
 
 public class ChooseActivity extends AppCompatActivity {
+    private KidManager kids = KidManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,16 +27,7 @@ public class ChooseActivity extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true); // Enable back button
 
-        KidManager kids = KidManager.getInstance();
-
-        TextView greeting = findViewById(R.id.greetingTxt);
-
-        if (kids.getNum() <= 0) {
-            greeting.setText(R.string.choose_coin_heads_tails_no_children);
-        }
-        else {
-            greeting.setText(getString(R.string.choose_coin_heads_tails_children, kids.getKidAt(kids.getCurrentIndex()).getName()));
-        }
+        setGreeting();
 
         Button heads = findViewById(R.id.headBtn);
         Button tails = findViewById(R.id.tailsBtn);
@@ -47,7 +39,9 @@ public class ChooseActivity extends AppCompatActivity {
                 Intent headIntent = new Intent(ChooseActivity.this,
                         CoinFlipActivity.class);
                 String value = "Heads";
-                headIntent.putExtra("Choice", value);
+                if (!kids.isNobody()) {
+                    headIntent.putExtra("Choice", value);
+                }
                 startActivity(headIntent);
                 finish(); // A finish so we can't go back to this activity in CoinFlip
             }
@@ -59,7 +53,9 @@ public class ChooseActivity extends AppCompatActivity {
                 Intent tailsIntent = new Intent(ChooseActivity.this,
                         CoinFlipActivity.class);
                 String value = "Tails";
-                tailsIntent.putExtra("Choice", value);
+                if (!kids.isNobody()) {
+                    tailsIntent.putExtra("Choice", value);
+                }
                 startActivity(tailsIntent);
                 finish(); // A finish so we can't go back to this activity in CoinFlip
             }
@@ -75,5 +71,26 @@ public class ChooseActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void setGreeting() {
+        TextView greeting = findViewById(R.id.greetingTxt);
+
+        // Safety
+        if (kids.getNum() <= 0) {
+            greeting.setText(R.string.choose_coin_heads_tails_no_children);
+        }
+        else {
+            greeting.setText(getString(R.string.choose_coin_heads_tails_children,
+                    kids.getName()));
+        }
+    }
+
+    // When returning from another activity or fragment
+    // this will refresh the greeting
+    @Override
+    public void onResume(){
+        super.onResume();
+        setGreeting();
     }
 }

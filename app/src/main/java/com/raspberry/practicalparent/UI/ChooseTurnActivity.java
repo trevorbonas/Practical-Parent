@@ -10,9 +10,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -38,7 +40,18 @@ public class ChooseTurnActivity extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true); // Enable back button
 
         setupListView();
-        //registerListClick();
+        registerListClick();
+
+        Button nobody = findViewById(R.id.nobdyBtn);
+
+        nobody.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                kids.setNobody(true);
+                MainActivity.saveKidManager(ChooseTurnActivity.this);
+                finish();
+            }
+        });
     }
 
     public void setupListView() {
@@ -59,20 +72,25 @@ public class ChooseTurnActivity extends AppCompatActivity {
             index = (index + 1) % (kids.getNum());
         }
 
+        index = kids.getCurrentIndex(); // Reset index
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
                 android.R.layout.simple_list_item_1, kidText);
         listView.setAdapter(adapter);
     }
 
-    /*private void registerListClick() {
-        ListView listView = findViewById(R.id.childrenListView);
+    private void registerListClick() {
+        ListView listView = findViewById(R.id.namesListView);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
+                kids.changeKid((index + position) % (kids.getNum()) );
+                Log.println(Log.DEBUG, "Check new current index",
+                        "New KidManager index: " + kids.getCurrentIndex());
+                MainActivity.saveKidManager(ChooseTurnActivity.this);
+                finish();
             }
         });
-    }*/
+    }
 }

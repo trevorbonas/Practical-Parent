@@ -95,6 +95,21 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    public static void saveKidManager(Context context) {
+        KidManager kids = KidManager.getInstance();
+
+        // Saving KidManager into SharedPreferences
+        SharedPreferences prefs = context.getSharedPreferences("Kids", MODE_PRIVATE);
+        SharedPreferences.Editor prefEditor = prefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(kids.getList()); // Saving list
+        prefEditor.putString("List", json);
+        json = gson.toJson(kids.getCurrentIndex()); // Saving list
+        prefEditor.putString("Index", json); // Saving current index
+        prefEditor.putBoolean("Nobody", kids.isNobody());
+        prefEditor.apply();
+    }
+
 
     // Loads KidManager singleton from saved SharedPreferences
     private void setupKidManager() {
@@ -109,7 +124,9 @@ public class MainActivity extends AppCompatActivity {
             kids.setList(list);
             json = prefs.getString("Index", "");
             int index = gson.fromJson(json, Integer.class);
+            boolean condition = prefs.getBoolean("Nobody", false);
             kids.changeKid(index);
+            kids.setNobody(condition);
         }
     }
 
