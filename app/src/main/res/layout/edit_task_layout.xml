@@ -12,26 +12,28 @@
         android:layout_height="22dp"
         app:layout_constraintBottom_toTopOf="@+id/taskName"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.908" />
+        app:layout_constraintVertical_bias="0.572" />
 
     <Button
         android:id="@+id/completedBtn"
         style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="90dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="12dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="163dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="163dp"
         android:background="@drawable/outlined_button"
         android:fontFamily="sans-serif-medium"
         android:foreground="@drawable/ripple_mask"
         android:text="Completed"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="#6E6E6E"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
-        app:layout_constraintStart_toEndOf="@+id/kidPic"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.734" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spacer" />
 
     <Button
         android:id="@+id/taskDeleteBtn"
@@ -74,7 +76,7 @@
         android:id="@+id/taskName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="144dp"
         android:text=""
         android:textAlignment="center"
         android:textColor="#000000"
@@ -89,7 +91,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
+        app:layout_constraintGuide_percent="0.71" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
@@ -143,7 +145,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_bias="0.958"
         tools:srcCompat="@tools:sample/avatars" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

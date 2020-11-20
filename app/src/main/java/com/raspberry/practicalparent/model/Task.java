@@ -10,6 +10,8 @@ import java.util.Random;
 public class Task {
     private String name;
     private String kidName; // The name of whose kid's turn it is to do the task
+    private String description;
+
     private int i; // Index of kidName in KidManager singleton
 
     public Task(String name) {
@@ -54,6 +56,15 @@ public class Task {
         this.i = (this.i + 1) % (kids.getNum());
         kidName = kids.getKidAt(this.i).getName();
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
 
     public String getKidName() {
         return kidName;

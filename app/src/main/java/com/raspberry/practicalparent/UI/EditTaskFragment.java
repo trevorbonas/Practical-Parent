@@ -25,8 +25,8 @@ import com.raspberry.practicalparent.R;
 import com.raspberry.practicalparent.model.KidManager;
 import com.raspberry.practicalparent.model.TaskManager;
 
-// Edit fragment pops up in KidOptionsActivity
-// upon clicking on a kid from the list
+// Edit fragment pops up in TaskActivity
+// upon clicking on a task from the list
 // Allows editing of name, deletion, or simply exiting the fragment
 public class EditTaskFragment extends AppCompatDialogFragment {
     private int index; // Index of child in ListView passed in through a bundle
@@ -129,7 +129,8 @@ public class EditTaskFragment extends AppCompatDialogFragment {
         });
 
         // Build the alert dialog
-        Dialog d = builder.setView(v).setTitle("Select name to edit").create();
+        //TODO change title to take from strings.xml
+        Dialog d = builder.setView(v).setTitle("Task").create();
 
         return d;
     }
