@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        android:text="Select a task to edit or delete"
+        android:text="Select a task to edit, delete, or mark as done"
         app:layout_constraintBottom_toTopOf="@+id/taskListView"
         app:layout_constraintStart_toStartOf="@+id/taskListView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
