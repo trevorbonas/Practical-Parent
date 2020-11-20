@@ -1,5 +1,6 @@
 package com.raspberry.practicalparent.UI;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -11,14 +12,18 @@ import com.raspberry.practicalparent.model.KidManager;
 import com.raspberry.practicalparent.model.Task;
 import com.raspberry.practicalparent.model.TaskManager;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -67,21 +72,52 @@ public class TaskActivity extends AppCompatActivity {
 
     public void setupListView() {
         // A list of the task names
-        List<String> taskText = new ArrayList<String>();
+//        List<String> taskText = new ArrayList<String>();
+//
+//        // Adding all stored task names to the list
+//        for (int i = 0; i < tasks.getNum(); i++) {
+//            taskText.add(tasks.getTaskAt(i).getKidName() +
+//                    " " + tasks.getTaskAt(i).getName());
+//        }
+//
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
+//                R.layout.task_listview, taskText);
+//        listView.setAdapter(adapter);
+
 
         // The ListView to show the tasks
         ListView listView = findViewById(R.id.taskListView);
 
-        // Adding all stored task names to the list
-        for (int i = 0; i < tasks.getNum(); i++) {
-            taskText.add(tasks.getTaskAt(i).getKidName() +
-                    " " + tasks.getTaskAt(i).getName());
+
+        ArrayAdapter<Task> taskArrayAdapter = new TaskListAdapter();
+        listView.setAdapter(taskArrayAdapter);
+        taskArrayAdapter.notifyDataSetChanged();
+    }
+
+    private class TaskListAdapter extends ArrayAdapter<Task> {
+
+        public TaskListAdapter() {
+            super(TaskActivity.this, R.layout.task_listview, tasks.getList());
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
-                android.R.layout.simple_list_item_1, taskText);
-        listView.setAdapter(adapter);
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            View itemView = convertView;
+            if (itemView == null) {
+                itemView = getLayoutInflater().inflate(R.layout.task_listview, parent, false);
+            }
+            Task currTask = tasks.getTaskAt(position);
+            ImageView imageView = itemView.findViewById(R.id.imgChildLayout);
+            TextView taskCurrentChildName = itemView.findViewById(R.id.taskCurrentChildLayout);
+            TextView taskName = itemView.findViewById(R.id.taskNameLayout);
+            taskCurrentChildName.setText(currTask.getKidName());
+            taskName.setText(currTask.getName());
+
+            return itemView;
+        }
     }
+
 
     // Clicking on a task will bring up an AlertDialog that allows
     // the user to edit or delete the task
@@ -91,7 +127,7 @@ public class TaskActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TextView textView = (TextView)view;
+                //TextView textView = (TextView)view;
                 Bundle bundle = new Bundle();
                 bundle.putInt("Task index", position);
                 FragmentManager manager = getSupportFragmentManager();
