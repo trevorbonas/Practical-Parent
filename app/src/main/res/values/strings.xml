@@ -56,15 +56,36 @@
     <string name="outcome">Outcome</string>
     <string name="history">History</string>
     <string name="all_history">All history</string>
+    <string name="you_win">You win!</string>
+    <string name="you_lose">You lose</string>
+
+
 
     <string name="choose_coin_heads_tails_no_children">Hi, \nWhat do you choose?</string>
     <string name="choose_coin_heads_tails_children">Hi %s, \nWhat do you choose?</string>
     <string name="kid_name_flips">%s\'s flips</string>
     <string name="all_flips">All flips</string>
 
+    <string name="edit_child_fragment_title">Select name to edit</string>
+
+
     <plurals name="radio_buttons_text_in_minutes">
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>
     </plurals>
+    <string name="title_activity_main2">MainActivity</string>
+    <string name="images">Images:</string>
+    <string name="herman_luo">- HERMAN LUO</string>
+    <string name="jaydon_lau">- JAYDON LAU</string>
+    <string name="trevor_bonas">- TREVOR BONAS</string>
+    <string name="shubham_negi">- SHUBHAM NEGI</string>
+    <string name="coin">Coin</string>
+    <string name="calm_bg">Calm BG</string>
+    <string name="app_icon">App Icon</string>
+    <string name="menu_icon">Menu Icon</string>
+    <string name="team_raspberry">TEAM RASPBERRY</string>
+    <string name="created_by">Created by:</string>
+    <string name="help">Help</string>
+    <string name="practical_nparent">Practical\nParent</string>
 
 </resources>

@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 // If there are no kids pressing the coin flip button
                 // will take the user straight to the coin flipping activity
                 // without heads or tails chosen
-                if (kids.getNum() == 0) {
+                if (kids.getNum() <= 0 || kids.isNobody()) {
                     coinFlipIntent = new Intent(MainActivity.this,
                             CoinFlipActivity.class);
                 }
@@ -86,6 +86,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button helpBtn = findViewById(R.id.helpBtn);
+        helpBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent helpIntent = new Intent(MainActivity.this,
+                        HelpActivity.class);
+                startActivity(helpIntent);
+            }
+        });
+
     }
 
     @Override
@@ -93,6 +103,20 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    public static void saveKidManager(Context context) {
+        KidManager kids = KidManager.getInstance();
+
+        // Saving KidManager into SharedPreferences
+        SharedPreferences prefs = context.getSharedPreferences("Kids", MODE_PRIVATE);
+        SharedPreferences.Editor prefEditor = prefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(kids.getList()); // Saving list
+        prefEditor.putString("List", json);
+        json = gson.toJson(kids.getCurrentIndex()); // Saving list
+        prefEditor.putString("Index", json); // Saving current index
+        prefEditor.apply();
     }
 
 
