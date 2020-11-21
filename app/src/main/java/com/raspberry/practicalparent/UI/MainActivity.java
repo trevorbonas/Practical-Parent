@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
             //File file = new File(current.getUri());
 
-            test.setImageDrawable(Drawable.createFromPath(current.getUri()));
+            test.setImageDrawable(Drawable.createFromPath("/storage/emulated/0/saved_images/" + current.getUri()));
 
            /* Glide.with(this)
                     .load(new File(current.getUri()) )
