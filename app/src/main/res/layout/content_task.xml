@@ -10,6 +10,7 @@
         android:id="@+id/taskListView"
         android:layout_width="387dp"
         android:layout_height="506dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/taskHintTitle" />
@@ -21,7 +22,7 @@
         android:layout_marginStart="14dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="122dp"
-        android:text="Select a task to edit, delete, or mark as done"
+        android:text="@string/task_options"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

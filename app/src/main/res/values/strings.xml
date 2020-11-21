@@ -68,5 +68,12 @@
     </plurals>
     <string name="title_activity_task">Tasks</string>
     <string name="title_activity_add_task">Add Task</string>
+    <string name="task">Task</string>
+    <string name="task_options">Select a task to edit, delete, or mark as done</string>
+    <string name="task_name">Task Name</string>
+    <string name="task_description">Task Description</string>
+    <string name="kid_name">kid name</string>
+    <string name="done">Done</string>
+    <string name="child_name">Child Name</string>
 
 </resources>
