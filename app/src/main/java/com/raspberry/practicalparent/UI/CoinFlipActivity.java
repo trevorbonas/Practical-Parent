@@ -74,10 +74,24 @@ public class CoinFlipActivity extends AppCompatActivity {
         history = ResultsManager.getInstance();
 
         Button historyBtn = findViewById(R.id.historyBtn);
+        Button nobodyBtn = findViewById(R.id.nobodySettings);
         MainActivity.disableBtn(historyBtn, this);
+        nobodyBtn.setEnabled(false);
+        nobodyBtn.setVisibility(View.INVISIBLE);
 
-        if (kids.getNum() <= 0) {
+        nobodyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent settingsIntent = new Intent(CoinFlipActivity.this,
+                        ChooseTurnActivity.class);
+                startActivity(settingsIntent);
+            }
+        });
+
+        if (kids.getNum() <= 0 || kids.isNobody()) {
             this.choice = "Not set";
+            //nobodyBtn.setEnabled(true);
+            //nobodyBtn.setVisibility(View.VISIBLE);
         }
         else {
             this.kidName = kids.getKidAt(kids.getCurrentIndex()).getName();
@@ -109,6 +123,12 @@ public class CoinFlipActivity extends AppCompatActivity {
         playAnimationXML();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        kids.setNobody(false);
+    }
+
     private int flipCoinResult() {
         Random rand = new Random();
         int n = rand.nextInt(2);
@@ -119,7 +139,7 @@ public class CoinFlipActivity extends AppCompatActivity {
     private void updateResultText(String result) {
         TextView textView = findViewById(R.id.txtResult);
         String winOrLose = "";
-        if (kids.getNum() <= 0) {
+        if (kids.getNum() <= 0 || kids.isNobody()) {
             textView.setText(result);
             return;
         }
@@ -183,7 +203,7 @@ public class CoinFlipActivity extends AppCompatActivity {
                 super.onAnimationEnd(animation);
 
                 // There isn't a kid choosing, user can flip as many times as they want
-                if (kids.getNum() <= 0) {
+                if (kids.getNum() <= 0 || kids.isNobody()) {
                     MainActivity.enableBtn(btn, CoinFlipActivity.this);
                     if (intCurrentFace == 0) {
                         updateResultText("Heads");
@@ -220,7 +240,7 @@ public class CoinFlipActivity extends AppCompatActivity {
                     Results results = new Results(wonFlip, choice, getDate(), kid.getName());
                     history.add(results);
                     kids.nextKid();
-                    saveKidManager();
+                    MainActivity.saveKidManager(CoinFlipActivity.this);
                     saveResultsManager();
                     MainActivity.disableBtn(btn, CoinFlipActivity.this);
                 }
@@ -235,18 +255,6 @@ public class CoinFlipActivity extends AppCompatActivity {
     private String getDate() {
         // df is pre-defined DateFormat "hour:minutes AM/PM Month. day, year"
         return df.format(Calendar.getInstance().getTime());
-    }
-
-    private void saveKidManager() {
-        // Save the KidManager interior values
-        SharedPreferences prefs = getSharedPreferences("Kids", MODE_PRIVATE);
-        SharedPreferences.Editor prefEditor = prefs.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(kids.getList()); // Saving list
-        prefEditor.putString("List", json);
-        json = gson.toJson(kids.getCurrentIndex()); // Saving list
-        prefEditor.putString("Index", json); // Saving current index
-        prefEditor.apply();
     }
 
     private void saveResultsManager() {

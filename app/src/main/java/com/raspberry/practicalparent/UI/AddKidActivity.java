@@ -51,15 +51,7 @@ public class AddKidActivity extends AppCompatActivity {
             public void onClick(View v) {
                 kids.addKid(kidsName);
 
-                // Saving KidManager into SharedPreferences
-                SharedPreferences prefs = getSharedPreferences("Kids", MODE_PRIVATE);
-                SharedPreferences.Editor prefEditor = prefs.edit();
-                Gson gson = new Gson();
-                String json = gson.toJson(kids.getList()); // Saving list
-                prefEditor.putString("List", json);
-                json = gson.toJson(kids.getCurrentIndex()); // Saving list
-                prefEditor.putString("Index", json); // Saving current index
-                prefEditor.apply();
+                MainActivity.saveKidManager(AddKidActivity.this);
 
                 finish();
             }

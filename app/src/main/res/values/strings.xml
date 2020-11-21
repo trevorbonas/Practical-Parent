@@ -73,5 +73,6 @@
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>
     </plurals>
+    <string name="title_activity_choose_turn">ChooseTurnActivity</string>
 
 </resources>
