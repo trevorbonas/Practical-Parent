@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (current != null && current.getUri() != null) {
             Glide.with(this)
-                    .load(new File(current.getUri()) )
+                    .load(current.getUri())
                     .into(test);
         }
         else {
