@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.raspberry.practicalparent.R;
+import com.raspberry.practicalparent.model.Kid;
 import com.raspberry.practicalparent.model.KidManager;
 
 import androidx.annotation.NonNull;
@@ -21,6 +23,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -30,6 +33,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Random;
 
 // The activity to add a kid to the application
 // launched from KidOptions
@@ -132,7 +140,7 @@ public class AddKidActivity extends AppCompatActivity {
                 if (path != null) {
                     kids.getKidAt(kids.getNum() - 1).setUri(path);
                     Log.println(Log.DEBUG, "path check",
-                            "So path is not null");
+                            "AddKidActivity path is: " + path);
                 } else if (path == null) {
                     Log.println(Log.DEBUG, "path check",
                             "path IS null");
@@ -227,12 +235,47 @@ public class AddKidActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && requestCode == IMAGE_CAPTURE_CODE) {
             //set image to imageView
             mImageView.setImageURI(image_uri);
-            path = image_uri.getPath();
+            Bitmap image = null;
+            try {
+                image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), image_uri);
+                saveImage(image);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE) {
             //set image to imageView
             mImageView.setImageURI(data.getData());
-            path = data.getData().getPath();
+            Uri imageUri = data.getData();
+            Bitmap image = null;
+            try {
+                image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                saveImage(image);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void saveImage(Bitmap image) {
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + "/saved_images");
+        myDir.mkdirs();
+        Random generator = new Random();
+        int n = 10000;
+        n = generator.nextInt(n);
+        String fileName = "Image-"+ n +".jpg";
+        path = fileName; // Path that will be added to kid when saved
+        File file = new File (myDir, fileName);
+        if (file.exists ()) file.delete ();
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            image.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
