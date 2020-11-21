@@ -88,26 +88,18 @@ public class KidOptionsActivity extends AppCompatActivity {
             if (itemView == null) {
                 itemView = getLayoutInflater().inflate(R.layout.kid_list_layout, parent, false);
             }
+
             Kid currKid = kids.getKidAt(position);
 
             ImageView imageView = itemView.findViewById(R.id.imgChildPic);
-            String imgFileName = kids.getKidAt(position).getPicPath();
-            File imgFile = null;
-            if (imgFileName != null) {
-                imgFile = new File(imgFileName);
-            }
-            if (imgFile.exists()) {
-                //Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                //imageView.setImageBitmap(myBitmap);
-                imageView.setImageDrawable(Drawable.createFromPath(currKid.getPicPath()));
-            }
+            MainActivity.displayPortrait(imageView, currKid);
+
             TextView taskCurrentChildName = itemView.findViewById(R.id.kidName);
             taskCurrentChildName.setText(currKid.getName());
 
             return itemView;
         }
     }
-
 
     // Clicking on a kid's name will bring up an AlertDialog that allows
     // the user to edit or delete the kid
