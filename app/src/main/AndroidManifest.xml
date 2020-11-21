@@ -21,6 +21,10 @@
             android:label="Timeout Timer"
             android:parentActivityName=".UI.MainActivity" />
         <activity
+            android:name=".UI.TimerActivity"
+            android:label="Timeout Timer"
+            android:parentActivityName=".UI.MainActivity"></activity>
+        <activity
             android:name=".UI.ChooseActivity"
             android:label=""
             android:parentActivityName=".UI.MainActivity" />
