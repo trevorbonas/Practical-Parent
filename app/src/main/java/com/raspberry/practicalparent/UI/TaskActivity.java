@@ -74,19 +74,6 @@ public class TaskActivity extends AppCompatActivity {
 
     public void setupListView() {
         // A list of the task names
-//        List<String> taskText = new ArrayList<String>();
-//
-//        // Adding all stored task names to the list
-//        for (int i = 0; i < tasks.getNum(); i++) {
-//            taskText.add(tasks.getTaskAt(i).getKidName() +
-//                    " " + tasks.getTaskAt(i).getName());
-//        }
-//
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
-//                R.layout.task_listview, taskText);
-//        listView.setAdapter(adapter);
-
-
         // The ListView to show the tasks
         ListView listView = findViewById(R.id.taskListView);
 
