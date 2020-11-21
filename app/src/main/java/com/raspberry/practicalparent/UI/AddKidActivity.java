@@ -51,7 +51,7 @@ public class AddKidActivity extends AppCompatActivity {
     private String path;
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;//code for choose gallery
-    private static final int PERMISSION_CODE_TAKE_PICTURE = 1002;//code for choose gallery
+    private static final int PERMISSION_CODE_TAKE_PICTURE = 1002;//code for taking picture
     private static final int IMAGE_CAPTURE_CODE = 1003;
 
     @Override
@@ -93,6 +93,7 @@ public class AddKidActivity extends AppCompatActivity {
                     }
                 }
                 else {
+                    openCamera();
                     //system os < marshmallow
                 }
             }
@@ -206,23 +207,28 @@ public class AddKidActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case PERMISSION_CODE_TAKE_PICTURE: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                if ( grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     //permission from popup was granted
                     openCamera();
+                    break;
                 }
                 else {
                     //permission was denied
-                    Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show();
+                   Toast.makeText(this, "Permission denied for taking picture", Toast.LENGTH_SHORT).show();
+                   break;
                 }
             }
             case PERMISSION_CODE: {
-                if(grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+
+                if( grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //permission was granted
                     pickImageFromGallery();
+                    break;
                 }
                 else {
                     //permission was denied
-                    Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Permission denied for picking image", Toast.LENGTH_SHORT).show();
+                    break;
                 }
             }
         }
