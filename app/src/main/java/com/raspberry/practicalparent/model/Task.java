@@ -74,6 +74,15 @@ public class Task {
         this.i = i;
     }
 
+    public void setKidName(String kidName) {
+        this.kidName = kidName;
+    }
+
+    public void updateKidName() {
+        KidManager kids = KidManager.getInstance();
+        this.kidName = kids.getKidAt(i).getName();
+    }
+
     public String getKidName() {
         return kidName;
     }

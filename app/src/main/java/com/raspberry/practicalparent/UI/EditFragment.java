@@ -78,6 +78,7 @@ public class EditFragment extends AppCompatDialogFragment {
 
                 // Refreshing activity list
                 ((KidOptionsActivity)getActivity()).setupListView();
+                adjustTaskChildName();
                 dismiss();
             }
         });
@@ -131,6 +132,12 @@ public class EditFragment extends AppCompatDialogFragment {
             if (task.getIndex() >= index) {
                 task.next();
             }
+        }
+    }
+
+    private void adjustTaskChildName() {
+        for (Task task : taskManager.getList()) {
+            task.updateKidName();
         }
     }
 
