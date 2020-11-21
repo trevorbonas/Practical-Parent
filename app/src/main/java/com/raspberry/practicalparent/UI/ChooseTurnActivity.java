@@ -1,5 +1,7 @@
 package com.raspberry.practicalparent.UI;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -58,10 +60,14 @@ public class ChooseTurnActivity extends AppCompatActivity {
                         CoinFlipActivity.class);
                 nobodyIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(nobodyIntent);
+                Intent intent = new Intent("finish");
+                sendBroadcast(intent);
                 finish();
             }
         });
     }
+
+
 
     public void setupListView() {
         // A list of the kids' names

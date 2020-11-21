@@ -1,6 +1,9 @@
 package com.raspberry.practicalparent.UI;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import com.raspberry.practicalparent.R;
@@ -19,6 +22,7 @@ import android.widget.TextView;
 
 public class ChooseActivity extends AppCompatActivity {
     private KidManager kids = KidManager.getInstance();
+    BroadcastReceiver broadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +75,23 @@ public class ChooseActivity extends AppCompatActivity {
         });
 
 
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                if (action.equals("finish")) {
+                    finish();
+                }
+            }
+        };
+        registerReceiver(broadcastReceiver, new IntentFilter("finish"));
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(broadcastReceiver);
     }
 
     private void setGreeting() {
@@ -93,4 +114,5 @@ public class ChooseActivity extends AppCompatActivity {
         super.onResume();
         setGreeting();
     }
+
 }

@@ -123,6 +123,12 @@ public class CoinFlipActivity extends AppCompatActivity {
         playAnimationXML();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        kids.setNobody(false);
+    }
+
     private int flipCoinResult() {
         Random rand = new Random();
         int n = rand.nextInt(2);
