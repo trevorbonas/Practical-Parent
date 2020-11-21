@@ -62,16 +62,7 @@ public class EditFragment extends AppCompatDialogFragment {
                 kids.getKidAt(index).setName(newName);
                 name.clearFocus();
 
-                // Saving KidManager into SharedPreferences
-                SharedPreferences prefs = getActivity()
-                        .getSharedPreferences("Kids", Context.MODE_PRIVATE);
-                SharedPreferences.Editor prefEditor = prefs.edit();
-                Gson gson = new Gson();
-                String json = gson.toJson(kids.getList()); // Saving list
-                prefEditor.putString("List", json);
-                json = gson.toJson(kids.getCurrentIndex()); // Saving list
-                prefEditor.putString("Index", json); // Saving current index
-                prefEditor.apply();
+                MainActivity.saveKidManager(v.getContext());
 
                 // Refreshing activity list
                 ((KidOptionsActivity)getActivity()).setupListView();
@@ -97,16 +88,7 @@ public class EditFragment extends AppCompatDialogFragment {
             public void onClick(View v) {
                 kids.deleteKid(index);
 
-                // Saving KidManager into SharedPreferences
-                SharedPreferences prefs = getActivity()
-                        .getSharedPreferences("Kids", Context.MODE_PRIVATE);
-                SharedPreferences.Editor prefEditor = prefs.edit();
-                Gson gson = new Gson();
-                String json = gson.toJson(kids.getList()); // Saving list
-                prefEditor.putString("List", json);
-                json = gson.toJson(kids.getCurrentIndex()); // Saving list
-                prefEditor.putString("Index", json); // Saving current index
-                prefEditor.apply();
+                MainActivity.saveKidManager(v.getContext());
 
                 // Refreshing the ListView in KidOptionsActivity
                 ((KidOptionsActivity)getActivity()).setupListView();
@@ -115,7 +97,7 @@ public class EditFragment extends AppCompatDialogFragment {
         });
 
         // Build the alert dialog
-        Dialog d = builder.setView(v).setTitle("Select name to edit").create();
+        Dialog d = builder.setView(v).setTitle(R.string.edit_child_fragment_title).create();
 
         return d;
     }

@@ -6,6 +6,20 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+    <Button
+        android:id="@+id/changeBtn"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="27dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="60dp"
+        android:fontFamily="sans-serif-medium"
+        android:foreground="@drawable/ic_baseline_edit_24"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="#6E6E6E"
+        app:layout_constraintBottom_toTopOf="@+id/headBtn"
+        app:layout_constraintStart_toEndOf="@+id/greetingTxt" />
+
     <TextView
         android:id="@+id/greetingTxt"
         android:layout_width="wrap_content"
