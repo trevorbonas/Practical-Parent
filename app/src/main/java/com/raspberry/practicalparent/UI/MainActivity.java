@@ -3,8 +3,10 @@ package com.raspberry.practicalparent.UI;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.raspberry.practicalparent.R;
@@ -17,12 +19,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
+import android.util.Log;
 import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ImageView;
 
+import java.io.File;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +55,23 @@ public class MainActivity extends AppCompatActivity {
         // Load the two singletons with info if there is info to load
         setupKidManager();
         setupResultsManager();
+
+        ImageView test = findViewById(R.id.testImage);
+
+        KidManager kids = KidManager.getInstance();
+        Kid current = null;
+        if (kids.getNum() > 0) {
+            current = kids.getKidAt(kids.getCurrentIndex());
+        }
+        if (current != null && current.getUri() != null) {
+            Glide.with(this)
+                    .load(new File(current.getUri()) )
+                    .into(test);
+        }
+        else {
+            test.setBackground(ContextCompat.getDrawable(MainActivity.this,
+                    R.drawable.calm_imagejpg));
+        }
 
         // Button to go to coin flipping activity
         Button coinBtn = findViewById(R.id.flipBtn);

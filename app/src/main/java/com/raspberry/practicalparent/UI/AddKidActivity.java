@@ -24,6 +24,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -88,7 +89,7 @@ public class AddKidActivity extends AppCompatActivity {
             }
         });
 
-        //handle galley button click
+        // Handle gallery button click
         mChooseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,7 +108,7 @@ public class AddKidActivity extends AppCompatActivity {
                     }
                 }
                 else {
-                    //system os is less than marshmellow
+                    //system os is less than marshmallow
                     pickImageFromGallery();
                 }
             }
@@ -117,7 +118,6 @@ public class AddKidActivity extends AppCompatActivity {
 
         final EditText name = findViewById(R.id.inputKidName);
         final Button okayBtn = findViewById(R.id.okayBtn);
-        //okayBtn.setEnabled(false);
         MainActivity.disableBtn(okayBtn, this);
 
         // Save button
@@ -128,7 +128,14 @@ public class AddKidActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 kids.addKid(kidsName);
-
+                if (image_uri != null) {
+                    kids.getKidAt(kids.getNum() - 1).setUri(image_uri.getPath());
+                    Log.println(Log.DEBUG, "image_uri check",
+                            "So image_uri is not null");
+                } else if (image_uri == null) {
+                    Log.println(Log.DEBUG, "image_uri check",
+                            "image_uri IS null");
+                }
                 // Saving KidManager into SharedPreferences
                 SharedPreferences prefs = getSharedPreferences("Kids", MODE_PRIVATE);
                 SharedPreferences.Editor prefEditor = prefs.edit();
@@ -185,7 +192,6 @@ public class AddKidActivity extends AppCompatActivity {
     }
 
     //handle result of runtime permission
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
