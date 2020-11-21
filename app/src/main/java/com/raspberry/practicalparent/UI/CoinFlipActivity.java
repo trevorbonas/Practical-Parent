@@ -74,10 +74,24 @@ public class CoinFlipActivity extends AppCompatActivity {
         history = ResultsManager.getInstance();
 
         Button historyBtn = findViewById(R.id.historyBtn);
+        Button nobodyBtn = findViewById(R.id.nobodySettings);
         MainActivity.disableBtn(historyBtn, this);
+        nobodyBtn.setEnabled(false);
+        nobodyBtn.setVisibility(View.INVISIBLE);
+
+        nobodyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent settingsIntent = new Intent(CoinFlipActivity.this,
+                        ChooseTurnActivity.class);
+                startActivity(settingsIntent);
+            }
+        });
 
         if (kids.getNum() <= 0 || kids.isNobody()) {
             this.choice = "Not set";
+            nobodyBtn.setEnabled(true);
+            nobodyBtn.setVisibility(View.VISIBLE);
         }
         else {
             this.kidName = kids.getKidAt(kids.getCurrentIndex()).getName();

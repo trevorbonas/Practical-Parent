@@ -1,5 +1,6 @@
 package com.raspberry.practicalparent.UI;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -36,8 +37,16 @@ public class ChooseTurnActivity extends AppCompatActivity {
         setContentView(R.layout.activity_choose_turn);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true); // Enable back button
+        final Intent nobodyIntent = new Intent(ChooseTurnActivity.this,
+                CoinFlipActivity.class);
+        nobodyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        // We have come to this activity from ChooseActivity
+        if (!kids.isNobody()) {
+            ActionBar ab = getSupportActionBar();
+            ab.setDisplayHomeAsUpEnabled(true); // Enable back button
+        }
 
         setupListView();
         registerListClick();
@@ -49,6 +58,7 @@ public class ChooseTurnActivity extends AppCompatActivity {
             public void onClick(View v) {
                 kids.setNobody(true);
                 MainActivity.saveKidManager(ChooseTurnActivity.this);
+                startActivity(nobodyIntent);
                 finish();
             }
         });
@@ -85,11 +95,26 @@ public class ChooseTurnActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                kids.changeKid((index + position) % (kids.getNum()) );
-                Log.println(Log.DEBUG, "Check new current index",
-                        "New KidManager index: " + kids.getCurrentIndex());
-                MainActivity.saveKidManager(ChooseTurnActivity.this);
-                finish();
+                if (kids.isNobody()) {
+                    kids.changeKid((index + position) % (kids.getNum()) );
+                    Log.println(Log.DEBUG, "Check new current index",
+                            "New KidManager index: " + kids.getCurrentIndex());
+                    MainActivity.saveKidManager(ChooseTurnActivity.this);
+
+                    Intent chooseIntent = new Intent(ChooseTurnActivity.this,
+                            ChooseActivity.class);
+                    chooseIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                            Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(chooseIntent);
+                    finish();
+                }
+                else {
+                    kids.changeKid((index + position) % (kids.getNum()) );
+                    Log.println(Log.DEBUG, "Check new current index",
+                            "New KidManager index: " + kids.getCurrentIndex());
+                    MainActivity.saveKidManager(ChooseTurnActivity.this);
+                    finish();
+                }
             }
         });
     }

@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 // If there are no kids pressing the coin flip button
                 // will take the user straight to the coin flipping activity
                 // without heads or tails chosen
-                if (kids.getNum() == 0) {
+                if (kids.getNum() <= 0 || kids.isNobody()) {
                     coinFlipIntent = new Intent(MainActivity.this,
                             CoinFlipActivity.class);
                 }
