@@ -40,6 +40,7 @@ public class AddKidActivity extends AppCompatActivity {
     Button mChooseBtn;  //button to choose the image
     Button mCaptureBtn; //button to capture the image
     Uri image_uri;
+    private String path;
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;//code for choose gallery
     private static final int PERMISSION_CODE_TAKE_PICTURE = 1002;//code for choose gallery
@@ -128,13 +129,13 @@ public class AddKidActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 kids.addKid(kidsName);
-                if (image_uri != null) {
-                    kids.getKidAt(kids.getNum() - 1).setUri(image_uri.getPath());
-                    Log.println(Log.DEBUG, "image_uri check",
-                            "So image_uri is not null");
-                } else if (image_uri == null) {
-                    Log.println(Log.DEBUG, "image_uri check",
-                            "image_uri IS null");
+                if (path != null) {
+                    kids.getKidAt(kids.getNum() - 1).setUri(path);
+                    Log.println(Log.DEBUG, "path check",
+                            "So path is not null");
+                } else if (path == null) {
+                    Log.println(Log.DEBUG, "path check",
+                            "path IS null");
                 }
                 // Saving KidManager into SharedPreferences
                 SharedPreferences prefs = getSharedPreferences("Kids", MODE_PRIVATE);
@@ -226,10 +227,12 @@ public class AddKidActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && requestCode == IMAGE_CAPTURE_CODE) {
             //set image to imageView
             mImageView.setImageURI(image_uri);
+            path = image_uri.getPath();
         }
         if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE) {
             //set image to imageView
             mImageView.setImageURI(data.getData());
+            path = data.getData().getPath();
         }
     }
 }
