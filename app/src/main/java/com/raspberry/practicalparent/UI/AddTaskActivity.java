@@ -56,12 +56,7 @@ public class AddTaskActivity extends AppCompatActivity {
                 tasks.addTask(taskName, taskDescription);
 
                 // Saving KidManager into SharedPreferences
-                SharedPreferences prefs = getSharedPreferences("Tasks", MODE_PRIVATE);
-                SharedPreferences.Editor prefEditor = prefs.edit();
-                Gson gson = new Gson();
-                String json = gson.toJson(tasks.getList()); // Saving list
-                prefEditor.putString("List", json);
-                prefEditor.apply();
+                saveTaskList(tasks, AddTaskActivity.this);
 
                 finish();
             }
@@ -113,5 +108,15 @@ public class AddTaskActivity extends AppCompatActivity {
         } else {
             MainActivity.disableBtn(button, context);
         }
+    }
+
+    public static void saveTaskList(TaskManager tasks, Context context) {
+        // Saving KidManager into SharedPreferences
+        SharedPreferences prefs = context.getSharedPreferences("Tasks", MODE_PRIVATE);
+        SharedPreferences.Editor prefEditor = prefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(tasks.getList()); // Saving list
+        prefEditor.putString("List", json);
+        prefEditor.apply();
     }
 }

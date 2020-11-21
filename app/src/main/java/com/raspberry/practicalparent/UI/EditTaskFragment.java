@@ -131,8 +131,7 @@ public class EditTaskFragment extends AppCompatDialogFragment {
         });
 
         // Build the alert dialog
-        //TODO change title to take from strings.xml
-        Dialog d = builder.setView(v).setTitle("Task").create();
+        Dialog d = builder.setView(v).setTitle(getString(R.string.task)).create();
 
         return d;
     }
@@ -144,8 +143,6 @@ public class EditTaskFragment extends AppCompatDialogFragment {
     }
 
     // Sets up the EditText to receive input
-    // If the user edits the name and presses the checkmark on their
-    // keyboard it will change the task's name and save this to SharedPreferences
     private void setupInputField() {
         taskNameText = v.findViewById(R.id.taskName);
         taskNameText.setText(taskName);
@@ -155,11 +152,9 @@ public class EditTaskFragment extends AppCompatDialogFragment {
         taskDescriptionText = v.findViewById(R.id.taskDescription);
         taskDescriptionText.setText(taskDescription);
         taskDescriptionText.setEnabled(true);
-        //taskDescriptionText.setInputType(InputType.TYPE_CLASS_TEXT);
 
         // Changes made to EditText
         // in edit task
-        //Change to TextWatcher
 
         taskNameText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -198,28 +193,5 @@ public class EditTaskFragment extends AppCompatDialogFragment {
                 AddTaskActivity.setButtonEnabledIfStringsNonNull(newTaskName, newTaskDescription, saveBtn, v.getContext());
             }
         });
-
-
-//        taskNameText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                switch(actionId){
-//                    case EditorInfo.IME_ACTION_DONE:
-//                    case EditorInfo.IME_ACTION_NEXT:
-//                    case EditorInfo.IME_ACTION_PREVIOUS: // Meaning checkmark has been pressed
-//                        newTaskName = taskNameText.getText().toString();
-//                        // If the input name is empty or just a space
-//                        // Don't enable saving
-//                        if (newTaskName.length() == 0 || newTaskName.charAt(0) == ' ') {
-//                            MainActivity.disableBtn(saveBtn, v.getContext());
-//                        }
-//                        else {
-//                            MainActivity.enableBtn(saveBtn, v.getContext());
-//                        }
-//                        return true;
-//                }
-//                return true;
-//            }
-//        });
     }
 }

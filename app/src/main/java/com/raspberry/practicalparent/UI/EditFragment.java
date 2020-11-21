@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import android.app.Dialog;
 import android.text.InputType;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,6 +80,8 @@ public class EditFragment extends AppCompatDialogFragment {
                 // Refreshing activity list
                 ((KidOptionsActivity)getActivity()).setupListView();
                 adjustTaskChildName();
+                AddTaskActivity.saveTaskList(taskManager, v.getContext());
+
                 dismiss();
             }
         });
@@ -116,6 +119,11 @@ public class EditFragment extends AppCompatDialogFragment {
                 ((KidOptionsActivity)getActivity()).setupListView();
 
                 adjustTaskManagerToAccountForDeletingChild();
+                if (kids.getNum() == 0) {
+                    adjustTaskChildName();
+                }
+
+                AddTaskActivity.saveTaskList(taskManager, v.getContext());
 
                 dismiss(); // Closing fragment
             }

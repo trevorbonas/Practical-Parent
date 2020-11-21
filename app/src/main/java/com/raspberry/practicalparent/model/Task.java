@@ -1,5 +1,8 @@
 package com.raspberry.practicalparent.model;
 
+import android.content.res.Resources;
+import android.util.Log;
+
 import com.google.gson.internal.$Gson$Preconditions;
 
 import java.util.Random;
@@ -24,6 +27,7 @@ public class Task {
             i = 0;
             this.kidName = "Unassigned";
             this.name = name;
+            this.description = description;
             return;
         }
         this.name = name;
@@ -80,7 +84,11 @@ public class Task {
 
     public void updateKidName() {
         KidManager kids = KidManager.getInstance();
-        this.kidName = kids.getKidAt(i).getName();
+        if (kids.getNum() <= 0) {
+            this.kidName = "Unassigned";
+        } else {
+            this.kidName = kids.getKidAt(i).getName();
+        }
     }
 
     public String getKidName() {
