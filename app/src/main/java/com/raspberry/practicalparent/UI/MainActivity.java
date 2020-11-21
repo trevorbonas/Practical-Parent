@@ -4,15 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.annotation.GlideModule;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.raspberry.practicalparent.R;
@@ -21,7 +14,6 @@ import com.raspberry.practicalparent.model.KidManager;
 import com.raspberry.practicalparent.model.Results;
 import com.raspberry.practicalparent.model.ResultsManager;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -30,7 +22,6 @@ import android.util.Log;
 import android.view.View;
 
 import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -66,28 +57,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView test = findViewById(R.id.testImage);
 
         KidManager kids = KidManager.getInstance();
-        Kid current = null;
-        if (kids.getNum() > 0) {
-            current = kids.getKidAt(kids.getCurrentIndex());
-        }
-
-
-        if (current != null && current.getUri() != null) {
-            Log.println(Log.DEBUG, "path check",
-                    "MainActivity path is: " + current.getUri());
-
-            //File file = new File(current.getUri());
-
-            test.setImageDrawable(Drawable.createFromPath(current.getUri()));
-
-           /* Glide.with(this)
-                    .load(new File(current.getUri()) )
-                    .into(test); */
-        }
-        else {
-            test.setBackground(ContextCompat.getDrawable(MainActivity.this,
-                    R.drawable.calm_imagejpg));
-        }
+        displayPortrait(test, kids.getKidAt(kids.getCurrentIndex()));
 
         // Button to go to coin flipping activity
         Button coinBtn = findViewById(R.id.flipBtn);
@@ -188,5 +158,19 @@ public class MainActivity extends AppCompatActivity {
                 R.drawable.outlined_button));
         btn.setTextColor(context.getResources().getColor(R.color.buttonTxt,
                 context.getTheme()));
+    }
+
+    static public void displayPortrait(ImageView imageView, Kid kid) {
+        if (kid == null) {
+            return;
+        }
+        String imgFileName = kid.getPicPath();
+        File imgFile = null;
+        if (imgFileName != null) {
+            imgFile = new File(imgFileName);
+        }
+        if (imgFile.exists()) {
+            imageView.setImageDrawable(Drawable.createFromPath(kid.getPicPath()));
+        }
     }
 }
