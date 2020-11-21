@@ -1,6 +1,5 @@
 package com.raspberry.practicalparent.model;
 
-import android.graphics.Bitmap;
 import android.net.Uri;
 
 /**
@@ -10,7 +9,7 @@ public class Kid {
 
     private int age; // Optional feature
     private String name;
-    private String uriPath; // Path to kid's portrait
+    private String picPath; // Path to kid's portrait
 
     public Kid(String name) {
         this.name = name;
@@ -20,8 +19,8 @@ public class Kid {
         this.name = name;
     }
 
-    public void setUri(String path) {
-        this.uriPath = path;
+    public void setPicPath(String path) {
+        this.picPath = path;
     }
 
     /*public Bitmap getPortrait() {
@@ -47,7 +46,7 @@ public class Kid {
 
     // Retrieves the kid's portrait from sd card/secondary memory
     // Useful for setting images in the UI quickly to kid's portrait
-    public String getUri() {
-        return  uriPath;
+    public String getPicPath() {
+        return picPath;
     }
 }

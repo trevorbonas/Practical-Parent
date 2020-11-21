@@ -1,8 +1,6 @@
 package com.raspberry.practicalparent.UI;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
@@ -28,8 +26,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 // Activity to allow users to edit, add, or delete kids
 public class KidOptionsActivity extends AppCompatActivity {
@@ -95,12 +91,15 @@ public class KidOptionsActivity extends AppCompatActivity {
             Kid currKid = kids.getKidAt(position);
 
             ImageView imageView = itemView.findViewById(R.id.imgChildPic);
-            String imgFileName = "/storage/emulated/0/saved_images/" + kids.getKidAt(position).getUri();
-            File imgFile = new File(imgFileName);
+            String imgFileName = kids.getKidAt(position).getPicPath();
+            File imgFile = null;
+            if (imgFileName != null) {
+                imgFile = new File(imgFileName);
+            }
             if (imgFile.exists()) {
                 //Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 //imageView.setImageBitmap(myBitmap);
-                imageView.setImageDrawable(Drawable.createFromPath("/storage/emulated/0/saved_images/" + currKid.getUri()));
+                imageView.setImageDrawable(Drawable.createFromPath(currKid.getPicPath()));
             }
             TextView taskCurrentChildName = itemView.findViewById(R.id.kidName);
             taskCurrentChildName.setText(currKid.getName());

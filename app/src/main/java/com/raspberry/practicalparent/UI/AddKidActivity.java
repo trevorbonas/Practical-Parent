@@ -10,15 +10,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.raspberry.practicalparent.R;
-import com.raspberry.practicalparent.model.Kid;
 import com.raspberry.practicalparent.model.KidManager;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -138,9 +134,9 @@ public class AddKidActivity extends AppCompatActivity {
             public void onClick(View v) {
                 kids.addKid(kidsName);
                 if (path != null) {
-                    kids.getKidAt(kids.getNum() - 1).setUri(path);
+                    kids.getKidAt(kids.getNum() - 1).setPicPath(path);
                     Log.println(Log.DEBUG, "path check",
-                            "AddKidActivity path is: " + path);
+                            "path is: " + path);
                 } else if (path == null) {
                     Log.println(Log.DEBUG, "path check",
                             "path IS null");
@@ -265,7 +261,7 @@ public class AddKidActivity extends AppCompatActivity {
         int n = 10000;
         n = generator.nextInt(n);
         String fileName = "Image-"+ n +".jpg";
-        path = fileName; // Path that will be added to kid when saved
+        path = myDir.toString() + "/" + fileName; // Path that will be added to kid when saved
         File file = new File (myDir, fileName);
         if (file.exists ()) file.delete ();
         try {
