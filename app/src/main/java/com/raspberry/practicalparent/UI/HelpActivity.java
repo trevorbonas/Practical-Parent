@@ -32,11 +32,13 @@ public class HelpActivity extends AppCompatActivity {
         Button btnCalm = (Button) findViewById(R.id.btn_credit_calm);
         Button btnIcon = (Button) findViewById(R.id.btn_credit_icon);
         Button btnMenu = (Button) findViewById(R.id.btn_credit_menu);
+        Button btnDefault = (Button) findViewById(R.id.btn_credit_default);
 
         btnCoin.setOnClickListener(OnClickListener);
         btnCalm.setOnClickListener(OnClickListener);
         btnIcon.setOnClickListener(OnClickListener);
         btnMenu.setOnClickListener(OnClickListener);
+        btnDefault.setOnClickListener(OnClickListener);
     }
 
     View.OnClickListener OnClickListener = new View.OnClickListener() {
@@ -55,7 +57,6 @@ public class HelpActivity extends AppCompatActivity {
                     startActivity(intent);
                     break;
                 case R.id.btn_credit_icon:
-                    //TODO:
                     intent = new Intent(Intent.ACTION_VIEW,
                             Uri.parse("https://www.pinterest.ca/pin/367465650825732546/"));
                     startActivity(intent);
@@ -63,6 +64,11 @@ public class HelpActivity extends AppCompatActivity {
                 case R.id.btn_credit_menu:
                     intent = new Intent(Intent.ACTION_VIEW,
                             Uri.parse("https://pixabay.com/vectors/boy-child-dad-daughter-family-2025099/"));
+                    startActivity(intent);
+                    break;
+                case R.id.btn_credit_default:
+                    intent = new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("https://commons.wikimedia.org/wiki/File:Family_icon.png"));
                     startActivity(intent);
                     break;
             }
