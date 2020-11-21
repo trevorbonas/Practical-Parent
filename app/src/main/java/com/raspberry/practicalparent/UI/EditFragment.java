@@ -23,6 +23,8 @@ import androidx.core.content.ContextCompat;
 import com.google.gson.Gson;
 import com.raspberry.practicalparent.R;
 import com.raspberry.practicalparent.model.KidManager;
+import com.raspberry.practicalparent.model.Task;
+import com.raspberry.practicalparent.model.TaskManager;
 
 // Edit fragment pops up in KidOptionsActivity
 // upon clicking on a kid from the list
@@ -35,6 +37,7 @@ public class EditFragment extends AppCompatDialogFragment {
     private View v; // Current view
     private KidManager kids = KidManager.getInstance(); // An instance of the singleton
     Button saveBtn;
+    private TaskManager taskManager = TaskManager.getInstance();
 
     @Override
     @Nullable
@@ -110,6 +113,9 @@ public class EditFragment extends AppCompatDialogFragment {
 
                 // Refreshing the ListView in KidOptionsActivity
                 ((KidOptionsActivity)getActivity()).setupListView();
+
+                adjustTaskManagerToAccountForDeletingChild();
+
                 dismiss(); // Closing fragment
             }
         });
@@ -118,6 +124,14 @@ public class EditFragment extends AppCompatDialogFragment {
         Dialog d = builder.setView(v).setTitle("Select name to edit").create();
 
         return d;
+    }
+
+    private void adjustTaskManagerToAccountForDeletingChild() {
+        for (Task task : taskManager.getList()) {
+            if (task.getIndex() >= index) {
+                task.next();
+            }
+        }
     }
 
     // Sets up the EditText to receive input

@@ -66,6 +66,13 @@ public class Task {
         this.description = description;
     }
 
+    public int getIndex() {
+        return i;
+    }
+
+    public void setIndex(int i) {
+        this.i = i;
+    }
 
     public String getKidName() {
         return kidName;
