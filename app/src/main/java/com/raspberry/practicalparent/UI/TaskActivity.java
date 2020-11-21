@@ -2,10 +2,12 @@ package com.raspberry.practicalparent.UI;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import com.google.gson.Gson;
 import com.raspberry.practicalparent.R;
 import com.raspberry.practicalparent.model.Kid;
 import com.raspberry.practicalparent.model.KidManager;
@@ -118,6 +120,11 @@ public class TaskActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        saveTaskManager(tasks, this);
+    }
 
     // Clicking on a task will bring up an AlertDialog that allows
     // the user to edit or delete the task
@@ -137,5 +144,15 @@ public class TaskActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public static void saveTaskManager(TaskManager taskManager, Context context) {
+        // Saving TaskManager into SharedPreferences
+        SharedPreferences prefs = context.getSharedPreferences("Tasks", Context.MODE_PRIVATE);
+        SharedPreferences.Editor prefEditor = prefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(taskManager.getList()); // Saving list
+        prefEditor.putString("List", json);
+        prefEditor.apply();
     }
 }

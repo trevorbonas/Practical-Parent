@@ -68,6 +68,7 @@ public class EditTaskFragment extends AppCompatDialogFragment {
                 updateKidName();
 
                 ((TaskActivity)getActivity()).setupListView();
+                TaskActivity.saveTaskManager(tasks, v.getContext());
                 dismiss();
             }
         });
@@ -84,13 +85,7 @@ public class EditTaskFragment extends AppCompatDialogFragment {
                 taskNameText.clearFocus();
 
                 // Saving TaskManager into SharedPreferences
-                SharedPreferences prefs = getActivity()
-                        .getSharedPreferences("Tasks", Context.MODE_PRIVATE);
-                SharedPreferences.Editor prefEditor = prefs.edit();
-                Gson gson = new Gson();
-                String json = gson.toJson(tasks.getList()); // Saving list
-                prefEditor.putString("List", json);
-                prefEditor.apply();
+                TaskActivity.saveTaskManager(tasks, getActivity());
 
                 // Refreshing activity list
                 ((TaskActivity)getActivity()).setupListView();
