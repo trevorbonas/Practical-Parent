@@ -90,8 +90,8 @@ public class CoinFlipActivity extends AppCompatActivity {
 
         if (kids.getNum() <= 0 || kids.isNobody()) {
             this.choice = "Not set";
-            nobodyBtn.setEnabled(true);
-            nobodyBtn.setVisibility(View.VISIBLE);
+            //nobodyBtn.setEnabled(true);
+            //nobodyBtn.setVisibility(View.VISIBLE);
         }
         else {
             this.kidName = kids.getKidAt(kids.getCurrentIndex()).getName();

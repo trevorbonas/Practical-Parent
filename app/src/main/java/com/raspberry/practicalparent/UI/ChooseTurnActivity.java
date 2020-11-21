@@ -37,10 +37,6 @@ public class ChooseTurnActivity extends AppCompatActivity {
         setContentView(R.layout.activity_choose_turn);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        final Intent nobodyIntent = new Intent(ChooseTurnActivity.this,
-                CoinFlipActivity.class);
-        nobodyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
-                Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         // We have come to this activity from ChooseActivity
         if (!kids.isNobody()) {
@@ -58,6 +54,9 @@ public class ChooseTurnActivity extends AppCompatActivity {
             public void onClick(View v) {
                 kids.setNobody(true);
                 MainActivity.saveKidManager(ChooseTurnActivity.this);
+                Intent nobodyIntent = new Intent(ChooseTurnActivity.this,
+                        CoinFlipActivity.class);
+                nobodyIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(nobodyIntent);
                 finish();
             }
