@@ -39,7 +39,7 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".UI.AddTaskActivity"
-            android:label=""
+            android:label="@string/title_activity_add_task"
             android:parentActivityName=".UI.TaskActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
