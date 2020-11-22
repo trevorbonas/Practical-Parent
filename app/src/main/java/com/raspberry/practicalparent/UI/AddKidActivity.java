@@ -54,8 +54,6 @@ public class AddKidActivity extends AppCompatActivity {
     ImageView mImageView;  //the image view
     Button mChooseBtn;  //button to choose the image
     Button mCaptureBtn; //button to capture the image
-    //Uri image_uri;            //Changed to static
-    //private String path;      //Changed to static
     public static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;//code for choose gallery
     private static final int PERMISSION_CODE_TAKE_PICTURE = 1002;//code for taking picture
@@ -280,7 +278,7 @@ public class AddKidActivity extends AppCompatActivity {
 
     public static String onActivityResultGlobalFunction(int requestCode, int resultCode, Intent data, ImageView imageView, Context context, Uri imageUri) {
         Random generator = new Random();
-        Log.d("image: ", "Imaeg");
+        Log.d("image: ", "Image");
         String savedPath = null;
         int n = 10000;
         n = generator.nextInt(n);
