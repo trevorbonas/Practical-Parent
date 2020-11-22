@@ -61,7 +61,8 @@
     <string name="choose_coin_heads_tails_children">Hi %s, \nWhat do you choose?</string>
     <string name="kid_name_flips">%s\'s flips</string>
     <string name="all_flips">All flips</string>
-
+    <string name="capture_image">Capture Image</string>
+    <string name="choose_image">Choose image from gallery</string>
     <plurals name="radio_buttons_text_in_minutes">
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>
