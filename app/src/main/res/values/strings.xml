@@ -73,6 +73,15 @@
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>
     </plurals>
+    <string name="title_activity_task">Tasks</string>
+    <string name="title_activity_add_task">Add Task</string>
+    <string name="task">Task</string>
+    <string name="task_options">Select a task to edit, delete, or mark as done</string>
+    <string name="task_name">Task Name</string>
+    <string name="task_description">Task Description</string>
+    <string name="kid_name">kid name</string>
+    <string name="done">Done</string>
+    <string name="child_name">Child Name</string>
     <string name="title_activity_main2">MainActivity</string>
     <string name="images">Images:</string>
     <string name="herman_luo">- HERMAN LUO</string>

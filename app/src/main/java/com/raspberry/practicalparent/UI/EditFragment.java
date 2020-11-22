@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import android.app.Dialog;
 import android.text.InputType;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,8 @@ import androidx.core.content.ContextCompat;
 import com.google.gson.Gson;
 import com.raspberry.practicalparent.R;
 import com.raspberry.practicalparent.model.KidManager;
+import com.raspberry.practicalparent.model.Task;
+import com.raspberry.practicalparent.model.TaskManager;
 
 // Edit fragment pops up in KidOptionsActivity
 // upon clicking on a kid from the list
@@ -35,6 +38,7 @@ public class EditFragment extends AppCompatDialogFragment {
     private View v; // Current view
     private KidManager kids = KidManager.getInstance(); // An instance of the singleton
     Button saveBtn;
+    private TaskManager taskManager = TaskManager.getInstance();
 
     @Override
     @Nullable
@@ -66,6 +70,9 @@ public class EditFragment extends AppCompatDialogFragment {
 
                 // Refreshing activity list
                 ((KidOptionsActivity)getActivity()).setupListView();
+                adjustTaskChildName();
+                AddTaskActivity.saveTaskList(taskManager, v.getContext());
+
                 dismiss();
             }
         });
@@ -92,6 +99,14 @@ public class EditFragment extends AppCompatDialogFragment {
 
                 // Refreshing the ListView in KidOptionsActivity
                 ((KidOptionsActivity)getActivity()).setupListView();
+
+                adjustTaskManagerToAccountForDeletingChild();
+                if (kids.getNum() == 0) {
+                    adjustTaskChildName();
+                }
+
+                AddTaskActivity.saveTaskList(taskManager, v.getContext());
+
                 dismiss(); // Closing fragment
             }
         });
@@ -100,6 +115,20 @@ public class EditFragment extends AppCompatDialogFragment {
         Dialog d = builder.setView(v).setTitle(R.string.edit_child_fragment_title).create();
 
         return d;
+    }
+
+    private void adjustTaskManagerToAccountForDeletingChild() {
+        for (Task task : taskManager.getList()) {
+            if (task.getIndex() >= index) {
+                task.next();
+            }
+        }
+    }
+
+    private void adjustTaskChildName() {
+        for (Task task : taskManager.getList()) {
+            task.updateKidName();
+        }
     }
 
     // Sets up the EditText to receive input

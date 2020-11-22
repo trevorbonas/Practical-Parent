@@ -8,6 +8,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.raspberry.practicalparent.R;
 import com.raspberry.practicalparent.model.KidManager;
+import com.raspberry.practicalparent.model.Task;
+import com.raspberry.practicalparent.model.TaskManager;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +26,7 @@ import android.widget.Toast;
 // launched from KidOptions
 public class AddKidActivity extends AppCompatActivity {
     private String kidsName; // The input kid's name
+    private TaskManager taskManager = TaskManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,11 @@ public class AddKidActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 kids.addKid(kidsName);
+                for (Task task : taskManager.getList()) {
+                    task.updateKidName();
+                }
+
+                AddTaskActivity.saveTaskList(taskManager, AddKidActivity.this);
 
                 MainActivity.saveKidManager(AddKidActivity.this);
 
