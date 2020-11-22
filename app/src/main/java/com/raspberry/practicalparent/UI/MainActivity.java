@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.raspberry.practicalparent.R;
@@ -57,7 +58,13 @@ public class MainActivity extends AppCompatActivity {
         ImageView test = findViewById(R.id.testImage);
 
         KidManager kids = KidManager.getInstance();
-        displayPortrait(test, kids.getKidAt(kids.getCurrentIndex()));
+        //displayPortrait(test, kids.getKidAt(kids.getCurrentIndex()));
+        Kid currKid = kids.getKidAt(kids.getCurrentIndex());
+        if (currKid != null) {
+            Glide.with(this)
+                    .load("/storage/emulated/0/Pictures/" + currKid.getPicPath())
+                    .into(test);
+        }
 
         // Button to go to coin flipping activity
         Button coinBtn = findViewById(R.id.flipBtn);
@@ -169,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
         if (imgFileName != null) {
             imgFile = new File(imgFileName);
         }
-        if (imgFile.exists()) {
+        if (imgFile != null && imgFile.exists()) {
             imageView.setImageDrawable(Drawable.createFromPath(kid.getPicPath()));
         }
     }

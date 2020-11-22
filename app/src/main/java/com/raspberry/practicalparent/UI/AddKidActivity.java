@@ -1,6 +1,7 @@
 package com.raspberry.practicalparent.UI;
 
 import android.Manifest;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,8 +33,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Objects;
 import java.util.Random;
 
 // The activity to add a kid to the application
@@ -237,13 +241,18 @@ public class AddKidActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode,  Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Random generator = new Random();
+        int n = 10000;
+        n = generator.nextInt(n);
+        String fileName = "Image-"+ n +".jpg";
         if (resultCode == RESULT_OK && requestCode == IMAGE_CAPTURE_CODE) {
             //set image to imageView
             mImageView.setImageURI(image_uri);
             Bitmap image = null;
             try {
                 image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), image_uri);
-                saveImage(image);
+                saveImage(image, fileName);
+                path = fileName;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -255,14 +264,15 @@ public class AddKidActivity extends AppCompatActivity {
             Bitmap image = null;
             try {
                 image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-                saveImage(image);
+                saveImage(image, fileName);
+                path = fileName;
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void saveImage(Bitmap image) {
+    private void saveImageOld(Bitmap image) {
         String root = Environment.getExternalStorageDirectory().toString();
         File myDir = new File(root + "/saved_images");
 
@@ -287,5 +297,28 @@ public class AddKidActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void saveImage(Bitmap bitmap, String fileName) throws IOException {
+        OutputStream fos;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ContentResolver resolver = getContentResolver();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(MediaStore.Images.Media.DISPLAY_NAME,
+                    fileName);
+            contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg");
+            contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES);
+            Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    contentValues);
+            fos = resolver.openOutputStream(Objects.requireNonNull(imageUri) );
+        } else {
+            String dir = Environment.getExternalStoragePublicDirectory(Environment
+                    .DIRECTORY_PICTURES).toString();
+            File image = new File(dir, fileName);
+            fos = new FileOutputStream(image);
+        }
+
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+        fos.close();
     }
 }
