@@ -128,7 +128,10 @@ public class AddKidActivity extends AppCompatActivity {
 //                    //system os is less than marshmallow
 //                    pickImageFromGallery();
 //                }
-                CropImage.startPickImageActivity(AddKidActivity.this);
+          //      CropImage.startPickImageActivity(AddKidActivity.this);
+                CropImage.activity()
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .start(AddKidActivity.this);
             }
         });
         // Instance of the singleton KidManager holding all the kids
@@ -192,16 +195,16 @@ public class AddKidActivity extends AppCompatActivity {
         });
     }
 
-    private void openCamera() {
-        ContentValues values = new ContentValues();
-        values.put(MediaStore.Images.Media.TITLE, "New Picture");
-        values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera");
-        image_uri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-        //Camera intent
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri);
-        startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE);
-    }
+//    private void openCamera() {
+//        ContentValues values = new ContentValues();
+//        values.put(MediaStore.Images.Media.TITLE, "New Picture");
+//        values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera");
+//        image_uri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+//        //Camera intent
+//        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri);
+//        startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE);
+//    }
 
 //    private void pickImageFromGallery() {
 //        //Intent intent = new Intent(Intent.ACTION_PICK);
@@ -251,7 +254,7 @@ public class AddKidActivity extends AppCompatActivity {
         Random generator = new Random();
         int n = 10000;
         n = generator.nextInt(n);
-        String fileName = "Image-"+ n +".jpg";
+        String fileName = "Image-" + n + ".jpg";
         if (resultCode == RESULT_OK && requestCode == IMAGE_CAPTURE_CODE) {
             //set image to imageView
             mImageView.setImageURI(image_uri);
@@ -263,44 +266,56 @@ public class AddKidActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-     //   if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE) {
-            //set image to imageView
-         //   mImageView.setImageURI(data.getData());
-          //  Uri imageUri = data.getData();
-         //   image_uri_picked = data.getData();
-          if(requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == Activity.RESULT_OK){
-              Uri imageuri = CropImage.getPickImageResultUri(this, data);
-              if(CropImage.isReadExternalStoragePermissionsRequired(this, imageuri)){
-                  image_uri_picked = imageuri;
-                  requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
-              } else {
-                  startCrop(imageuri);
-              }
+        //   if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE) {
+        //set image to imageView
+        //   mImageView.setImageURI(data.getData());
+        //  Uri imageUri = data.getData();
+        //   image_uri_picked = data.getData();
+//          if(requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == Activity.RESULT_OK){
+//              Uri imageuri = CropImage.getPickImageResultUri(this, data);
+//              if(CropImage.isReadExternalStoragePermissionsRequired(this, imageuri)){
+//                  image_uri_picked = imageuri;
+//                  requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
+//              } else {
+//                  startCrop(imageuri);
+//              }
+//
+//              if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE ){
+//                  CropImage.ActivityResult result = CropImage.getActivityResult(data);
+//                  if(resultCode == RESULT_OK){
+//                      mImageView.setImageURI(result.getUri());
+//                      Toast.makeText(this, "Image updated successfully", Toast.LENGTH_SHORT).show();
+//                  }
+//              }
 
-              if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE ){
-                  CropImage.ActivityResult result = CropImage.getActivityResult(data);
-                  if(resultCode == RESULT_OK){
-                      mImageView.setImageURI(result.getUri());
-                      Toast.makeText(this, "Image updated successfully", Toast.LENGTH_SHORT).show();
-                  }
-              }
            //   mImageView.setImageURI(imageuri);
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+                mImageView.setImageURI(resultUri);
+                image_uri_picked = resultUri;
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
+
             Bitmap image = null;
             try {
-                image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageuri);
+                image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), image_uri_picked);
                 saveImage(image, fileName);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-    }
 
-    private void startCrop(Uri imageuri) {
-        CropImage.activity(imageuri)
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setMultiTouchEnabled(true)
-                .start(this);
-    }
+
+//    private void startCrop(Uri imageuri) {
+//        CropImage.activity(imageuri)
+//                .setGuidelines(CropImageView.Guidelines.ON)
+//                .setMultiTouchEnabled(true)
+//                .start(this);
+//    }
 
     /*private void saveImage(Bitmap image) {
         String root = Environment.getExternalStorageDirectory().toString();
