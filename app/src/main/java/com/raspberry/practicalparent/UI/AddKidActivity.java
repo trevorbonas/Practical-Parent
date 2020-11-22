@@ -41,6 +41,7 @@ import java.util.Random;
 
 // The activity to add a kid to the application
 // launched from KidOptions
+//contains code to intake picture from camera and take picture
 public class AddKidActivity extends AppCompatActivity {
 
     private String kidsName; // The input kid's name
