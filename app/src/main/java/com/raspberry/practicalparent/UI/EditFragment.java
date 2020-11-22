@@ -1,24 +1,35 @@
 package com.raspberry.practicalparent.UI;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import android.app.Dialog;
+import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
-import androidx.core.content.ContextCompat;
 
 import com.google.gson.Gson;
 import com.raspberry.practicalparent.R;
@@ -34,7 +45,11 @@ public class EditFragment extends AppCompatDialogFragment {
     private String newName; // The changed name of the child
     private View v; // Current view
     private KidManager kids = KidManager.getInstance(); // An instance of the singleton
-    Button saveBtn;
+    private static Uri imageUri;
+    private String path;
+    private Button saveBtn;
+
+    private ImageView imageView;
 
     @Override
     @Nullable
@@ -48,8 +63,40 @@ public class EditFragment extends AppCompatDialogFragment {
         this.index = bundle.getInt("Kid index");
         kidName = bundle.getString("Kid name");
 
+        imageView = v.findViewById(R.id.kidPicEditKid);
+
+        path = kids.getKidAt(index).getPicPath();
+        newName = kidName;
+
+        MainActivity.displayPortrait(v.getContext(), kids.getKidAt(index).getPicPath(), imageView);
+
         Button cancelBtn = v.findViewById(R.id.cancelBtn);
         Button deleteBtn = v.findViewById(R.id.deleteBtn);
+        Button captureBtn = v.findViewById(R.id.captureImageEditKid);
+        Button chooseBtn = v.findViewById(R.id.chooseImageGalleryEditKid);
+
+        captureBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int result = AddKidActivity.takePhotoUsingCamera(v.getContext());
+                if (result == AddKidActivity.OPEN_CAMERA) {
+                    openCameraFragment(v.getContext());
+                }
+                Log.d("Clicked Capture", "onClick: " + result);
+            }
+        });
+
+        chooseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int result = AddKidActivity.selectPhotoFromDevice(v.getContext());
+                if (result == AddKidActivity.OPEN_GALLERY) {
+                    pickImageFromGalleryFragment();
+                }
+                Log.d("Clicked Choose", "onClick: " + result);
+            }
+        });
+
         saveBtn = v.findViewById(R.id.saveBtn);
 
         // Until name has been edited make it not enabled
@@ -60,6 +107,7 @@ public class EditFragment extends AppCompatDialogFragment {
             public void onClick(View v) {
                 // Changing singleton
                 kids.getKidAt(index).setName(newName);
+                kids.getKidAt(index).setPicPath(path);
                 name.clearFocus();
 
                 // Saving KidManager into SharedPreferences
@@ -131,26 +179,62 @@ public class EditFragment extends AppCompatDialogFragment {
 
         // Changes made to EditText
         // in edit kid
-        name.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        //now using TextWatcher
+
+        name.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                switch(actionId){
-                    case EditorInfo.IME_ACTION_DONE:
-                    case EditorInfo.IME_ACTION_NEXT:
-                    case EditorInfo.IME_ACTION_PREVIOUS: // Meaning checkmark has been pressed
-                        newName = name.getText().toString();
-                        // If the input name is empty or just a space
-                        // Don't enable saving
-                        if (newName.length() == 0 || newName.charAt(0) == ' ') {
-                            MainActivity.disableBtn(saveBtn, v.getContext());
-                        }
-                        else {
-                           MainActivity.enableBtn(saveBtn, v.getContext());
-                        }
-                        return true;
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                newName = name.getText().toString();
+                if (!newName.trim().isEmpty()) {
+                    MainActivity.enableBtn(saveBtn, v.getContext());
+                } else {
+                    MainActivity.disableBtn(saveBtn, v.getContext());
                 }
-                return true;
+
             }
         });
+    }
+
+    private void openCameraFragment(Context context) {
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, "New Picture");
+        values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera");
+        imageUri = context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+        //Camera intent
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        startActivityForResult(cameraIntent, AddKidActivity.IMAGE_CAPTURE_CODE);
+    }
+
+    private void pickImageFromGalleryFragment() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, AddKidActivity.IMAGE_PICK_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        AddKidActivity.onRequestPermission(requestCode, grantResults, v.getContext());
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+        path = AddKidActivity.onActivityResultGlobalFunction(requestCode, resultCode, data, imageView, v.getContext(), imageUri);
+        if (!newName.trim().isEmpty()) {
+            MainActivity.enableBtn(saveBtn, v.getContext());
+        } else {
+            MainActivity.disableBtn(saveBtn, v.getContext());
+        }
     }
 }
