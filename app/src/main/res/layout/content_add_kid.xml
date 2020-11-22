@@ -16,15 +16,14 @@
 
     <ImageView
         android:id="@+id/image_view"
-        android:layout_width="400dp"
-        android:layout_height="401dp"
+        android:layout_width="292dp"
+        android:layout_height="354dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="17dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_baseline_image_24"
         app:layout_constraintBottom_toTopOf="@+id/choose_image_btn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.454"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spacerAddKid" />
 

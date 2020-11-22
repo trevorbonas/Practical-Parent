@@ -30,7 +30,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.raspberry.practicalparent.R;
 import com.raspberry.practicalparent.model.KidManager;
@@ -68,7 +71,7 @@ public class EditFragment extends AppCompatDialogFragment {
         path = kids.getKidAt(index).getPicPath();
         newName = kidName;
 
-        MainActivity.displayPortrait(v.getContext(), kids.getKidAt(index).getPicPath(), imageView);
+        MainActivity.displayPortrait(v.getContext(), path, imageView);
 
         Button cancelBtn = v.findViewById(R.id.cancelBtn);
         Button deleteBtn = v.findViewById(R.id.deleteBtn);

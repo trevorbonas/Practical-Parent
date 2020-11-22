@@ -58,22 +58,21 @@
     <TextView
         android:id="@+id/spacerEditKidLayout"
         android:layout_width="50dp"
-        android:layout_height="22dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/kidPicEditKid"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
-
     <ImageView
         android:id="@+id/kidPicEditKid"
-        android:layout_width="396dp"
-        android:layout_height="384dp"
+        android:layout_width="292dp"
+        android:layout_height="354dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_baseline_image_24"
         app:layout_constraintBottom_toTopOf="@+id/chooseImageGalleryEditKid"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.47"
+        app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
