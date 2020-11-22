@@ -55,17 +55,6 @@ public class MainActivity extends AppCompatActivity {
         setupKidManager();
         setupResultsManager();
 
-        ImageView test = findViewById(R.id.testImage);
-
-        KidManager kids = KidManager.getInstance();
-        //displayPortrait(test, kids.getKidAt(kids.getCurrentIndex()));
-        Kid currKid = kids.getKidAt(kids.getCurrentIndex());
-        if (currKid != null) {
-            Glide.with(this)
-                    .load("/storage/emulated/0/Pictures/" + currKid.getPicPath())
-                    .into(test);
-        }
-
         // Button to go to coin flipping activity
         Button coinBtn = findViewById(R.id.flipBtn);
         coinBtn.setOnClickListener(new View.OnClickListener() {
@@ -167,17 +156,9 @@ public class MainActivity extends AppCompatActivity {
                 context.getTheme()));
     }
 
-    static public void displayPortrait(ImageView imageView, Kid kid) {
-        if (kid == null) {
-            return;
-        }
-        String imgFileName = kid.getPicPath();
-        File imgFile = null;
-        if (imgFileName != null) {
-            imgFile = new File(imgFileName);
-        }
-        if (imgFile != null && imgFile.exists()) {
-            imageView.setImageDrawable(Drawable.createFromPath(kid.getPicPath()));
-        }
+    static public void displayPortrait(Context context, String path, ImageView imageView) {
+        Glide.with(context)
+                .load(path)
+                .into(imageView);
     }
 }

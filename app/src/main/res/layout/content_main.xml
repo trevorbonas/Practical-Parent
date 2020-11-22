@@ -90,13 +90,4 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.500684" />
 
-    <ImageView
-        android:id="@+id/testImage"
-        android:layout_width="95dp"
-        android:layout_height="101dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
 </androidx.constraintlayout.widget.ConstraintLayout>

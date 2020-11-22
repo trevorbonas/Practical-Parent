@@ -92,7 +92,8 @@ public class KidOptionsActivity extends AppCompatActivity {
             Kid currKid = kids.getKidAt(position);
 
             ImageView imageView = itemView.findViewById(R.id.imgChildPic);
-            MainActivity.displayPortrait(imageView, currKid);
+            MainActivity.displayPortrait(KidOptionsActivity.this,
+                    currKid.getPicPath(), imageView);
 
             TextView taskCurrentChildName = itemView.findViewById(R.id.kidName);
             taskCurrentChildName.setText(currKid.getName());

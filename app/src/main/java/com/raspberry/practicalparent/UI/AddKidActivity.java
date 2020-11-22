@@ -249,7 +249,6 @@ public class AddKidActivity extends AppCompatActivity {
             try {
                 image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), image_uri);
                 saveImage(image, fileName);
-                path = fileName;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -262,7 +261,6 @@ public class AddKidActivity extends AppCompatActivity {
             try {
                 image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
                 saveImage(image, fileName);
-                path = fileName;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -315,6 +313,8 @@ public class AddKidActivity extends AppCompatActivity {
         }
 
         bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+        path = Environment.getExternalStoragePublicDirectory(Environment
+                .DIRECTORY_PICTURES).toString() + "/" + fileName;
         fos.close();
     }
 }
