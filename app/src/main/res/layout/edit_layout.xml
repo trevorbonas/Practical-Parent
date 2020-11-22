@@ -66,9 +66,8 @@
 
     <ImageView
         android:id="@+id/kidPicEditKid"
-        android:layout_width="292dp"
-        android:layout_height="354dp"
-        android:scaleType="centerCrop"
+        android:layout_width="295dp"
+        android:layout_height="313dp"
         android:src="@drawable/ic_baseline_image_24"
         app:layout_constraintBottom_toTopOf="@+id/chooseImageGalleryEditKid"
         app:layout_constraintEnd_toEndOf="parent"
