@@ -180,12 +180,10 @@ public class AddKidActivity extends AppCompatActivity {
             }
             else {
                 //permission already granted
-                //openCamera(context);
                 return OPEN_CAMERA;
             }
         }
         else {
-            //openCamera(context);
             return OPEN_CAMERA;
             //system os < marshmallow
         }
@@ -206,13 +204,11 @@ public class AddKidActivity extends AppCompatActivity {
             }
             else {
                 //permission already granted
-                //pickImageFromGallery(context);
                 return OPEN_GALLERY;
             }
         }
         else {
             //system os is less than marshmallow
-            //pickImageFromGallery(context);
             return OPEN_GALLERY;
         }
         return NO_PERMISSIONS;
@@ -252,7 +248,6 @@ public class AddKidActivity extends AppCompatActivity {
             case PERMISSION_CODE_TAKE_PICTURE: {
                 if ( grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     //permission from popup was granted
-                    //openCamera(context);
                     return OPEN_CAMERA;
                 }
                 else {
@@ -264,7 +259,6 @@ public class AddKidActivity extends AppCompatActivity {
             case PERMISSION_CODE: {
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //permission was granted
-                    //pickImageFromGallery(context);
                     return OPEN_GALLERY;
                 }
                 else {

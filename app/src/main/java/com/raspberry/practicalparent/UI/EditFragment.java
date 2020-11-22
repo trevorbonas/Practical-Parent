@@ -229,7 +229,6 @@ public class EditFragment extends AppCompatDialogFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
         path = AddKidActivity.onActivityResultGlobalFunction(requestCode, resultCode, data, imageView, v.getContext(), imageUri);
         if (!newName.trim().isEmpty()) {
             MainActivity.enableBtn(saveBtn, v.getContext());
