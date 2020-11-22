@@ -48,7 +48,7 @@ public class AddKidActivity extends AppCompatActivity {
     ImageView mImageView;  //the image view
     Button mChooseBtn;  //button to choose the image
     Button mCaptureBtn; //button to capture the image
-    Uri image_uri;
+    Uri image_uri;      //uri of the taken image
     private String path;
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;//code for choose gallery
