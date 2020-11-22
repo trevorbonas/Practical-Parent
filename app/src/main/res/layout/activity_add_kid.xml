@@ -25,51 +25,6 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!--ImageView on which image will be set-->
-
-
-    <ImageView
-        android:id="@+id/image_view"
-        android:layout_width="400dp"
-        android:layout_height="401dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_baseline_image_24"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.454"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-        app:layout_constraintVertical_bias="0.067" />
-    <!--button to choose image-->
-
-    <!--Button to capture image-->
-
-    <Button
-        android:id="@+id/choose_image_btn"
-        style="@style/Base.Widget.AppCompat.Button.Colored"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/choose_image"
-        app:layout_anchor="@+id/include"
-        app:layout_anchorGravity="center"
-        app:layout_constraintBottom_toBottomOf="@+id/include"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_view"
-        app:layout_constraintVertical_bias="0.028" />
-
-    <Button
-        android:id="@+id/capture_image_btn"
-        style="@style/Base.Widget.AppCompat.Button.Colored"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/capture_image"
-        app:layout_constraintBottom_toBottomOf="@+id/include"
-        app:layout_constraintTop_toBottomOf="@+id/choose_image_btn"
-        app:layout_constraintVertical_bias="0.036"
-        tools:layout_editor_absoluteX="5dp" />
-
     <include
         android:id="@+id/include"
         layout="@layout/content_add_kid"
