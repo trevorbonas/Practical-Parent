@@ -30,8 +30,8 @@
 
     <ImageView
         android:id="@+id/image_view"
-        android:layout_width="394dp"
-        android:layout_height="246dp"
+        android:layout_width="400dp"
+        android:layout_height="401dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_baseline_image_24"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -49,7 +49,7 @@
         style="@style/Base.Widget.AppCompat.Button.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Choose Image From Gallery"
+        android:text="@string/choose_image"
         app:layout_anchor="@+id/include"
         app:layout_anchorGravity="center"
         app:layout_constraintBottom_toBottomOf="@+id/include"
@@ -64,7 +64,7 @@
         style="@style/Base.Widget.AppCompat.Button.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Capture Image"
+        android:text="@string/capture_image"
         app:layout_constraintBottom_toBottomOf="@+id/include"
         app:layout_constraintTop_toBottomOf="@+id/choose_image_btn"
         app:layout_constraintVertical_bias="0.036"
