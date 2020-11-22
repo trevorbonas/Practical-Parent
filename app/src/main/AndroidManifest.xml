@@ -6,9 +6,15 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     package="com.raspberry.practicalparent">
+    <!--Adding Read External Storage Permission-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <!--Adding Camera, Write External Storage Permission-->
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -31,7 +37,11 @@
             android:label="@string/title_activity_task"
             android:parentActivityName=".UI.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
-
+        <activity
+            android:name=".UI.AddTaskActivity"
+            android:label=""
+            android:parentActivityName=".UI.TaskActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".UI.ChooseActivity"
@@ -70,11 +80,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <service android:name=".TimerNotificationClasses.TimerNotificationService" />
-
-        <receiver android:name=".TimerNotificationClasses.TimerNotificationServiceBroadcastReceiver" />
-        <receiver android:name=".TimerNotificationClasses.TimerCompleteNotificationBroadcastReceiver" />
+        <service android:name=".TimerNotificationClasses.TimerNotificationService"/>
+        <receiver android:name=".TimerNotificationClasses.TimerNotificationServiceBroadcastReceiver"/>
+        <receiver android:name=".TimerNotificationClasses.TimerCompleteNotificationBroadcastReceiver"/>
 
         <meta-data
             android:name="preloaded_fonts"

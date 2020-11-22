@@ -98,5 +98,9 @@
     <string name="practical_nparent">Practical\nParent</string>
     <string name="title_activity_choose_turn">ChooseTurnActivity</string>
     <string name="default_icon">Default icon</string>
+    <string name="flip_a_coin">Flip a Coin</string>
+    <string name="kids">Kids</string>
+    <string name="timeout">Timeout</string>
+    <string name="tasks">Tasks</string>
 
 </resources>
