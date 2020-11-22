@@ -24,6 +24,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="q">
+
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" /> <!-- optional (needed if default theme has no action bar) -->
+
         <activity
             android:name=".UI.TimerActivity"
             android:parentActivityName=".UI.MainActivity"
