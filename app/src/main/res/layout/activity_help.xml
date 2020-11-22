@@ -137,4 +137,14 @@
         app:layout_constraintStart_toStartOf="@+id/btn_credit_icon"
         app:layout_constraintTop_toBottomOf="@+id/btn_credit_icon" />
 
+    <Button
+        android:id="@+id/btn_credit_default"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/default_icon"
+        app:layout_constraintEnd_toEndOf="@+id/btn_credit_menu"
+        app:layout_constraintStart_toStartOf="@+id/btn_credit_menu"
+        app:layout_constraintTop_toBottomOf="@+id/btn_credit_menu" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
