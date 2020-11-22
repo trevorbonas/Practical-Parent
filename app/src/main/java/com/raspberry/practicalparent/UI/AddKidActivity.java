@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -102,9 +103,11 @@ public class AddKidActivity extends AppCompatActivity {
                 //check runtime permission
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_DENIED){
+                    == PackageManager.PERMISSION_DENIED ||
+                            checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                    == PackageManager.PERMISSION_DENIED) {
                         //permission not granted, request it.
-                        String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
+                        String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
                         //show popup for runtime permission
                         requestPermissions(permissions, PERMISSION_CODE);
                     }
@@ -262,7 +265,12 @@ public class AddKidActivity extends AppCompatActivity {
     private void saveImage(Bitmap image) {
         String root = Environment.getExternalStorageDirectory().toString();
         File myDir = new File(root + "/saved_images");
-        myDir.mkdirs();
+
+        if (myDir.mkdirs()) {
+            Log.d("Make Dir", "Created Directory");
+        } else {
+            Log.d("Make dir", "fail");
+        }
         Random generator = new Random();
         int n = 10000;
         n = generator.nextInt(n);
