@@ -4,10 +4,12 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,13 +17,13 @@ import android.os.Bundle;
 import com.google.gson.Gson;
 import com.raspberry.practicalparent.R;
 import com.raspberry.practicalparent.model.KidManager;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -44,22 +46,24 @@ import java.util.Random;
 
 // The activity to add a kid to the application
 // launched from KidOptions
-//contains code to intake picture from camera and take picture
 public class AddKidActivity extends AppCompatActivity {
 
+    public static Uri image_uri;
+    private String path;
     private String kidsName; // The input kid's name
     ImageView mImageView;  //the image view
     Button mChooseBtn;  //button to choose the image
     Button mCaptureBtn; //button to capture the image
-    Uri image_uri;      //uri of the taken image
-
-    Uri image_uri_picked; //new
-
-    private String path;
-    private static final int IMAGE_PICK_CODE = 1000;
+    //Uri image_uri;            //Changed to static
+    //private String path;      //Changed to static
+    public static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;//code for choose gallery
     private static final int PERMISSION_CODE_TAKE_PICTURE = 1002;//code for taking picture
-    private static final int IMAGE_CAPTURE_CODE = 1003;
+    public static final int IMAGE_CAPTURE_CODE = 1003;
+
+    public static final int OPEN_CAMERA = 1;
+    public static final int OPEN_GALLERY = 2;
+    public static final int NO_PERMISSIONS = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,63 +79,29 @@ public class AddKidActivity extends AppCompatActivity {
         //Views
         mImageView = findViewById(R.id.image_view);
         mChooseBtn = findViewById(R.id.choose_image_btn);
-     //   mCaptureBtn = findViewById(R.id.capture_image_btn);
+        mCaptureBtn = findViewById(R.id.capture_image_btn);
 
 
         //handle take image button click
-//        mCaptureBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //if system os is >= marshmellow, request runtime permission
-//                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-//                    if(checkSelfPermission(Manifest.permission.CAMERA)
-//                            == PackageManager.PERMISSION_DENIED ||
-//                            checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//                            == PackageManager.PERMISSION_DENIED ){
-//                        //permission not enabled, request it
-//                        String[] permission = {Manifest.permission.CAMERA, Manifest.permission.CAMERA,
-//                        Manifest.permission.WRITE_EXTERNAL_STORAGE};
-//                        //show popup to request permission
-//                        requestPermissions(permission, PERMISSION_CODE_TAKE_PICTURE);
-//                    }
-//                    else {
-//                        //permission already granted
-//                        openCamera();
-//                    }
-//                }
-//                else {
-//                    openCamera();
-//                    //system os < marshmallow
-//                }
-//            }
-//        });
+        mCaptureBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //if system os is >= marshmellow, request runtime permission
+                int result = takePhotoUsingCamera(AddKidActivity.this);
+                if (result == OPEN_CAMERA) {
+                    openCamera(AddKidActivity.this);
+                }
+            }
+        });
 
         // Handle gallery button click
         mChooseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //check runtime permission
-//                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                    if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-//                    == PackageManager.PERMISSION_DENIED){
-//                        //permission not granted, request it.
-//                        String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
-//                        //show popup for runtime permission
-//                        requestPermissions(permissions, PERMISSION_CODE);
-//                    }
-//                    else {
-//                        //permission already granted
-//                        pickImageFromGallery();
-//                    }
-//                }
-//                else {
-//                    //system os is less than marshmallow
-//                    pickImageFromGallery();
-//                }
-          //      CropImage.startPickImageActivity(AddKidActivity.this);
-                CropImage.activity()
-                        .setGuidelines(CropImageView.Guidelines.ON)
-                        .start(AddKidActivity.this);
+                int result = selectPhotoFromDevice(AddKidActivity.this);
+                if (result == OPEN_GALLERY) {
+                    pickImageFromGallery(AddKidActivity.this);
+                }
             }
         });
         // Instance of the singleton KidManager holding all the kids
@@ -195,158 +165,156 @@ public class AddKidActivity extends AppCompatActivity {
         });
     }
 
-//    private void openCamera() {
-//        ContentValues values = new ContentValues();
-//        values.put(MediaStore.Images.Media.TITLE, "New Picture");
-//        values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera");
-//        image_uri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-//        //Camera intent
-//        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri);
-//        startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE);
-//    }
+    public static int takePhotoUsingCamera(Context context) {
+        //if system os is >= marshmellow, request runtime permission
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if(context.checkSelfPermission(Manifest.permission.CAMERA)
+                    == PackageManager.PERMISSION_DENIED ||
+                    context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            == PackageManager.PERMISSION_DENIED ){
+                //permission not enabled, request it
+                String[] permission = {Manifest.permission.CAMERA, Manifest.permission.CAMERA,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                //show popup to request permission
+                ((Activity) context).requestPermissions(permission, PERMISSION_CODE_TAKE_PICTURE);
+            }
+            else {
+                //permission already granted
+                return OPEN_CAMERA;
+            }
+        }
+        else {
+            return OPEN_CAMERA;
+            //system os < marshmallow
+        }
+        return NO_PERMISSIONS;
+    }
 
-//    private void pickImageFromGallery() {
-//        //Intent intent = new Intent(Intent.ACTION_PICK);
-//        //intent.setType("image/*");
-//       // startActivityForResult(intent, IMAGE_PICK_CODE);
-//
-//        CropImage.startPickImageActivity(AddKidActivity.this);
-//    }
+    public static int selectPhotoFromDevice(Context context) {
+        //check runtime permission
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(context.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_DENIED ||
+                    context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            == PackageManager.PERMISSION_DENIED) {
+                //permission not granted, request it.
+                String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                //show popup for runtime permission
+                ((Activity) context).requestPermissions(permissions, PERMISSION_CODE);
+            }
+            else {
+                //permission already granted
+                return OPEN_GALLERY;
+            }
+        }
+        else {
+            //system os is less than marshmallow
+            return OPEN_GALLERY;
+        }
+        return NO_PERMISSIONS;
+    }
+
+    private static void openCamera(Context context) {
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, "New Picture");
+        values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera");
+        image_uri = context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+        //Camera intent
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri);
+        ((Activity) context).startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE);
+    }
+
+    private static void pickImageFromGallery(Context context) {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        ((Activity) context).startActivityForResult(intent, IMAGE_PICK_CODE);
+    }
 
     //handle result of runtime permission
 
-   // @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        switch (requestCode) {
-//            case PERMISSION_CODE_TAKE_PICTURE: {
-//                if ( grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-//                    //permission from popup was granted
-//                    openCamera();
-//                    break;
-//                }
-//                else {
-//                    //permission was denied
-//                   Toast.makeText(this, "Permission denied for taking picture", Toast.LENGTH_SHORT).show();
-//                   break;
-//                }
-//            }
-//            case PERMISSION_CODE: {
-//
-//                if( grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    //permission was granted
-//                    pickImageFromGallery();
-//                    break;
-//                }
-//                else {
-//                    //permission was denied
-//                    Toast.makeText(this, "Permission denied for picking image", Toast.LENGTH_SHORT).show();
-//                    break;
-//                }
-//            }
-//        }
-//    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        int result = onRequestPermission(requestCode, grantResults, this);
+        if (result == OPEN_CAMERA) {
+            openCamera(this);
+        } else if (result == OPEN_GALLERY) {
+            pickImageFromGallery(this);
+        }
+    }
+
+    public static int onRequestPermission(int requestCode, int[] grantResults, Context context) {
+        switch (requestCode) {
+            case PERMISSION_CODE_TAKE_PICTURE: {
+                if ( grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    //permission from popup was granted
+                    return OPEN_CAMERA;
+                }
+                else {
+                    //permission was denied
+                    Toast.makeText(context, "Permission denied for taking picture", Toast.LENGTH_SHORT).show();
+                    return NO_PERMISSIONS;
+                }
+            }
+            case PERMISSION_CODE: {
+                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //permission was granted
+                    return OPEN_GALLERY;
+                }
+                else {
+                    //permission was denied
+                    Toast.makeText(context, "Permission denied for picking image", Toast.LENGTH_SHORT).show();
+                    return NO_PERMISSIONS;
+                }
+            }
+        }
+        return NO_PERMISSIONS;
+    }
 
     //handle result of picked image
     @Override
     protected void onActivityResult(int requestCode, int resultCode,  Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        path = onActivityResultGlobalFunction(requestCode, resultCode, data, mImageView, this, image_uri);
+    }
+
+    public static String onActivityResultGlobalFunction(int requestCode, int resultCode, Intent data, ImageView imageView, Context context, Uri imageUri) {
         Random generator = new Random();
-        int n = 10000;
-        n = generator.nextInt(n);
-        String fileName = "Image-" + n + ".jpg";
-        if (resultCode == RESULT_OK && requestCode == IMAGE_CAPTURE_CODE) {
-            //set image to imageView
-            mImageView.setImageURI(image_uri);
-            Bitmap image = null;
-            try {
-                image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), image_uri);
-                saveImage(image, fileName);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        //   if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE) {
-        //set image to imageView
-        //   mImageView.setImageURI(data.getData());
-        //  Uri imageUri = data.getData();
-        //   image_uri_picked = data.getData();
-//          if(requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == Activity.RESULT_OK){
-//              Uri imageuri = CropImage.getPickImageResultUri(this, data);
-//              if(CropImage.isReadExternalStoragePermissionsRequired(this, imageuri)){
-//                  image_uri_picked = imageuri;
-//                  requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
-//              } else {
-//                  startCrop(imageuri);
-//              }
-//
-//              if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE ){
-//                  CropImage.ActivityResult result = CropImage.getActivityResult(data);
-//                  if(resultCode == RESULT_OK){
-//                      mImageView.setImageURI(result.getUri());
-//                      Toast.makeText(this, "Image updated successfully", Toast.LENGTH_SHORT).show();
-//                  }
-//              }
-
-           //   mImageView.setImageURI(imageuri);
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                Uri resultUri = result.getUri();
-                mImageView.setImageURI(resultUri);
-                image_uri_picked = resultUri;
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
-            }
-        }
-
-            Bitmap image = null;
-            try {
-                image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), image_uri_picked);
-                saveImage(image, fileName);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-//    private void startCrop(Uri imageuri) {
-//        CropImage.activity(imageuri)
-//                .setGuidelines(CropImageView.Guidelines.ON)
-//                .setMultiTouchEnabled(true)
-//                .start(this);
-//    }
-
-    /*private void saveImage(Bitmap image) {
-        String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root + "/saved_images");
-        if (myDir.mkdirs()) {
-            Log.println(Log.DEBUG, "Directory creation", "Directory created");
-        } else {
-            Log.println(Log.DEBUG, "Directory creation", "Directory NOT created");
-        }
-        Random generator = new Random();
+        Log.d("image: ", "Imaeg");
+        String savedPath = null;
         int n = 10000;
         n = generator.nextInt(n);
         String fileName = "Image-"+ n +".jpg";
-        path = myDir.toString() + "/" + fileName; // Path that will be added to kid when saved
-        File file = new File (myDir, fileName);
-        if (file.exists ()) file.delete ();
-        try {
-            FileOutputStream out = new FileOutputStream(file);
-            image.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            out.flush();
-            out.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (resultCode == RESULT_OK && requestCode == IMAGE_CAPTURE_CODE) {
+            //set image to imageView
+            imageView.setImageURI(imageUri);
+            Bitmap image = null;
+            try {
+                image = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
+                savedPath = saveImage(image, fileName, context);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-    } */
+        if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE) {
+            //set image to imageView
+            imageView.setImageURI(data.getData());
+            imageUri = data.getData();
+            Bitmap image = null;
+            try {
+                image = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
+                savedPath = saveImage(image, fileName, context);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return savedPath;
+    }
 
-    private void saveImage(Bitmap bitmap, String fileName) throws IOException {
+    public static String saveImage(Bitmap bitmap, String fileName, Context context) throws IOException {
         OutputStream fos;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            ContentResolver resolver = getContentResolver();
+            ContentResolver resolver = context.getContentResolver();
             ContentValues contentValues = new ContentValues();
             contentValues.put(MediaStore.Images.Media.DISPLAY_NAME,
                     fileName);
@@ -363,8 +331,9 @@ public class AddKidActivity extends AppCompatActivity {
         }
 
         bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
-        path = Environment.getExternalStoragePublicDirectory(Environment
+        String savedPath = Environment.getExternalStoragePublicDirectory(Environment
                 .DIRECTORY_PICTURES).toString() + "/" + fileName;
         fos.close();
+        return savedPath;
     }
 }
