@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.raspberry.practicalparent.R;
 import com.raspberry.practicalparent.model.CardViewMaker;
 import com.raspberry.practicalparent.model.KidManager;
@@ -135,10 +136,11 @@ public class HistoryActivity extends AppCompatActivity {
 
     //Add flip result to RecyclerView
     private void addFlipToView(Results flip) {
+        String portraitPath = "src/main/res/drawable-mdpi/blank.png";
 
         //Get individual kids' pics if allhistory
         if (differentPortraits) {
-            //TODO: get portrait from kid class and display in each flip
+            portraitPath = kids.searchByName(flip.getChildName()).getPicPath();
         }
 
         //Image is lost flip by default
@@ -153,7 +155,12 @@ public class HistoryActivity extends AppCompatActivity {
         }
 
         //Add flip to list
-        cardList.add(0, new CardViewMaker(image, flip.getChildName(), wonOrLost, flip.getDateFlip(), flip.getSideChosen()));
+        cardList.add(0, new CardViewMaker(image,
+                flip.getChildName(),
+                wonOrLost,
+                flip.getDateFlip(),
+                flip.getSideChosen(),
+                portraitPath));
         adapter.notifyItemInserted(0);
     }
 

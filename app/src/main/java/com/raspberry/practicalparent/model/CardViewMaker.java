@@ -10,13 +10,15 @@ public class CardViewMaker {
     private String wonFlip;
     private String date;
     private String sideChosen;
+    private String portraitPath;
 
-    public CardViewMaker(int imageFile, String name, String win, String dateFlip, String side) {
+    public CardViewMaker(int imageFile, String name, String win, String dateFlip, String side, String path) {
         image = imageFile;
         childName = name;
         wonFlip = win;
         date = dateFlip;
         sideChosen = side;
+        portraitPath = path;
     }
 
     public int getImage() {
@@ -37,5 +39,9 @@ public class CardViewMaker {
 
     public String getSideChosen() {
         return sideChosen;
+    }
+
+    public String getPortraitPath() {
+        return portraitPath;
     }
 }
