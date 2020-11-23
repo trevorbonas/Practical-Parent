@@ -65,7 +65,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         holder.wonFlip.setText(currentItem.getWonFlip());
         holder.date.setText(currentItem.getDate());
         holder.sideChosen.setText(currentItem.getSideChosen());
-        Glide.with(v).load(currentItem.getPortraitPath()).into(holder.portrait);
+        MainActivity.displayPortrait(v.getContext(), currentItem.getPortraitPath(), holder.portrait);
     }
 
     @Override
