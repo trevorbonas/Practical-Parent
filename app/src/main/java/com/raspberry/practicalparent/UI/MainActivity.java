@@ -218,34 +218,4 @@ public class MainActivity extends AppCompatActivity {
                 .load(path)
                 .into(imageView);
     }
-
-    public abstract class MyTransformation extends BitmapTransformation {
-        private int myOrientation;
-
-        public MyTransformation(Context context, int orientation) {
-            super();
-            myOrientation = orientation;
-        }
-
-        @Override
-        protected Bitmap transform(BitmapPool pool, Bitmap image, int outWidth, int outHeight) {
-            int degrees = getExifDegrees(myOrientation);
-            return TransformationUtils.rotateImageExif(pool, image, degrees);
-        }
-
-        private int getExifDegrees(int orientation) {
-            int exifInt;
-            switch (orientation) {
-                case 90:
-                    exifInt = ExifInterface.ORIENTATION_ROTATE_90;
-                    break;
-                default:
-                    exifInt = ExifInterface.ORIENTATION_NORMAL;
-                    break;
-            }
-            return exifInt;
-        }
-    }
-
-
 }
