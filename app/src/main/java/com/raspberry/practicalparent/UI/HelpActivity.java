@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import androidx.appcompat.widget.Toolbar;
 
 import com.raspberry.practicalparent.R;
 
@@ -32,13 +31,15 @@ public class HelpActivity extends AppCompatActivity {
         Button btnCalm = (Button) findViewById(R.id.btn_credit_calm);
         Button btnIcon = (Button) findViewById(R.id.btn_credit_icon);
         Button btnMenu = (Button) findViewById(R.id.btn_credit_menu);
-        Button btnDefault = (Button) findViewById(R.id.btn_credit_default);
+        Button btnPortrait = (Button) findViewById(R.id.btn_credit_portrait);
+        Button btnTask = (Button) findViewById(R.id.btn_credit_task);
 
         btnCoin.setOnClickListener(OnClickListener);
         btnCalm.setOnClickListener(OnClickListener);
         btnIcon.setOnClickListener(OnClickListener);
         btnMenu.setOnClickListener(OnClickListener);
-        btnDefault.setOnClickListener(OnClickListener);
+        btnPortrait.setOnClickListener(OnClickListener);
+        btnTask.setOnClickListener(OnClickListener);
     }
 
     View.OnClickListener OnClickListener = new View.OnClickListener() {
@@ -66,9 +67,14 @@ public class HelpActivity extends AppCompatActivity {
                             Uri.parse("https://pixabay.com/vectors/boy-child-dad-daughter-family-2025099/"));
                     startActivity(intent);
                     break;
-                case R.id.btn_credit_default:
+                case R.id.btn_credit_portrait:
                     intent = new Intent(Intent.ACTION_VIEW,
                             Uri.parse("https://commons.wikimedia.org/wiki/File:Ic_person_48px.svg"));
+                    startActivity(intent);
+                    break;
+                case R.id.btn_credit_task:
+                    intent = new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("https://commons.wikimedia.org/wiki/File:Family_icon.png"));
                     startActivity(intent);
                     break;
             }
