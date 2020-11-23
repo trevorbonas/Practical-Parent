@@ -218,14 +218,15 @@ public class MainActivity extends AppCompatActivity {
     static public void displayPortrait(Context context, String path, ImageView imageView) {
         // Kid's picpath will be null if image never saved for kid
         if (path == null) {
-            int defaultId = context.getResources().getIdentifier("calm_imagejpg",
+            Log.d("displayPortrait", "input path is null");
+            int defaultId = context.getResources().getIdentifier("default_profile",
                     "drawable", context.getPackageName());
             Glide.with(context)
                     .load(defaultId)
                     .into(imageView);
         }
         else {
-            Log.d("displayPortrait", "input path was fine");
+            Log.d("displayPortrait", "input path is fine");
             Glide.with(context)
                     .load(path)
                     .into(imageView);
