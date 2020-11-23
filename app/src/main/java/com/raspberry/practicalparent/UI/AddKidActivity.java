@@ -309,15 +309,21 @@ public class AddKidActivity extends AppCompatActivity {
                 String orientation = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
                 Log.d("Orientation", "Image orientation is: " + orientation);
 
-                // If photo is taken from normal camera it's orientation will be 6
+                // If photo is taken from normal camera its orientation will be 6
                 if (orientation.equals("6")) {
                     image = rotate(MediaStore.Images.Media.getBitmap(context.getContentResolver(),
                             imageUri), 90);
                 }
-                // If photo is taken from selfie camera it's orientation will be 8
+                // If photo is taken from selfie camera its orientation will be 8
                 else if (orientation.equals("8")) {
                     image = rotate(MediaStore.Images.Media.getBitmap(context.getContentResolver(),
                             imageUri), 270);
+                }
+                // If photo is taken from front or back camera 90 degree right its
+                // orientation will be 3
+                else if (orientation.equals("3")) {
+                    image = rotate(MediaStore.Images.Media.getBitmap(context.getContentResolver(),
+                            imageUri), 180);
                 }
                 else {
                     image = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
