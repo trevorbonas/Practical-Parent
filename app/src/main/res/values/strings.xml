@@ -56,16 +56,56 @@
     <string name="outcome">Outcome</string>
     <string name="history">History</string>
     <string name="all_history">All history</string>
-
+    <string name="you_win">You win!</string>
+    <string name="you_lose">You lose</string>
+    <string name="options">Options</string>
+    <string name="add_child">Add Child</string>
+    <string name="title_activity_coin_flip">Coin Flip</string>
+    <string name="title_activity_history">History</string>
+    <string name="title_activity_options">Options</string>
     <string name="choose_coin_heads_tails_no_children">Hi, \nWhat do you choose?</string>
     <string name="choose_coin_heads_tails_children">Hi %s, \nWhat do you choose?</string>
     <string name="kid_name_flips">%s\'s flips</string>
     <string name="all_flips">All flips</string>
     <string name="capture_image">Capture Image</string>
     <string name="choose_image">Choose image from gallery</string>
+
+    <string name="edit_child_fragment_title">Select name to edit</string>
+
+
     <plurals name="radio_buttons_text_in_minutes">
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>
     </plurals>
+    <string name="title_activity_task">Tasks</string>
+    <string name="title_activity_add_task">Add Task</string>
+    <string name="task">Task</string>
+    <string name="task_options">Select a task to edit, delete, or mark as done</string>
+    <string name="task_name">Task Name</string>
+    <string name="task_description">Task Description</string>
+    <string name="kid_name">kid name</string>
+    <string name="done">Done</string>
+    <string name="child_name">Child Name</string>
+    <string name="title_activity_main2">MainActivity</string>
+    <string name="images">Images:</string>
+    <string name="herman_luo">- HERMAN LUO</string>
+    <string name="jaydon_lau">- JAYDON LAU</string>
+    <string name="trevor_bonas">- TREVOR BONAS</string>
+    <string name="shubham_negi">- SHUBHAM NEGI</string>
+    <string name="coin">Coin</string>
+    <string name="calm_bg">Calm BG</string>
+    <string name="app_icon">App Icon</string>
+    <string name="menu_icon">Menu Icon</string>
+    <string name="team_raspberry">TEAM RASPBERRY</string>
+    <string name="created_by">Created by:</string>
+    <string name="help">Help</string>
+    <string name="practical_nparent">Practical\nParent</string>
+    <string name="title_activity_choose_turn">Choose Whose Turn It Is</string>
+    <string name="default_icon">Default icon</string>
+    <string name="flip_a_coin">Flip a Coin</string>
+    <string name="kids">Kids</string>
+    <string name="timeout">Timeout</string>
+    <string name="title_activity_timeout_timer">Timeout Timer</string>
+    <string name="tasks">Tasks</string>
 
 </resources>

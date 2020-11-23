@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -95,8 +96,8 @@ public class KidOptionsActivity extends AppCompatActivity {
             MainActivity.displayPortrait(KidOptionsActivity.this,
                     currKid.getPicPath(), imageView);
 
-            TextView taskCurrentChildName = itemView.findViewById(R.id.kidName);
-            taskCurrentChildName.setText(currKid.getName());
+            TextView kidName = itemView.findViewById(R.id.kidName);
+            kidName.setText(currKid.getName());
 
             return itemView;
         }
@@ -121,5 +122,15 @@ public class KidOptionsActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

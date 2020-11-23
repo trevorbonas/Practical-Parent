@@ -12,6 +12,7 @@ public class KidManager {
     private static KidManager instance;
     private List<Kid> kids = new ArrayList<>();
     private Kid currentKid; // The current kid whose qualities will be changed
+    private boolean nobody; // Whether or not current is set to nobody
     private int currentIndex; // The index of the current kid in the ArrayList
 
     static public KidManager getInstance() {
@@ -32,6 +33,7 @@ public class KidManager {
         // current kid (whose turn it is)
         if (kids.size() == 1) {
             changeKid(0);
+            setNobody(false);
         }
     }
 
@@ -55,6 +57,10 @@ public class KidManager {
         else {
             kids.remove(i);
         }
+
+        if (kids.size() <= 0) {
+            setNobody(true);
+        }
     }
 
     public void changeName(String name) {
@@ -62,6 +68,7 @@ public class KidManager {
             return;
         }
         kids.get(currentIndex).setName(name);
+        setNobody(false);
     }
 
     public void changeKid(int i) {
@@ -70,6 +77,7 @@ public class KidManager {
         }
         currentIndex = i;
         currentKid = kids.get(currentIndex);
+        setNobody(false);
     }
 
     // Makes the current kid whose qualities are being changed
@@ -78,19 +86,17 @@ public class KidManager {
     public void nextKid() {
         currentIndex = (currentIndex + 1) % kids.size();
         currentKid = kids.get(currentIndex);
+        setNobody(false);
     }
-
-    // Gets the current kid's Result
-    // so it can be displayed or edited
-    /*public Result getStats() {
-        return currentKid.getResult();
-    }*/
 
     public int getNum() {
         return kids.size();
     }
 
     public String getName() {
+        if (nobody) {
+            return "";
+        }
         return currentKid.getName();
     }
 
@@ -99,6 +105,14 @@ public class KidManager {
             return null;
         }
         return kids.get(i);
+    }
+
+    public void setNobody(boolean condition) {
+        this.nobody = condition;
+    }
+
+    public boolean isNobody() {
+        return nobody;
     }
 
     public List<Kid> getList() {
