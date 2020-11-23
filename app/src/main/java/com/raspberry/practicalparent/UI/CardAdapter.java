@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.raspberry.practicalparent.R;
 import com.raspberry.practicalparent.model.CardViewMaker;
 
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 //adapted from https://www.youtube.com/watch?v=Nw9JF55LDzE
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder> {
     private ArrayList<CardViewMaker> cardViewList;
+    private View v;
 
     public static class CardViewHolder extends RecyclerView.ViewHolder {
 
@@ -29,6 +31,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         public TextView wonFlip;
         public TextView date;
         public TextView sideChosen;
+        public ImageView portrait;
 
         public CardViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -37,6 +40,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
             wonFlip = itemView.findViewById(R.id.tv_win_loss);
             date = itemView.findViewById(R.id.tv_date);
             sideChosen = itemView.findViewById(R.id.tv_side_chosen);
+            portrait = itemView.findViewById(R.id.portrait);
         }
     }
 
@@ -47,7 +51,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     @NonNull
     @Override
     public CardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview, parent, false);
+        v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview, parent, false);
         CardViewHolder cvh = new CardViewHolder(v);
         return cvh;
     }
@@ -61,6 +65,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         holder.wonFlip.setText(currentItem.getWonFlip());
         holder.date.setText(currentItem.getDate());
         holder.sideChosen.setText(currentItem.getSideChosen());
+        MainActivity.displayPortrait(v.getContext(), currentItem.getPortraitPath(), holder.portrait);
     }
 
     @Override

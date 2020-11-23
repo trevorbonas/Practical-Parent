@@ -9,11 +9,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.raspberry.practicalparent.R;
 import com.raspberry.practicalparent.model.CardViewMaker;
+import com.raspberry.practicalparent.model.KidManager;
 import com.raspberry.practicalparent.model.Results;
 import com.raspberry.practicalparent.model.ResultsManager;
 
@@ -32,6 +35,9 @@ public class HistoryActivity extends AppCompatActivity {
     private TextView historyText;
     private Button toggleBtn;
     private boolean toggledAll = false;
+    private boolean differentPortraits;
+    private ImageView historyPortrait;
+    private KidManager kids = KidManager.getInstance();
 
     // Things for KidManager
     private String kidName;
@@ -44,6 +50,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         historyText = findViewById(R.id.tv_history_name);
         toggleBtn = findViewById(R.id.btn_toggle_history);
+        historyPortrait = findViewById(R.id.iv_history_portrait);
 
         createRecyclerView();
         extractIntentName();
@@ -97,6 +104,12 @@ public class HistoryActivity extends AppCompatActivity {
 
         clearRecyclerView();
 
+        //Show kid's portrait on top
+        differentPortraits = false;
+
+        String path = kids.searchByName(name).getPicPath();
+        MainActivity.displayPortrait(this, path, historyPortrait);
+
         //Populate list
         for (Results flip: manager) {
             if (flip.getChildName().equals(name)) {
@@ -110,6 +123,11 @@ public class HistoryActivity extends AppCompatActivity {
 
         clearRecyclerView();
 
+        //Blank if all history
+        differentPortraits = true;
+        String blankPath = "src/main/res/drawable-mdpi/blank.png";
+        MainActivity.displayPortrait(this, blankPath, historyPortrait);
+
         //Populate list
         for (Results flip: manager) {
             addFlipToView(flip);
@@ -118,10 +136,16 @@ public class HistoryActivity extends AppCompatActivity {
 
     //Add flip result to RecyclerView
     private void addFlipToView(Results flip) {
+        String portraitPath = "src/main/res/drawable-mdpi/blank.png";
+
+        //Get individual kids' pics if allhistory
+        if (differentPortraits) {
+            portraitPath = kids.searchByName(flip.getChildName()).getPicPath();
+        }
 
         //Image is lost flip by default
         int image = R.drawable.ic_x;
-        Boolean won = flip.isWonFlip();
+        boolean won = flip.isWonFlip();
         String wonOrLost = "LOST";
 
         //Check if they won flip
@@ -131,7 +155,12 @@ public class HistoryActivity extends AppCompatActivity {
         }
 
         //Add flip to list
-        cardList.add(0, new CardViewMaker(image, flip.getChildName(), wonOrLost, flip.getDateFlip(), flip.getSideChosen()));
+        cardList.add(0, new CardViewMaker(image,
+                flip.getChildName(),
+                wonOrLost,
+                flip.getDateFlip(),
+                flip.getSideChosen(),
+                portraitPath));
         adapter.notifyItemInserted(0);
     }
 
