@@ -113,7 +113,7 @@ public class ChooseActivity extends AppCompatActivity {
         TextView greeting = findViewById(R.id.greetingTxt);
 
         // Safety
-        if (kids.getNum() <= 0) {
+        if (kids.isNobody()) {
             greeting.setText(R.string.choose_coin_heads_tails_no_children);
         }
         else {
