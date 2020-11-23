@@ -113,6 +113,9 @@ public class KidManager {
     }
 
     public boolean isNobody() {
+        if (kids.size() <= 0) {
+            nobody = true;
+        }
         return nobody;
     }
 
