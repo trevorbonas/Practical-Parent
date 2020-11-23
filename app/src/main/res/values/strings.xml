@@ -101,12 +101,13 @@
     <string name="help">Help</string>
     <string name="practical_nparent">Practical\nParent</string>
     <string name="title_activity_choose_turn">Choose Whose Turn It Is</string>
-    <string name="default_icon">Default icon</string>
+    <string name="kid_icon">Kid icon</string>
     <string name="flip_a_coin">Flip a Coin</string>
     <string name="kids">Kids</string>
     <string name="timeout">Timeout</string>
     <string name="title_activity_timeout_timer">Timeout Timer</string>
     <string name="tasks">Tasks</string>
+    <string name="task_icon">Task Icon</string>
     <string name="nobody">Nobody</string>
 
 </resources>

@@ -131,20 +131,30 @@
         android:id="@+id/btn_credit_menu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
         android:text="@string/menu_icon"
-        app:layout_constraintEnd_toEndOf="@+id/btn_credit_icon"
-        app:layout_constraintStart_toStartOf="@+id/btn_credit_icon"
-        app:layout_constraintTop_toBottomOf="@+id/btn_credit_icon" />
+        app:layout_constraintBottom_toBottomOf="@+id/btn_credit_coin"
+        app:layout_constraintStart_toEndOf="@+id/btn_credit_coin"
+        app:layout_constraintTop_toTopOf="@+id/btn_credit_coin" />
 
     <Button
-        android:id="@+id/btn_credit_default"
+        android:id="@+id/btn_credit_portrait"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/default_icon"
+        android:text="@string/kid_icon"
         app:layout_constraintEnd_toEndOf="@+id/btn_credit_menu"
         app:layout_constraintStart_toStartOf="@+id/btn_credit_menu"
         app:layout_constraintTop_toBottomOf="@+id/btn_credit_menu" />
+
+    <Button
+        android:id="@+id/btn_credit_task"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/task_icon"
+        app:layout_constraintEnd_toEndOf="@+id/btn_credit_portrait"
+        app:layout_constraintStart_toStartOf="@+id/btn_credit_portrait"
+        app:layout_constraintTop_toBottomOf="@+id/btn_credit_portrait" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
