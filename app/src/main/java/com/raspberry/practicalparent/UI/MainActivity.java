@@ -3,8 +3,12 @@ package com.raspberry.practicalparent.UI;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
+import com.bumptech.glide.load.resource.bitmap.TransformationUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.raspberry.practicalparent.R;
@@ -15,9 +19,11 @@ import com.raspberry.practicalparent.model.ResultsManager;
 import com.raspberry.practicalparent.model.Task;
 import com.raspberry.practicalparent.model.TaskManager;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.exifinterface.media.ExifInterface;
 
 import android.view.View;
 
@@ -26,6 +32,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 
 import java.lang.reflect.Type;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -201,4 +208,34 @@ public class MainActivity extends AppCompatActivity {
         btn.setTextColor(context.getResources().getColor(R.color.buttonTxt,
                 context.getTheme()));
     }
+
+    public abstract class MyTransformation extends BitmapTransformation {
+        private int myOrientation;
+
+        public MyTransformation(Context context, int orientation) {
+            super();
+            myOrientation = orientation;
+        }
+
+        @Override
+        protected Bitmap transform(BitmapPool pool, Bitmap image, int outWidth, int outHeight) {
+            int degrees = getExifDegrees(myOrientation);
+            return TransformationUtils.rotateImageExif(pool, image, degrees);
+        }
+
+        private int getExifDegrees(int orientation) {
+            int exifInt;
+            switch (orientation) {
+                case 90:
+                    exifInt = ExifInterface.ORIENTATION_ROTATE_90;
+                    break;
+                default:
+                    exifInt = ExifInterface.ORIENTATION_NORMAL;
+                    break;
+            }
+            return exifInt;
+        }
+    }
+
+
 }
