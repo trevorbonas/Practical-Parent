@@ -1,5 +1,6 @@
 package com.raspberry.practicalparent.UI;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -213,9 +214,21 @@ public class MainActivity extends AppCompatActivity {
                 context.getTheme()));
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     static public void displayPortrait(Context context, String path, ImageView imageView) {
-        Glide.with(context)
-                .load(path)
-                .into(imageView);
+        // Kid's picpath will be null if image never saved for kid
+        if (path == null) {
+            int defaultId = context.getResources().getIdentifier("calm_imagejpg",
+                    "drawable", context.getPackageName());
+            Glide.with(context)
+                    .load(defaultId)
+                    .into(imageView);
+        }
+        else {
+            Log.d("displayPortrait", "input path was fine");
+            Glide.with(context)
+                    .load(path)
+                    .into(imageView);
+        }
     }
 }

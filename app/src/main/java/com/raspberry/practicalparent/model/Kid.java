@@ -38,12 +38,6 @@ public class Kid {
         return name;
     }
 
-    // Saves indicated image as portrait in sd card/secondary memory
-    // filename becomes name of kid
-    public void savePortrait(Uri image) {
-
-    }
-
     // Retrieves the kid's portrait from sd card/secondary memory
     // Useful for setting images in the UI quickly to kid's portrait
     public String getPicPath() {
