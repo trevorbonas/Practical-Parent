@@ -180,7 +180,7 @@ public class EditFragment extends AppCompatDialogFragment {
         });
 
         // Build the alert dialog
-        Dialog d = builder.setView(v).setTitle("Select name to edit").create();
+        Dialog d = builder.setView(v).setTitle(getString(R.string.edit_child_fragment_title)).create();
 
         return d;
     }

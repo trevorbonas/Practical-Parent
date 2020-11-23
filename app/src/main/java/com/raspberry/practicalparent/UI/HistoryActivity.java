@@ -187,12 +187,12 @@ public class HistoryActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (!toggledAll) {
-                    Toast.makeText(HistoryActivity.this, "Now showing all flips", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HistoryActivity.this, getString(R.string.showing_all_flips_toast), Toast.LENGTH_SHORT).show();
                     toggledAll = true;
                     setUpAllHistory();
                 }
                 else {
-                    Toast.makeText(HistoryActivity.this, "Now showing child's flips", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HistoryActivity.this, getString(R.string.showing_childs_flip_toast), Toast.LENGTH_SHORT).show();
                     toggledAll = false;
                     setUpPersonalHistory();
                 }

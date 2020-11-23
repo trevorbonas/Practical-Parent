@@ -266,7 +266,7 @@ public class AddKidActivity extends AppCompatActivity {
                 }
                 else {
                     //permission was denied
-                    Toast.makeText(context, "Permission denied for taking picture", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, context.getString(R.string.denied_permission_taking_picture_toast), Toast.LENGTH_SHORT).show();
                     return NO_PERMISSIONS;
                 }
             }
@@ -277,7 +277,7 @@ public class AddKidActivity extends AppCompatActivity {
                 }
                 else {
                     //permission was denied
-                    Toast.makeText(context, "Permission denied for picking image", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, context.getString(R.string.denied_permission_picking_image_toast), Toast.LENGTH_SHORT).show();
                     return NO_PERMISSIONS;
                 }
             }

@@ -109,5 +109,9 @@
     <string name="tasks">Tasks</string>
     <string name="task_icon">Task Icon</string>
     <string name="nobody">Nobody</string>
+    <string name="denied_permission_taking_picture_toast">Permission denied for taking picture</string>
+    <string name="denied_permission_picking_image_toast">Permission denied for picking image</string>
+    <string name="showing_all_flips_toast">Now showing all flips</string>
+    <string name="showing_childs_flip_toast">Now showing child's flips</string>
 
 </resources>
