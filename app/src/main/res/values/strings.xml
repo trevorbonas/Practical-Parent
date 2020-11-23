@@ -107,5 +107,6 @@
     <string name="timeout">Timeout</string>
     <string name="title_activity_timeout_timer">Timeout Timer</string>
     <string name="tasks">Tasks</string>
+    <string name="nobody">Nobody</string>
 
 </resources>

@@ -24,7 +24,7 @@
         android:layout_marginTop="28dp"
         android:ellipsize="end"
         android:singleLine="true"
-        android:text="Kid Name"
+        android:text="@string/kid_name"
         app:layout_constraintHorizontal_bias="0.062"
         app:layout_constraintStart_toEndOf="@+id/imgChildPic"
         app:layout_constraintTop_toTopOf="parent" />
