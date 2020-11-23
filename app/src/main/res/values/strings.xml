@@ -58,9 +58,11 @@
     <string name="all_history">All history</string>
     <string name="you_win">You win!</string>
     <string name="you_lose">You lose</string>
-
-
-
+    <string name="options">Options</string>
+    <string name="add_child">Add Child</string>
+    <string name="title_activity_coin_flip">Coin Flip</string>
+    <string name="title_activity_history">History</string>
+    <string name="title_activity_options">Options</string>
     <string name="choose_coin_heads_tails_no_children">Hi, \nWhat do you choose?</string>
     <string name="choose_coin_heads_tails_children">Hi %s, \nWhat do you choose?</string>
     <string name="kid_name_flips">%s\'s flips</string>
@@ -96,11 +98,12 @@
     <string name="created_by">Created by:</string>
     <string name="help">Help</string>
     <string name="practical_nparent">Practical\nParent</string>
-    <string name="title_activity_choose_turn">ChooseTurnActivity</string>
+    <string name="title_activity_choose_turn">Choose Whose Turn It Is</string>
     <string name="default_icon">Default icon</string>
     <string name="flip_a_coin">Flip a Coin</string>
     <string name="kids">Kids</string>
     <string name="timeout">Timeout</string>
+    <string name="title_activity_timeout_timer">Timeout Timer</string>
     <string name="tasks">Tasks</string>
 
 </resources>

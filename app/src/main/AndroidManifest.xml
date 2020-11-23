@@ -25,11 +25,11 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".UI.HelpActivity"
-            android:label="Help"
+            android:label="@string/help"
             android:parentActivityName=".UI.MainActivity" />
         <activity
             android:name=".UI.TimerActivity"
-            android:label="Timeout Timer"
+            android:label="@string/title_activity_timeout_timer"
             android:parentActivityName=".UI.MainActivity" />
 
         <activity
@@ -49,26 +49,26 @@
             android:parentActivityName=".UI.MainActivity" />
         <activity
             android:name=".UI.ChooseTurnActivity"
-            android:label="Choose Whose Turn It Is"
+            android:label="@string/title_activity_choose_turn"
             android:parentActivityName=".UI.ChooseActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".UI.CoinFlipActivity"
-            android:label="Coin Flip"
+            android:label="@string/title_activity_coin_flip"
             android:parentActivityName=".UI.MainActivity" />
         <activity
             android:name=".UI.AddKidActivity"
-            android:label="Add Child"
+            android:label="@string/add_child"
             android:parentActivityName=".UI.KidOptionsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".UI.KidOptionsActivity"
-            android:label="Options"
+            android:label="@string/title_activity_options"
             android:parentActivityName=".UI.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".UI.HistoryActivity"
-            android:label="History"
+            android:label="@string/title_activity_history"
             android:parentActivityName=".UI.MainActivity" />
         <activity
             android:name=".UI.MainActivity"
