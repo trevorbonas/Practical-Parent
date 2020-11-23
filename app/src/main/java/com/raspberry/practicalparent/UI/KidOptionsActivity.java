@@ -1,6 +1,7 @@
 package com.raspberry.practicalparent.UI;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -9,19 +10,23 @@ import com.raspberry.practicalparent.R;
 import com.raspberry.practicalparent.model.Kid;
 import com.raspberry.practicalparent.model.KidManager;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
 
 // Activity to allow users to edit, add, or delete kids
 public class KidOptionsActivity extends AppCompatActivity {
@@ -64,21 +69,38 @@ public class KidOptionsActivity extends AppCompatActivity {
     }
 
     public void setupListView() {
-        // A list of the kids' names
-        List<String> kidText = new ArrayList<String>();
-
         // The ListView to show the kids
         ListView listView = findViewById(R.id.childrenListView);
 
-        // Adding all stored kids' names to the list
-        for (int i = 0; i < kids.getNum(); i++) {
-            Kid kid = kids.getKidAt(i);
-            kidText.add(kid.getName());
+        ArrayAdapter<Kid> kidArrayAdapter = new KidListAdapter();
+        listView.setAdapter(kidArrayAdapter);
+    }
+
+    private class KidListAdapter extends ArrayAdapter<Kid> {
+
+        public KidListAdapter() {
+            super(KidOptionsActivity.this, R.layout.kid_list_layout, kids.getList());
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
-                android.R.layout.simple_list_item_1, kidText);
-        listView.setAdapter(adapter);
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            View itemView = convertView;
+            if (itemView == null) {
+                itemView = getLayoutInflater().inflate(R.layout.kid_list_layout, parent, false);
+            }
+
+            Kid currKid = kids.getKidAt(position);
+
+            ImageView imageView = itemView.findViewById(R.id.imgChildPic);
+            MainActivity.displayPortrait(KidOptionsActivity.this,
+                    currKid.getPicPath(), imageView);
+
+            TextView taskCurrentChildName = itemView.findViewById(R.id.kidName);
+            taskCurrentChildName.setText(currKid.getName());
+
+            return itemView;
+        }
     }
 
     // Clicking on a kid's name will bring up an AlertDialog that allows
@@ -89,7 +111,7 @@ public class KidOptionsActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TextView textView = (TextView)view;
+                //TextView textView = (TextView)view;
                 Bundle bundle = new Bundle();
                 bundle.putString("Kid name", kids.getKidAt(position).getName());
                 bundle.putInt("Kid index", position);
@@ -100,5 +122,15 @@ public class KidOptionsActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

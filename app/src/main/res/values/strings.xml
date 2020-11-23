@@ -67,6 +67,8 @@
     <string name="choose_coin_heads_tails_children">Hi %s, \nWhat do you choose?</string>
     <string name="kid_name_flips">%s\'s flips</string>
     <string name="all_flips">All flips</string>
+    <string name="capture_image">Capture Image</string>
+    <string name="choose_image">Choose image from gallery</string>
 
     <string name="edit_child_fragment_title">Select name to edit</string>
 
