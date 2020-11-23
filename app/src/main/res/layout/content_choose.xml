@@ -18,42 +18,51 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="#6E6E6E"
         app:layout_constraintBottom_toTopOf="@+id/headBtn"
-        app:layout_constraintStart_toEndOf="@+id/greetingTxt" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.45"
+        app:layout_constraintStart_toEndOf="@+id/greetingTxt"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.259" />
 
     <TextView
         android:id="@+id/greetingTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="40dp"
         android:text=""
         android:textAlignment="textStart"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/headBtn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.223" />
 
     <Button
         android:id="@+id/headBtn"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="207dp"
         android:layout_height="72dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="88dp"
         android:background="@drawable/outlined_button"
         android:fontFamily="sans-serif-medium"
         android:foreground="@drawable/ripple_mask"
         android:text="@string/heads"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="#6E6E6E"
-        app:layout_constraintBottom_toTopOf="@+id/guideline4"
+        app:layout_constraintBottom_toTopOf="@+id/tailsBtn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/tailsBtn"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="207dp"
         android:layout_height="72dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="156dp"
         android:background="@drawable/outlined_button"
         android:fontFamily="sans-serif-medium"
         android:foreground="@drawable/ripple_mask"
@@ -83,4 +92,15 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.41" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="130dp"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toTopOf="@+id/headBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.695"
+        app:srcCompat="@drawable/family_icon" />
 </androidx.constraintlayout.widget.ConstraintLayout>
