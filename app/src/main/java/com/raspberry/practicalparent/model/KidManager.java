@@ -24,6 +24,7 @@ public class KidManager {
 
     private KidManager() {
         // Made private for singleton support
+        nobody = true;
     }
 
     public void addKid(String name) {
