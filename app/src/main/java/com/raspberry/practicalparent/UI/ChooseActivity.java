@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 
 import com.raspberry.practicalparent.R;
+import com.raspberry.practicalparent.model.Kid;
 import com.raspberry.practicalparent.model.KidManager;
 
 import androidx.appcompat.app.ActionBar;
@@ -34,7 +35,9 @@ public class ChooseActivity extends AppCompatActivity {
 
 
         setGreeting();
-        setImage();
+        if (!kids.isNobody()) {
+            setImage();
+        }
         ImageView imageView;
         Button heads = findViewById(R.id.headBtn);
         Button tails = findViewById(R.id.tailsBtn);
@@ -93,8 +96,11 @@ public class ChooseActivity extends AppCompatActivity {
 
     private void setImage() {
         ImageView imageView = findViewById(R.id.imageView);
-        String path = kids.getKidAt(kids.getCurrentIndex()).getPicPath();
-        MainActivity.displayPortrait(ChooseActivity.this, path, imageView);
+        Kid kid = kids.getKidAt(kids.getCurrentIndex());
+        if (kid != null) {
+            String path = kids.getKidAt(kids.getCurrentIndex()).getPicPath();
+            MainActivity.displayPortrait(ChooseActivity.this, path, imageView);
+        }
     }
 
     @Override
@@ -122,7 +128,9 @@ public class ChooseActivity extends AppCompatActivity {
     public void onResume(){
         super.onResume();
         setGreeting();
-        setImage();
+        if (!kids.isNobody()) {
+            setImage();
+        }
     }
 
 }
