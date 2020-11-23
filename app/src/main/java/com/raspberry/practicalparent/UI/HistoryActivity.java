@@ -124,7 +124,8 @@ public class HistoryActivity extends AppCompatActivity {
 
         //Blank if all history
         differentPortraits = true;
-        historyPortrait.setBackgroundResource(R.drawable.blank);
+        String blankPath = "src/main/res/drawable-mdpi/blank.png";
+        MainActivity.displayPortrait(this, blankPath, historyPortrait);
 
         //Populate list
         for (Results flip: manager) {
