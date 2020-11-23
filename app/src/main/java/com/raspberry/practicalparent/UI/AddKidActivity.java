@@ -8,7 +8,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
@@ -301,7 +304,24 @@ public class AddKidActivity extends AppCompatActivity {
             imageView.setImageURI(imageUri);
             Bitmap image = null;
             try {
-                image = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
+                String realPath = getRealPathFromURI(context, imageUri);
+                ExifInterface exif = new ExifInterface(realPath);
+                String orientation = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
+                Log.d("Orientation", "Image orientation is: " + orientation);
+
+                // If photo is taken from normal camera it's orientation will be 6
+                if (orientation.equals("6")) {
+                    image = rotate(MediaStore.Images.Media.getBitmap(context.getContentResolver(),
+                            imageUri), 90);
+                }
+                // If photo is taken from selfie camera it's orientation will be 8
+                else if (orientation.equals("8")) {
+                    image = rotate(MediaStore.Images.Media.getBitmap(context.getContentResolver(),
+                            imageUri), 270);
+                }
+                else {
+                    image = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
+                }
                 savedPath = saveImage(image, fileName, context);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -320,6 +340,23 @@ public class AddKidActivity extends AppCompatActivity {
             }
         }
         return savedPath;
+    }
+
+    private static Bitmap rotate(Bitmap image, float degrees) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degrees);
+        return Bitmap.createBitmap(image, 0, 0, image.getWidth(),
+                image.getHeight(), matrix, true);
+    }
+
+    // Taken from the sweet sweet user minimanimo
+    // https://stackoverflow.com/questions/13511356/android-image-selected-from-gallery-orientation-is-always-0-exif-tag
+    public static String getRealPathFromURI(Context context, Uri contentUri) {
+        String[] proj = { MediaStore.Images.Media.DATA };
+        Cursor cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
     }
 
     public static String saveImage(Bitmap bitmap, String fileName, Context context) throws IOException {
