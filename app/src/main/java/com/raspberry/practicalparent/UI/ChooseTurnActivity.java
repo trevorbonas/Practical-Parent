@@ -8,6 +8,8 @@ import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -15,9 +17,11 @@ import androidx.fragment.app.FragmentManager;
 
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -31,6 +35,8 @@ import java.util.List;
 public class ChooseTurnActivity extends AppCompatActivity {
 
     private KidManager kids = KidManager.getInstance();
+    private List<Kid> kidList = new ArrayList<>();
+    private ArrayAdapter<Kid> kidArrayAdapter;
     private int index;
 
     @Override
@@ -69,29 +75,54 @@ public class ChooseTurnActivity extends AppCompatActivity {
 
 
 
-    public void setupListView() {
-        // A list of the kids' names
-        List<String> kidText = new ArrayList<String>();
+    private void addItemsToKidList() {
+        kidList.clear();
+        for (int i = 0; i < kids.getNum(); i++) {
+            Kid kid = kids.getKidAt(index);
+            kidList.add(kid);
+            index = (index + 1) % (kids.getNum());
+        }
+        index = kids.getCurrentIndex(); // Reset index
+    }
 
+    public void setupListView() {
         // The ListView to show the kids
         ListView listView = findViewById(R.id.namesListView);
 
         if (kids.getNum() > 0) {
             index = kids.getCurrentIndex();
         }
+        addItemsToKidList();
+        kidArrayAdapter = new KidListAdapter(this, kidList);
+        listView.setAdapter(kidArrayAdapter);
+        kidArrayAdapter.notifyDataSetChanged();
+    }
 
-        // Adding all stored kids' names to the list
-        for (int i = 0; i < kids.getNum(); i++) {
-            Kid kid = kids.getKidAt(index);
-            kidText.add(kid.getName());
-            index = (index + 1) % (kids.getNum());
+    private class KidListAdapter extends ArrayAdapter<Kid> {
+
+        public KidListAdapter(Context context, List<Kid> kidListAdapter) {
+            super(context, R.layout.kid_list_layout, kidListAdapter);
         }
 
-        index = kids.getCurrentIndex(); // Reset index
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            View itemView = convertView;
+            if (itemView == null) {
+                itemView = getLayoutInflater().inflate(R.layout.kid_list_layout, parent, false);
+            }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
-                android.R.layout.simple_list_item_1, kidText);
-        listView.setAdapter(adapter);
+            Kid currKid = kidList.get(position);
+
+            ImageView imageView = itemView.findViewById(R.id.imgChildPic);
+            MainActivity.displayPortrait(ChooseTurnActivity.this,
+                    currKid.getPicPath(), imageView);
+
+            TextView kidName = itemView.findViewById(R.id.kidName);
+            kidName.setText(currKid.getName());
+
+            return itemView;
+        }
     }
 
     private void registerListClick() {
