@@ -51,6 +51,7 @@ public class EditFragment extends AppCompatDialogFragment {
     private String newName; // The changed name of the child
     private View v; // Current view
     private KidManager kids = KidManager.getInstance(); // An instance of the singleton
+    private TaskManager taskManager = TaskManager.getInstance();
     private static Uri imageUri;
     private String path;
     private Button saveBtn;
@@ -129,6 +130,8 @@ public class EditFragment extends AppCompatDialogFragment {
 
                 // Refreshing activity list
                 ((KidOptionsActivity)getActivity()).setupListView();
+                adjustTaskChildName();
+                AddTaskActivity.saveTaskList(taskManager, v.getContext());
                 dismiss();
             }
         });
@@ -164,6 +167,14 @@ public class EditFragment extends AppCompatDialogFragment {
 
                 // Refreshing the ListView in KidOptionsActivity
                 ((KidOptionsActivity)getActivity()).setupListView();
+
+                adjustTaskManagerToAccountForDeletingChild();
+                if (kids.getNum() == 0) {
+                    adjustTaskChildName();
+                }
+
+                AddTaskActivity.saveTaskList(taskManager, v.getContext());
+
                 dismiss(); // Closing fragment
             }
         });
@@ -210,6 +221,21 @@ public class EditFragment extends AppCompatDialogFragment {
             }
         });
     }
+
+    private void adjustTaskManagerToAccountForDeletingChild() {
+        for (Task task : taskManager.getList()) {
+            if (task.getIndex() >= index) {
+                task.next();
+            }
+        }
+    }
+
+    private void adjustTaskChildName() {
+        for (Task task : taskManager.getList()) {
+            task.updateKidName();
+        }
+    }
+
 
     private void openCameraFragment(Context context) {
         ContentValues values = new ContentValues();
