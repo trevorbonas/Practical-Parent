@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.raspberry.practicalparent.R;
 import com.raspberry.practicalparent.model.CardViewMaker;
+import com.raspberry.practicalparent.model.Kid;
 import com.raspberry.practicalparent.model.KidManager;
 import com.raspberry.practicalparent.model.Results;
 import com.raspberry.practicalparent.model.ResultsManager;
@@ -136,32 +137,36 @@ public class HistoryActivity extends AppCompatActivity {
 
     //Add flip result to RecyclerView
     private void addFlipToView(Results flip) {
-        String portraitPath = "src/main/res/drawable-mdpi/blank.png";
+        Kid kid = kids.searchByName(flip.getChildName());
 
-        //Get individual kids' pics if allhistory
-        if (differentPortraits) {
-            portraitPath = kids.searchByName(flip.getChildName()).getPicPath();
+        if (kid != null) {
+            String portraitPath = "src/main/res/drawable-mdpi/blank.png";
+
+            //Get individual kids' pics if allhistory
+            if (differentPortraits) {
+                portraitPath = kid.getPicPath();
+            }
+
+            //Image is lost flip by default
+            int image = R.drawable.ic_x;
+            boolean won = flip.isWonFlip();
+            String wonOrLost = "LOST";
+
+            //Check if they won flip
+            if (won) {
+                image = R.drawable.ic_check;
+                wonOrLost = "WON";
+            }
+
+            //Add flip to list
+            cardList.add(0, new CardViewMaker(image,
+                    flip.getChildName(),
+                    wonOrLost,
+                    flip.getDateFlip(),
+                    flip.getSideChosen(),
+                    portraitPath));
+            adapter.notifyItemInserted(0);
         }
-
-        //Image is lost flip by default
-        int image = R.drawable.ic_x;
-        boolean won = flip.isWonFlip();
-        String wonOrLost = "LOST";
-
-        //Check if they won flip
-        if (won) {
-            image = R.drawable.ic_check;
-            wonOrLost = "WON";
-        }
-
-        //Add flip to list
-        cardList.add(0, new CardViewMaker(image,
-                flip.getChildName(),
-                wonOrLost,
-                flip.getDateFlip(),
-                flip.getSideChosen(),
-                portraitPath));
-        adapter.notifyItemInserted(0);
     }
 
     //Update text on history toggle

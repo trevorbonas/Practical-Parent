@@ -118,7 +118,7 @@ public class ChooseActivity extends AppCompatActivity {
         }
         else {
             greeting.setText(getString(R.string.choose_coin_heads_tails_children,
-                    kids.getName()));
+                    kids.getKidAt(kids.getCurrentIndex()).getName()));
         }
     }
 

@@ -85,6 +85,9 @@ public class KidManager {
     // the next kid in the list
     // Loops around
     public void nextKid() {
+        if (currentIndex >= kids.size()) {
+            currentIndex = 0;
+        }
         currentIndex = (currentIndex + 1) % kids.size();
         currentKid = kids.get(currentIndex);
         setNobody(false);
