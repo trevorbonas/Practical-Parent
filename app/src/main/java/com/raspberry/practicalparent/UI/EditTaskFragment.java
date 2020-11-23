@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -40,6 +41,7 @@ public class EditTaskFragment extends AppCompatDialogFragment {
     private String newTaskName; // The changed name of the task
     private View v; // Current view
     private TaskManager tasks = TaskManager.getInstance(); // An instance of the singleton
+    private KidManager kidManager = KidManager.getInstance();
     Button saveBtn;
 
     @Override
@@ -56,8 +58,13 @@ public class EditTaskFragment extends AppCompatDialogFragment {
         taskName = tasks.getTaskAt(index).getName();
         taskDescription = tasks.getTaskAt(index).getDescription();
 
+        ImageView imageView = v.findViewById(R.id.kidPic);
         Button cancelBtn = v.findViewById(R.id.taskCancelBtn);
         Button deleteBtn = v.findViewById(R.id.taskDeleteBtn);
+        if (kidManager.getNum() != 0) {
+            imageView.setImageResource(0);
+            MainActivity.displayPortrait(v.getContext(), kidManager.getKidAt(tasks.getTaskAt(index).getIndex()).getPicPath(), imageView);
+        }
         saveBtn = v.findViewById(R.id.taskSaveBtn);
         Button nextBtn = v.findViewById(R.id.completedBtn);
 

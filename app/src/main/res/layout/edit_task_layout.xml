@@ -156,8 +156,8 @@
 
     <ImageView
         android:id="@+id/kidPic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="52dp"
+        android:layout_height="53dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toTopOf="@+id/kidTurnName"
         app:layout_constraintEnd_toEndOf="parent"
@@ -165,6 +165,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.958"
-        android:background="@drawable/family_icon"/>
+        app:srcCompat="@drawable/family_icon" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

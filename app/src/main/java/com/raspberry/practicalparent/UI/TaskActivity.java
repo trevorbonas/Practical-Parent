@@ -35,6 +35,7 @@ import java.util.List;
 // Activity to allow users to edit, add, or delete kids
 public class TaskActivity extends AppCompatActivity {
     private TaskManager tasks;
+    private KidManager kidManager = KidManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +99,10 @@ public class TaskActivity extends AppCompatActivity {
             }
             Task currTask = tasks.getTaskAt(position);
             ImageView imageView = itemView.findViewById(R.id.imgChildLayout);
+
+            if (kidManager.getNum() != 0) {
+                MainActivity.displayPortrait(TaskActivity.this, kidManager.getKidAt(tasks.getTaskAt(position).getIndex()).getPicPath(), imageView);
+            }
             TextView taskCurrentChildName = itemView.findViewById(R.id.taskCurrentChildLayout);
             TextView taskName = itemView.findViewById(R.id.taskNameLayout);
             taskCurrentChildName.setText(currTask.getKidName());

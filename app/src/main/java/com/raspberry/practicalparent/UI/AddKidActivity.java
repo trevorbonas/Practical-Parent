@@ -131,6 +131,13 @@ public class AddKidActivity extends AppCompatActivity {
                     Log.println(Log.DEBUG, "path check",
                             "path IS null");
                 }
+
+                for (Task task : taskManager.getList()) {
+                    task.updateKidName();
+                }
+
+                AddTaskActivity.saveTaskList(taskManager, AddKidActivity.this);
+
                 // Saving KidManager into SharedPreferences
                 SharedPreferences prefs = getSharedPreferences("Kids", MODE_PRIVATE);
                 SharedPreferences.Editor prefEditor = prefs.edit();
