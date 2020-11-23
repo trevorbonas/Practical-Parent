@@ -140,7 +140,9 @@ public class HistoryActivity extends AppCompatActivity {
 
         //Get individual kids' pics if allhistory
         if (differentPortraits) {
-            portraitPath = kids.searchByName(flip.getChildName()).getPicPath();
+            if (kids.searchByName(flip.getChildName()) != null) {
+                portraitPath = kids.searchByName(flip.getChildName()).getPicPath();
+            }
         }
 
         //Image is lost flip by default
