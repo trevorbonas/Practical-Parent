@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -31,8 +32,10 @@ public class ChooseActivity extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true); // Enable back button
 
-        setGreeting();
 
+        setGreeting();
+        setImage();
+        ImageView imageView;
         Button heads = findViewById(R.id.headBtn);
         Button tails = findViewById(R.id.tailsBtn);
         Button choose = findViewById(R.id.changeBtn);
@@ -88,6 +91,12 @@ public class ChooseActivity extends AppCompatActivity {
 
     }
 
+    private void setImage() {
+        ImageView imageView = findViewById(R.id.imageView);
+        String path = kids.getKidAt(kids.getCurrentIndex()).getPicPath();
+        MainActivity.displayPortrait(ChooseActivity.this, path, imageView);
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -113,6 +122,7 @@ public class ChooseActivity extends AppCompatActivity {
     public void onResume(){
         super.onResume();
         setGreeting();
+        setImage();
     }
 
 }
