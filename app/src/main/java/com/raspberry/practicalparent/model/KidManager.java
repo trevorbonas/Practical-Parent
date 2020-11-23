@@ -126,4 +126,17 @@ public class KidManager {
     public int getCurrentIndex() {
         return currentIndex;
     }
+
+    // Searches KidManager for a Kid with input name
+    // returns Kid on success
+    // returns null on failure
+    public Kid searchByName(String inName) {
+        for (int i = 0; i < getNum(); i++) {
+            Kid kid = getKidAt(i);
+            if (kid.getName().equals(inName)) {
+                return kid;
+            }
+        }
+        return null;
+    }
 }

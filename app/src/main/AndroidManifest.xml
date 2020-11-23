@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.raspberry.practicalparent" >
-
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-
-    package="com.raspberry.practicalparent">
+    package="com.raspberry.practicalparent"
+    xmlns:tools="http://schemas.android.com/tools">
     <!--Adding Read External Storage Permission-->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
     <!--Adding Camera, Write External Storage Permission-->
     <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="MANAGE_EXTERNAL_STORAGE"/>
+
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -20,8 +19,14 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:targetApi="q">
+
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" /> <!-- optional (needed if default theme has no action bar) -->
+
         android:theme="@style/AppTheme" >
         <activity
             android:name=".UI.HelpActivity"
@@ -29,54 +34,44 @@
             android:parentActivityName=".UI.MainActivity" />
         <activity
             android:name=".UI.TimerActivity"
-            android:label="Timeout Timer"
-            android:parentActivityName=".UI.MainActivity" />
-
-        <activity
-            android:name=".UI.TaskActivity"
-            android:label="@string/title_activity_task"
             android:parentActivityName=".UI.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity
-            android:name=".UI.AddTaskActivity"
-            android:label=""
-            android:parentActivityName=".UI.TaskActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-
+            android:label="Timeout Timer">
+        </activity>
         <activity
             android:name=".UI.ChooseActivity"
             android:label=""
-            android:parentActivityName=".UI.MainActivity" />
-        <activity
-            android:name=".UI.ChooseTurnActivity"
-            android:label="Choose Whose Turn It Is"
-            android:parentActivityName=".UI.ChooseActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:parentActivityName=".UI.MainActivity">
+        </activity>
         <activity
             android:name=".UI.CoinFlipActivity"
             android:label="Coin Flip"
-            android:parentActivityName=".UI.MainActivity" />
+            android:parentActivityName=".UI.MainActivity">
+        </activity>
         <activity
             android:name=".UI.AddKidActivity"
             android:label="Add Child"
             android:parentActivityName=".UI.KidOptionsActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
         <activity
             android:name=".UI.KidOptionsActivity"
             android:label="Options"
             android:parentActivityName=".UI.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
         <activity
             android:name=".UI.HistoryActivity"
             android:label="History"
-            android:parentActivityName=".UI.MainActivity" />
+            android:parentActivityName=".UI.MainActivity">
+        </activity>
         <activity
             android:name=".UI.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
