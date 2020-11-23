@@ -68,7 +68,7 @@ public class HelpActivity extends AppCompatActivity {
                     break;
                 case R.id.btn_credit_default:
                     intent = new Intent(Intent.ACTION_VIEW,
-                            Uri.parse("https://commons.wikimedia.org/wiki/File:Family_icon.png"));
+                            Uri.parse("https://commons.wikimedia.org/wiki/File:Ic_person_48px.svg"));
                     startActivity(intent);
                     break;
             }
