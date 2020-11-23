@@ -58,6 +58,9 @@ public class Task {
         if (kids.getNum() <= 0) {
             return;
         }
+        if (this.i == kids.getNum()) {
+            this.i = 0;
+        }
         this.i = (this.i + 1) % (kids.getNum());
         kidName = kids.getKidAt(this.i).getName();
     }
