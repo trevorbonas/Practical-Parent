@@ -1,5 +1,6 @@
 package com.raspberry.practicalparent.UI;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -132,5 +133,10 @@ public class KidOptionsActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    //Make intent
+    public static Intent makeLaunchIntent(Context context) {
+        return new Intent(context, KidOptionsActivity.class);
     }
 }
