@@ -23,7 +23,7 @@
         tools:targetApi="q">
         <activity
             android:name=".UI.BreatheActivity"
-            android:label="Breathe"
+            android:label="@string/breathe"
             android:parentActivityName=".UI.MainActivity" />
         <!-- <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" /> optional (needed if default theme has no action bar) -->
         <activity
@@ -46,7 +46,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".UI.ChooseActivity"
-            android:label="Choose Side"
+            android:label="@string/choose_side"
             android:parentActivityName=".UI.MainActivity" />
         <activity
             android:name=".UI.ChooseTurnActivity"
@@ -55,7 +55,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".UI.CoinFlipActivity"
-            android:label="Coin Flip"
+            android:label="@string/coin_flip"
             android:parentActivityName=".UI.MainActivity" />
         <activity
             android:name=".UI.AddKidActivity"
