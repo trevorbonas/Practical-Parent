@@ -1,5 +1,6 @@
 package com.raspberry.practicalparent.UI;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -12,6 +13,8 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -93,7 +96,7 @@ public class TimerActivity extends AppCompatActivity {
                         pauseTimer();
                         removeCalmImage();
                     } else {
-                        startTimer();
+                        startTimer(2);
                         showCalmImage();
                     }
             }
@@ -131,15 +134,17 @@ public class TimerActivity extends AppCompatActivity {
         resetTimer();
     }
 
-    private void startTimer() {
+    private void startTimer(final int speedFactor) {
         closeKeyboard();
         mEditTextInput.setText("");
 
         mEndTime = System.currentTimeMillis() + mTimeLeftInMillis;
-        mCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
+        mCountDownTimer = new CountDownTimer(mTimeLeftInMillis / speedFactor, 1000 / speedFactor) {
             @Override
             public void onTick(long millisUntilFinished) {
-                mTimeLeftInMillis = millisUntilFinished;
+                int[] arr = countdownTimerHoursMinutesSeconds(millisUntilFinished);
+                Log.d("TAG", "onTick: " + millisUntilFinished + "   H: " + arr[0] + "M:" + arr[1] + "S:" + arr[2]);
+                mTimeLeftInMillis = millisUntilFinished * speedFactor;
                 updateCountDownText();
             }
 
@@ -169,7 +174,7 @@ public class TimerActivity extends AppCompatActivity {
         updateWatchInterface();
     }
     
-    private  void resetTimer() {
+    private void resetTimer() {
         mTimeLeftInMillis = mStartTimeInMillis;
         updateCountDownText();
         updateWatchInterface();
@@ -321,7 +326,7 @@ public class TimerActivity extends AppCompatActivity {
                 updateWatchInterface();  //make buttons invisible
                 removeCalmImage();
             } else {
-                startTimer();
+                startTimer(2);
             }
         } else {
             removeCalmImage();
@@ -331,5 +336,10 @@ public class TimerActivity extends AppCompatActivity {
     private void cancelNotification(int notificationId) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.cancel(notificationId);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 }
