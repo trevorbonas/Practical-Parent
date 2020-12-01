@@ -24,7 +24,8 @@
         <activity
             android:name=".UI.BreatheActivity"
             android:label="@string/breathe"
-            android:parentActivityName=".UI.MainActivity" />
+            android:parentActivityName=".UI.MainActivity"
+            />
         <!-- <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" /> optional (needed if default theme has no action bar) -->
         <activity
             android:name=".UI.HelpActivity"
