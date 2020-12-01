@@ -33,7 +33,6 @@ public class BreatheActivity extends AppCompatActivity {
     Out out = new Out();
     Start start = new Start();
     State currentState = start;
-    ContinuousBuzzer tonePlayer = new ContinuousBuzzer();
     int time; // Time button pressed, set to zero when button in starting state
 
     @Override
@@ -69,7 +68,6 @@ public class BreatheActivity extends AppCompatActivity {
 
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     currentState.handleOff();
-
                 }
                 return false;
             }
@@ -89,10 +87,17 @@ public class BreatheActivity extends AppCompatActivity {
         long startTime;
         long checkTime;
         Handler timeHandler = new Handler();
+        Runnable disableRnb = new Runnable() {
+            @Override
+            public void run() {
+                bigBtn.setEnabled(true);
+            }
+        };
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 helpTxt.setText("Release button and breathe out");
+                timeHandler.removeCallbacksAndMessages(null);
             }
         };
         @Override
@@ -107,7 +112,7 @@ public class BreatheActivity extends AppCompatActivity {
             timeHandler.postDelayed(runnable, 10000);
             changeColor(R.drawable.round_button_in);
             changeText("In");
-            bigBtn.animate().scaleXBy(2.5f).scaleYBy(2.5f).setDuration(10000);
+            bigBtn.animate().scaleX(2.3f).scaleY(2.3f).setDuration(10000);
         }
 
         @Override
@@ -119,6 +124,8 @@ public class BreatheActivity extends AppCompatActivity {
             if (seconds < 3.0) {
                 // Shrink back down so user can try again
                 bigBtn.animate().scaleX(1.0f).scaleY(1.0f).setDuration(700);
+                bigBtn.setEnabled(false);
+                timeHandler.postDelayed(disableRnb, 700);
             } else {
                 setState(out);
             }
@@ -126,26 +133,52 @@ public class BreatheActivity extends AppCompatActivity {
     }
 
     public class Out extends State {
+        long startTime;
         Handler outHandler = new Handler();
-        Runnable outRunnable = new Runnable() {
+        Runnable tenRunnable = new Runnable() {
             @Override
             public void run() {
+                // TODO Update of displayed number of breaths
+                numBreaths--;
                 setupBigBtn();
+            }
+        };
+        Runnable threeRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (numBreaths > 0) {
+                    changeText("In");
+                    changeColor(R.drawable.round_button_in);
+                }
+                else {
+                    changeText("Good job");
+                    changeColor(R.drawable.round_button);
+                    bigBtn.setEnabled(false);
+                    helpTxt.setText("All breaths completed");
+                }
             }
         };
         @Override
         void setup() {
             changeText("Out");
             changeColor(R.drawable.round_button_out);
-            bigBtn.animate().scaleX(1.0f).scaleY(1.0f).setDuration(3000);
-            numBreaths--;
-            // TODO Update of displayed number of breaths
-            outHandler.postDelayed(outRunnable, 3000);
+            startTime = System.nanoTime();
+            bigBtn.animate().scaleX(1.0f).scaleY(1.0f).setDuration(10000);
+            outHandler.postDelayed(threeRunnable, 3000);
+            outHandler.postDelayed(tenRunnable, 10000);
         }
 
         @Override
         void handlePress() {
-            // Do nothing
+            long elapsedTime = System.nanoTime() - startTime;
+            double seconds = (double)elapsedTime / 1_000_000_000.0;
+            if (seconds >= 3) {
+                // TODO Update of displayed number of breaths
+                numBreaths--;
+                setState(in);
+                currentState.handlePress();
+                outHandler.removeCallbacksAndMessages(null);
+            }
         }
 
         @Override
