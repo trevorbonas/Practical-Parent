@@ -91,6 +91,9 @@ public class BreatheActivity extends AppCompatActivity {
             @Override
             public void run() {
                 bigBtn.setEnabled(true);
+                if (bigBtn.isInTouchMode()) {
+                    handlePress();
+                }
             }
         };
         Runnable runnable = new Runnable() {
@@ -224,10 +227,6 @@ public class BreatheActivity extends AppCompatActivity {
             helpTxt.setText("All breaths completed");
             bigBtn.setEnabled(false);
         }
-    }
-
-    void setHelpTxt(String text) {
-        helpTxt.setText(text);
     }
 
     void changeColor(int color) {
