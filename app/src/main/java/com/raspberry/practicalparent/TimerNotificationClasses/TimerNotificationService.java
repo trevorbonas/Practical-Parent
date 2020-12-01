@@ -35,7 +35,7 @@ public class TimerNotificationService extends Service {
     private long mEndTime;
     private long mStartTimeInMillis;
     private boolean isTimerRunning = true;
-    private int mSpeedFactor;
+    private float mSpeedFactor;
     private final int START_SERVICE = 0;
     private final int START_FROM_NOTIFICATION_STOP = 1;
     private NotificationCompat.Builder builderTimerRunning;
@@ -56,7 +56,7 @@ public class TimerNotificationService extends Service {
 
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
         mStartTimeInMillis = prefs.getLong(getString(R.string.shared_preferences_start_time_in_millis), 0);
-        mSpeedFactor = prefs.getInt(getString(R.string.shared_preferences_speed_factor), 1);
+        mSpeedFactor = prefs.getFloat(getString(R.string.shared_preferences_speed_factor), 1);
     }
 
     @Override
@@ -133,14 +133,14 @@ public class TimerNotificationService extends Service {
         notificationManagerCompat.notify(333, builderTimerRunning.build());
     }
 
-    private void startTimer(final int speedFactor, int type) {
+    private void startTimer(final float speedFactor, int type) {
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
         final SharedPreferences.Editor editor = prefs.edit();
         long mStartTimeInMillis = prefs.getLong(getString(R.string.shared_preferences_start_time_in_millis), 600000);
         if (type == 0) {
             mTimeLeftInMillis = prefs.getLong(getString(R.string.shared_preferences_time_left_in_millis), mStartTimeInMillis);
         } else {
-            mTimeLeftInMillis = prefs.getLong(getString(R.string.shared_preferences_time_left_in_millis), mStartTimeInMillis) / speedFactor;
+            mTimeLeftInMillis = (long) (prefs.getLong(getString(R.string.shared_preferences_time_left_in_millis), mStartTimeInMillis) / speedFactor);
         }
         if (isTimerRunning) {
             mEndTime = prefs.getLong(getString(R.string.shared_preferences_end_time), 0);
@@ -150,14 +150,14 @@ public class TimerNotificationService extends Service {
         }
         isTimerRunning = true;
         Log.d("TAG", "startTimer: mTimeLeftInMillis: " + mTimeLeftInMillis);
-        countDownTimer = new CountDownTimer(mTimeLeftInMillis , 1000 / speedFactor) {
+        countDownTimer = new CountDownTimer(mTimeLeftInMillis , (long) (1000 / speedFactor)) {
             @Override
             public void onTick(long l) {
-                int[] times = TimerActivity.countdownTimerHoursMinutesSeconds(l * speedFactor);
+                int[] times = TimerActivity.countdownTimerHoursMinutesSeconds((long) (l * speedFactor));
                 //Log.d("TAG", "Timing is ticking: " + times[0] + ":" + times[1] + ":" + times[2]);
                 //Log.d("TAG", "endTime: " + mEndTime);
                 //Log.d("TAG", "mTimeLeftInMillis: " + (mEndTime - System.currentTimeMillis()) * speedFactor);
-                editor.putLong(getString(R.string.shared_preferences_time_left_in_millis), (mEndTime - System.currentTimeMillis()) * speedFactor);
+                editor.putLong(getString(R.string.shared_preferences_time_left_in_millis), (long) ((mEndTime - System.currentTimeMillis()) * speedFactor));
                 editor.putLong(getString(R.string.shared_preferences_end_time), mEndTime);
                 editor.apply();
                 updateTimerRunningNotification(times[0], times[1], times[2]);

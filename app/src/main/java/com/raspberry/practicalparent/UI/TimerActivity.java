@@ -14,6 +14,7 @@ import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -22,6 +23,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.raspberry.practicalparent.R;
 import com.raspberry.practicalparent.TimerNotificationClasses.TimerCompleteNotificationBroadcastReceiver;
@@ -44,7 +46,8 @@ public class TimerActivity extends AppCompatActivity {
     private long mStartTimeInMillis;
     private long mTimeLeftInMillis;
     private long mEndTime;
-    private int mSpeedFactor = 4;
+    private float mSpeedFactor = 1;
+    private final float defaultSpeed = 1;
 
     private RadioGroup presetTimesRadioGroup;
     private int radioButtonIndex;
@@ -97,6 +100,8 @@ public class TimerActivity extends AppCompatActivity {
                         pauseTimer();
                         removeCalmImage();
                     } else {
+                        mSpeedFactor = defaultSpeed;
+                        saveSpeedFactor();
                         startTimer(mSpeedFactor);
                         showCalmImage();
                     }
@@ -135,23 +140,23 @@ public class TimerActivity extends AppCompatActivity {
         resetTimer();
     }
 
-    private void startTimer(final int speedFactor) {
+    private void startTimer(final double speedFactor) {
         closeKeyboard();
         mEditTextInput.setText("");
 
         if (!(mTimerRunning)) {
             Log.d("TAG", "end time if !mtimerrunning: " + mEndTime);
-            mEndTime = System.currentTimeMillis() + mTimeLeftInMillis / speedFactor;
+            mEndTime = (long) (System.currentTimeMillis() + mTimeLeftInMillis / speedFactor);
         }
         Log.d("TAG", "end time timer running: " + mEndTime);
         int[] testArr = countdownTimerHoursMinutesSeconds(mEndTime);
 
-        mCountDownTimer = new CountDownTimer(mTimeLeftInMillis / speedFactor, 1000 / speedFactor) {
+        mCountDownTimer = new CountDownTimer((long) (mTimeLeftInMillis / speedFactor), (long) (1000 / speedFactor)) {
             @Override
             public void onTick(long millisUntilFinished) {
                 int[] arr = countdownTimerHoursMinutesSeconds(millisUntilFinished);
                 Log.d("TAG", "onTick: speed factor " + mSpeedFactor + " " + speedFactor + "  |" + millisUntilFinished + "   " + arr[0] + ":" + arr[1] + ":" + arr[2]);
-                mTimeLeftInMillis = millisUntilFinished * speedFactor;
+                mTimeLeftInMillis = (long) (millisUntilFinished * speedFactor);
                 updateCountDownText();
             }
 
@@ -287,7 +292,7 @@ public class TimerActivity extends AppCompatActivity {
         editor.putLong(getString(R.string.shared_preferences_time_left_in_millis), mTimeLeftInMillis);
         editor.putBoolean(getString(R.string.shared_preferences_timer_running), mTimerRunning);
         editor.putLong(getString(R.string.shared_preferences_end_time), mEndTime);
-        editor.putInt(getString(R.string.shared_preferences_speed_factor), mSpeedFactor);
+        editor.putFloat(getString(R.string.shared_preferences_speed_factor), mSpeedFactor);
 
         editor.apply();
         if (mTimerRunning) {
@@ -298,6 +303,7 @@ public class TimerActivity extends AppCompatActivity {
             } else {
                 startTimerNotificationService();
             }
+            Log.d("TAG", "onStop: " + mSpeedFactor);
         }
         if(mCountDownTimer != null){
             mCountDownTimer.cancel(); //cancel timer when time runs out
@@ -317,14 +323,14 @@ public class TimerActivity extends AppCompatActivity {
         mStartTimeInMillis = prefs.getLong(getString(R.string.shared_preferences_start_time_in_millis), 600000);
         mTimeLeftInMillis = prefs.getLong(getString(R.string.shared_preferences_time_left_in_millis), mStartTimeInMillis);
         mTimerRunning = prefs.getBoolean(getString(R.string.shared_preferences_timer_running), false);
-        mSpeedFactor = prefs.getInt(getString(R.string.shared_preferences_speed_factor), 1);
+        mSpeedFactor = prefs.getFloat(getString(R.string.shared_preferences_speed_factor), 1);
 
         updateCountDownText();
         updateWatchInterface();
 
         if (mTimerRunning){
             mEndTime = prefs.getLong(getString(R.string.shared_preferences_end_time), 0);
-            mTimeLeftInMillis = (mEndTime - System.currentTimeMillis()) * mSpeedFactor;
+            mTimeLeftInMillis = (long) ((mEndTime - System.currentTimeMillis()) * mSpeedFactor);
             Log.d("TAG", "mTimeLeftInMillis in onStart(): " + mTimeLeftInMillis);
             showCalmImage();
 
@@ -351,8 +357,61 @@ public class TimerActivity extends AppCompatActivity {
         notificationManager.cancel(notificationId);
     }
 
+    private void changeTimerSpeed(float newSpeed) {
+        pauseTimer();
+        startTimer(newSpeed);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_timer, menu);
+        return true;
+    }
+
+    //TODO finish it
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        return super.onOptionsItemSelected(item);
+        TextView speedPercent = findViewById(R.id.tvTimerSpeed);
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        if (mTimerRunning) {
+            if (item.getItemId() == R.id.quarterSpeed) {
+                Toast.makeText(this, "quarterSpeed", Toast.LENGTH_SHORT).show();
+                mSpeedFactor = 0.25f;
+            } else if (item.getItemId() == R.id.halfSpeed) {
+                Toast.makeText(this, "halfSpeed", Toast.LENGTH_SHORT).show();
+                mSpeedFactor = 0.5f;
+            } else if (item.getItemId() == R.id.threeFourthsSpeed) {
+                Toast.makeText(this, "threeFourthsSpeed", Toast.LENGTH_SHORT).show();
+                mSpeedFactor = 0.75f;
+            } else if (item.getItemId() == R.id.normalSpeed) {
+                Toast.makeText(this, "normalSpeed", Toast.LENGTH_SHORT).show();
+                mSpeedFactor = 1f;
+            } else if (item.getItemId() == R.id.doubleSpeed) {
+                Toast.makeText(this, "doubleSpeed", Toast.LENGTH_SHORT).show();
+                mSpeedFactor = 2f;
+            } else if (item.getItemId() == R.id.tripleSpeed) {
+                Toast.makeText(this, "tripleSpeed", Toast.LENGTH_SHORT).show();
+                mSpeedFactor = 3f;
+            } else if (item.getItemId() == R.id.quadSpeed) {
+                Toast.makeText(this, "quadSpeed", Toast.LENGTH_SHORT).show();
+                mSpeedFactor = 4f;
+            }
+            saveSpeedFactor();
+            changeTimerSpeed(mSpeedFactor);
+            return true;
+        } else {
+            Toast.makeText(this, "Please start timer first", Toast.LENGTH_SHORT).show();
+        }
+        return true;
+    }
+
+    private void saveSpeedFactor() {
+        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putFloat(getString(R.string.shared_preferences_speed_factor), mSpeedFactor);
+        editor.apply();
     }
 }
