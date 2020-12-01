@@ -44,6 +44,7 @@ public class TimerActivity extends AppCompatActivity {
     private long mStartTimeInMillis;
     private long mTimeLeftInMillis;
     private long mEndTime;
+    private int mSpeedFactor = 4;
 
     private RadioGroup presetTimesRadioGroup;
     private int radioButtonIndex;
@@ -96,7 +97,7 @@ public class TimerActivity extends AppCompatActivity {
                         pauseTimer();
                         removeCalmImage();
                     } else {
-                        startTimer(2);
+                        startTimer(mSpeedFactor);
                         showCalmImage();
                     }
             }
@@ -138,12 +139,18 @@ public class TimerActivity extends AppCompatActivity {
         closeKeyboard();
         mEditTextInput.setText("");
 
-        mEndTime = System.currentTimeMillis() + mTimeLeftInMillis;
+        if (!(mTimerRunning)) {
+            Log.d("TAG", "end time if !mtimerrunning: " + mEndTime);
+            mEndTime = System.currentTimeMillis() + mTimeLeftInMillis / speedFactor;
+        }
+        Log.d("TAG", "end time timer running: " + mEndTime);
+        int[] testArr = countdownTimerHoursMinutesSeconds(mEndTime);
+
         mCountDownTimer = new CountDownTimer(mTimeLeftInMillis / speedFactor, 1000 / speedFactor) {
             @Override
             public void onTick(long millisUntilFinished) {
                 int[] arr = countdownTimerHoursMinutesSeconds(millisUntilFinished);
-                Log.d("TAG", "onTick: " + millisUntilFinished + "   H: " + arr[0] + "M:" + arr[1] + "S:" + arr[2]);
+                Log.d("TAG", "onTick: speed factor " + mSpeedFactor + " " + speedFactor + "  |" + millisUntilFinished + "   " + arr[0] + ":" + arr[1] + ":" + arr[2]);
                 mTimeLeftInMillis = millisUntilFinished * speedFactor;
                 updateCountDownText();
             }
@@ -280,6 +287,7 @@ public class TimerActivity extends AppCompatActivity {
         editor.putLong(getString(R.string.shared_preferences_time_left_in_millis), mTimeLeftInMillis);
         editor.putBoolean(getString(R.string.shared_preferences_timer_running), mTimerRunning);
         editor.putLong(getString(R.string.shared_preferences_end_time), mEndTime);
+        editor.putInt(getString(R.string.shared_preferences_speed_factor), mSpeedFactor);
 
         editor.apply();
         if (mTimerRunning) {
@@ -309,13 +317,15 @@ public class TimerActivity extends AppCompatActivity {
         mStartTimeInMillis = prefs.getLong(getString(R.string.shared_preferences_start_time_in_millis), 600000);
         mTimeLeftInMillis = prefs.getLong(getString(R.string.shared_preferences_time_left_in_millis), mStartTimeInMillis);
         mTimerRunning = prefs.getBoolean(getString(R.string.shared_preferences_timer_running), false);
+        mSpeedFactor = prefs.getInt(getString(R.string.shared_preferences_speed_factor), 1);
 
         updateCountDownText();
         updateWatchInterface();
 
         if (mTimerRunning){
             mEndTime = prefs.getLong(getString(R.string.shared_preferences_end_time), 0);
-            mTimeLeftInMillis = mEndTime - System.currentTimeMillis();
+            mTimeLeftInMillis = (mEndTime - System.currentTimeMillis()) * mSpeedFactor;
+            Log.d("TAG", "mTimeLeftInMillis in onStart(): " + mTimeLeftInMillis);
             showCalmImage();
 
             //check if overdue
@@ -326,9 +336,12 @@ public class TimerActivity extends AppCompatActivity {
                 updateWatchInterface();  //make buttons invisible
                 removeCalmImage();
             } else {
-                startTimer(2);
+                startTimer(mSpeedFactor);
             }
         } else {
+            //mEndTime = prefs.getLong(getString(R.string.shared_preferences_end_time), 0);
+            //mTimeLeftInMillis = (mEndTime - System.currentTimeMillis()) * mSpeedFactor;
+            Log.d("TAG", "endTime: " + mEndTime);
             removeCalmImage();
         }
     }
