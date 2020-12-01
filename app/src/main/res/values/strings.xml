@@ -113,5 +113,6 @@
     <string name="denied_permission_picking_image_toast">Permission denied for picking image</string>
     <string name="showing_all_flips_toast">Now showing all flips</string>
     <string name="showing_childs_flip_toast">Now showing child\'s flips</string>
+    <string name="shared_preferences_speed_factor">speedFactor</string>
 
 </resources>
