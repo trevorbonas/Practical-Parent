@@ -8,6 +8,22 @@
     >
 
     <Button
+        android:id="@+id/startBtn"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="132dp"
+        android:layout_height="63dp"
+        android:layout_marginBottom="48dp"
+        android:background="@drawable/outlined_button"
+        android:fontFamily="sans-serif-medium"
+        android:foreground="@drawable/ripple_mask"
+        android:text="Start"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="#6E6E6E"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
         android:id="@+id/bigBtn"
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -16,6 +32,15 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/helpTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
