@@ -5,11 +5,17 @@
         <item name="colorPrimary">#50b4ff</item>
         <item name="colorPrimaryDark">#000000</item>
         <item name="colorAccent">#D500F9</item>
+
+        <item name="android:actionOverflowButtonStyle">@style/OverFlowTimer</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="OverFlowTimer" parent="@android:style/Widget.Holo.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_baseline_speed_24</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
