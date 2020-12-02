@@ -14,7 +14,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -24,8 +27,9 @@ import com.raspberry.practicalparent.R;
 import net.mabboud.android_tone_player.ContinuousBuzzer;
 
 import java.util.Timer;
+
+public class BreatheActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 @SuppressLint("ClickableViewAccessibility")
-public class BreatheActivity extends AppCompatActivity {
     // Used to synchronize pressed states, i.e., make sure when button state "up" it was
     // first in state "down"
     int pressedState = 0;
@@ -38,11 +42,16 @@ public class BreatheActivity extends AppCompatActivity {
     Start start = new Start();
     State currentState = start;
     int time; // Time button pressed, set to zero when button in starting state
+    private Spinner breathDropdown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_breathe);
+
+        //Spinner/dropdown menu
+        setUpDropdown();
+
         bigBtn = findViewById(R.id.bigBtn);
         helpTxt = findViewById(R.id.helpTxt);
 
@@ -88,6 +97,31 @@ public class BreatheActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Menu for number of breaths
+     */
+    private void setUpDropdown() {
+        breathDropdown = findViewById(R.id.spinner);
+        Integer[] breaths = new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        ArrayAdapter<Integer> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, breaths);
+        breathDropdown.setAdapter(adapter);
+        breathDropdown.setSelection(2); //default
+        breathDropdown.setOnItemSelectedListener(this);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        numBreaths = (int) adapterView.getItemAtPosition(i);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
+    /**
+     * States
+     */
     private abstract class State {
         // Do everything needed to setup the button
         void setup() {}
@@ -122,6 +156,8 @@ public class BreatheActivity extends AppCompatActivity {
 
         @Override
         void handlePress() {
+            breathDropdown.setVisibility(View.GONE);
+
             helpTxt.setText("Press and hold the button and breathe in");
             startTime = System.nanoTime();
             timeHandler.postDelayed(runnable, 10000);
