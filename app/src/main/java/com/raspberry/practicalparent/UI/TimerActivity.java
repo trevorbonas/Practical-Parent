@@ -370,7 +370,6 @@ public class TimerActivity extends AppCompatActivity {
         return true;
     }
 
-    //TODO finish it
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         TextView speedPercent = findViewById(R.id.tvTimerSpeed);
