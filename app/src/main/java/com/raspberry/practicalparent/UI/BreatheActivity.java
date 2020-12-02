@@ -45,20 +45,8 @@ public class BreatheActivity extends AppCompatActivity {
         setContentView(R.layout.content_breathe);
         bigBtn = findViewById(R.id.bigBtn);
         helpTxt = findViewById(R.id.helpTxt);
-        startBtn = findViewById(R.id.startBtn);
 
-        bigBtn.setEnabled(false);
-        helpTxt.setText("Select number of desired breaths,\npress the start button to start");
-        startBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (numBreaths > 0) {
-                    bigBtn.setEnabled(true);
-                    MainActivity.disableBtn(startBtn, BreatheActivity.this);
-                    setupBigBtn();
-                }
-            }
-        });
+        helpTxt.setText("Select number of desired breaths\nPress the button to start");
 
         ActionBar ab = getSupportActionBar();
         assert ab != null;
@@ -219,7 +207,6 @@ public class BreatheActivity extends AppCompatActivity {
         void setup() {
             changeText("Begin");
             changeColor(R.drawable.round_button);
-            handleOff();
         }
 
         @Override
