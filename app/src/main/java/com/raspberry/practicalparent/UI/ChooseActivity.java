@@ -95,6 +95,7 @@ public class ChooseActivity extends AppCompatActivity {
     }
 
     private void setImage() {
+
         ImageView imageView = findViewById(R.id.imageView);
         Kid kid = kids.getKidAt(kids.getCurrentIndex());
         if (kid != null) {
