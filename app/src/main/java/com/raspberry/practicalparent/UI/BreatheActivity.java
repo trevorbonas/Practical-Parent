@@ -32,7 +32,7 @@ public class BreatheActivity extends AppCompatActivity {
     Button bigBtn;
     TextView helpTxt;
     Button startBtn;
-    int numBreaths = 3; // Default number of breaths is 3
+    int numBreaths = 1; // Default number of breaths is 3
     In in = new In();
     Out out = new Out();
     Start start = new Start();
@@ -174,6 +174,7 @@ public class BreatheActivity extends AppCompatActivity {
         Runnable threeRunnable = new Runnable() {
             @Override
             public void run() {
+                numBreaths--;
                 if (numBreaths > 0) {
                     changeText("In");
                     changeColor(R.drawable.round_button_in);
