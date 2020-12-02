@@ -116,5 +116,6 @@
     <string name="breathe">Breathe</string>
     <string name="choose_side">Choose Side</string>
     <string name="coin_flip">Coin Flip</string>
+    <string name="begin">Begin</string>
 
 </resources>
