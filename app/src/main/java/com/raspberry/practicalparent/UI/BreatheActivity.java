@@ -7,8 +7,11 @@ import androidx.core.content.ContextCompat;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,12 +23,26 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.exoplayer2.DefaultRenderersFactory;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.raspberry.practicalparent.R;
 
 import net.mabboud.android_tone_player.ContinuousBuzzer;
 
+import java.io.IOException;
 import java.util.Timer;
 
 public class BreatheActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
@@ -43,6 +60,7 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
     State currentState = in;
     int time; // Time button pressed, set to zero when button in starting state
     private Spinner breathDropdown;
+    MediaPlayer player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +167,7 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
             public void run() {
                 helpTxt.setText("Release button and breathe out");
                 timeHandler.removeCallbacksAndMessages(null);
+                player.setLooping(true);
             }
         };
         @Override
@@ -160,13 +179,15 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
         @Override
         void handlePress() {
             breathDropdown.setVisibility(View.GONE);
-
+            player = MediaPlayer.create(BreatheActivity.this, R.raw.in_sound);
+            player.start();
             helpTxt.setText("Press and hold the button and breathe in");
             startTime = System.nanoTime();
             timeHandler.postDelayed(runnable, 10000);
             changeColor(R.drawable.round_button_in);
             changeText("In");
-            bigBtn.animate().scaleX(2.3f).scaleY(2.3f).setDuration(10000);
+            bigBtn.animate().scaleX(2.5f).scaleY(2.5f).setDuration(10000);
+
             Log.d("In", "In is now handling press");
         }
 
@@ -175,6 +196,10 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
             long elapsedTime = System.nanoTime() - startTime;
             double seconds = (double)elapsedTime / 1_000_000_000.0;
             timeHandler.removeCallbacksAndMessages(null);
+            player.stop();
+            player.reset();
+            player.release();
+            player = null;
             Log.d("Time", "Elapsed seconds: " + seconds);
             if (seconds < 3.0) {
                 // Shrink back down so user can try again
@@ -219,8 +244,11 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
             changeColor(R.drawable.round_button_out);
             startTime = System.nanoTime();
             bigBtn.animate().scaleX(1.0f).scaleY(1.0f).setDuration(10000);
+            player = MediaPlayer.create(BreatheActivity.this, R.raw.out_sound);
+            player.start();
             outHandler.postDelayed(threeRunnable, 3000);
             outHandler.postDelayed(tenRunnable, 10000);
+            helpTxt.setText("Breathe out");
         }
 
         @Override
@@ -229,6 +257,10 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
             double seconds = (double)elapsedTime / 1_000_000_000.0;
             if (seconds >= 3) {
                 // TODO Update of displayed number of breaths
+                player.stop();
+                player.reset();
+                player.release();
+                player = null;
                 setState(in);
                 currentState.handlePress();
                 outHandler.removeCallbacksAndMessages(null);
