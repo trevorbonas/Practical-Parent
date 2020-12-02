@@ -4,6 +4,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,8 +24,11 @@ import com.raspberry.practicalparent.R;
 import net.mabboud.android_tone_player.ContinuousBuzzer;
 
 import java.util.Timer;
-
+@SuppressLint("ClickableViewAccessibility")
 public class BreatheActivity extends AppCompatActivity {
+    // Used to synchronize pressed states, i.e., make sure when button state "up" it was
+    // first in state "down"
+    int pressedState = 0;
     Button bigBtn;
     TextView helpTxt;
     Button startBtn;
@@ -63,11 +67,33 @@ public class BreatheActivity extends AppCompatActivity {
         bigBtn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    currentState.handlePress();
-
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    currentState.handleOff();
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        if (pressedState == 0) {
+                            pressedState = 1;
+                            Log.d("Touch", "Action down");
+                            currentState.handlePress();
+                        }
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        if (pressedState == 1) {
+                            pressedState = 2;
+                            Log.d("Touch", "Action move");
+                            currentState.handlePress();
+                        }
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        // Button is allowed to make currentState do handleOff
+                        // if button has been pressed down first
+                        if (pressedState == 2 || pressedState == 1) {
+                            pressedState = 0;
+                            Log.d("Touch", "Action up");
+                            currentState.handleOff();
+                        }
+                        break;
+                    default:
+                        Log.d("Touch", "Default. Action id is " + event.getAction());
+                        break;
                 }
                 return false;
             }
@@ -91,9 +117,6 @@ public class BreatheActivity extends AppCompatActivity {
             @Override
             public void run() {
                 bigBtn.setEnabled(true);
-                if (bigBtn.isInTouchMode()) {
-                    handlePress();
-                }
             }
         };
         Runnable runnable = new Runnable() {
@@ -111,11 +134,13 @@ public class BreatheActivity extends AppCompatActivity {
 
         @Override
         void handlePress() {
+            helpTxt.setText("Press and hold the button and breathe in");
             startTime = System.nanoTime();
             timeHandler.postDelayed(runnable, 10000);
             changeColor(R.drawable.round_button_in);
             changeText("In");
             bigBtn.animate().scaleX(2.3f).scaleY(2.3f).setDuration(10000);
+            Log.d("In", "In is now handling press");
         }
 
         @Override
