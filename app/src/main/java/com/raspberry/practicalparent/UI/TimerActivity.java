@@ -149,7 +149,6 @@ public class TimerActivity extends AppCompatActivity {
             mEndTime = (long) (System.currentTimeMillis() + mTimeLeftInMillis / speedFactor);
         }
         Log.d("TAG", "end time timer running: " + mEndTime);
-        int[] testArr = countdownTimerHoursMinutesSeconds(mEndTime);
 
         mCountDownTimer = new CountDownTimer((long) (mTimeLeftInMillis / speedFactor), (long) (1000 / speedFactor)) {
             @Override
@@ -168,6 +167,7 @@ public class TimerActivity extends AppCompatActivity {
                 timerComplete.setAction(getString(R.string.intent_action_timer_finished_from_activity));
                 sendBroadcast(timerComplete);
                 removeCalmImage();
+                clearSpeedPercentText();
             }
         }.start();
 
@@ -184,12 +184,14 @@ public class TimerActivity extends AppCompatActivity {
         mCountDownTimer.cancel();
         mTimerRunning = false;
         updateWatchInterface();
+        clearSpeedPercentText();
     }
     
     private void resetTimer() {
         mTimeLeftInMillis = mStartTimeInMillis;
         updateCountDownText();
         updateWatchInterface();
+        clearSpeedPercentText();
     }
 
     private void updateCountDownText() {
@@ -372,40 +374,48 @@ public class TimerActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         TextView speedPercent = findViewById(R.id.tvTimerSpeed);
+        int speed = 100;
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
         }
         if (mTimerRunning) {
             if (item.getItemId() == R.id.quarterSpeed) {
-                Toast.makeText(this, "quarterSpeed", Toast.LENGTH_SHORT).show();
                 mSpeedFactor = 0.25f;
+                speed = 25;
             } else if (item.getItemId() == R.id.halfSpeed) {
-                Toast.makeText(this, "halfSpeed", Toast.LENGTH_SHORT).show();
                 mSpeedFactor = 0.5f;
+                speed = 50;
             } else if (item.getItemId() == R.id.threeFourthsSpeed) {
-                Toast.makeText(this, "threeFourthsSpeed", Toast.LENGTH_SHORT).show();
                 mSpeedFactor = 0.75f;
+                speed = 75;
             } else if (item.getItemId() == R.id.normalSpeed) {
-                Toast.makeText(this, "normalSpeed", Toast.LENGTH_SHORT).show();
                 mSpeedFactor = 1f;
+                speed = 100;
             } else if (item.getItemId() == R.id.doubleSpeed) {
-                Toast.makeText(this, "doubleSpeed", Toast.LENGTH_SHORT).show();
                 mSpeedFactor = 2f;
+                speed = 200;
             } else if (item.getItemId() == R.id.tripleSpeed) {
-                Toast.makeText(this, "tripleSpeed", Toast.LENGTH_SHORT).show();
                 mSpeedFactor = 3f;
+                speed = 300;
             } else if (item.getItemId() == R.id.quadSpeed) {
-                Toast.makeText(this, "quadSpeed", Toast.LENGTH_SHORT).show();
                 mSpeedFactor = 4f;
+                speed = 400;
             }
+            Toast.makeText(this, getString(R.string.timer_percent_speed, speed), Toast.LENGTH_SHORT).show();
             saveSpeedFactor();
             changeTimerSpeed(mSpeedFactor);
+            speedPercent.setText(getString(R.string.timer_percent_speed, speed));
             return true;
         } else {
-            Toast.makeText(this, "Please start timer first", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.please_start_timer_first), Toast.LENGTH_SHORT).show();
         }
         return true;
+    }
+
+    private void clearSpeedPercentText() {
+        TextView speedPercent = findViewById(R.id.tvTimerSpeed);
+        speedPercent.setText("");
     }
 
     private void saveSpeedFactor() {
