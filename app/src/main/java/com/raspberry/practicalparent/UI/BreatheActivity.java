@@ -40,7 +40,7 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
     In in = new In();
     Out out = new Out();
     Start start = new Start();
-    State currentState = start;
+    State currentState = in;
     int time; // Time button pressed, set to zero when button in starting state
     private Spinner breathDropdown;
 
@@ -60,6 +60,9 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
         ActionBar ab = getSupportActionBar();
         assert ab != null;
         ab.setDisplayHomeAsUpEnabled(true);
+
+        changeText("Begin");
+        changeColor(R.drawable.round_button);
 
         bigBtn.setOnTouchListener(new View.OnTouchListener() {
             @Override
