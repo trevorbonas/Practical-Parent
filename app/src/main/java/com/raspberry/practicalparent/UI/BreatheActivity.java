@@ -203,7 +203,6 @@ public class BreatheActivity extends AppCompatActivity {
             double seconds = (double)elapsedTime / 1_000_000_000.0;
             if (seconds >= 3) {
                 // TODO Update of displayed number of breaths
-                numBreaths--;
                 setState(in);
                 currentState.handlePress();
                 outHandler.removeCallbacksAndMessages(null);
