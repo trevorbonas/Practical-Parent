@@ -167,7 +167,6 @@ public class BreatheActivity extends AppCompatActivity {
             @Override
             public void run() {
                 // TODO Update of displayed number of breaths
-                numBreaths--;
                 setupBigBtn();
             }
         };
