@@ -80,16 +80,12 @@
         android:id="@+id/progress_bar"
         android:layout_width="404dp"
         android:layout_height="357dp"
-        android:layout_marginTop="101dp"
         android:indeterminateOnly="false"
         android:progressDrawable="@drawable/circle"
-        tools:progress="60"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_input"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_input"/>
 
 
 
