@@ -354,5 +354,8 @@ public class TimerActivity extends AppCompatActivity {
         notificationManager.cancel(notificationId);
     }
 
-
+    //Make intent
+    public static Intent makeLaunchIntent(Context context) {
+        return new Intent(context, TimerActivity.class);
+    }
 }

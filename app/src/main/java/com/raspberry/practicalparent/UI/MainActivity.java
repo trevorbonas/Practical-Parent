@@ -53,75 +53,71 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Button btnTimeoutTimer = (Button) findViewById(R.id.timeoutBtn);
-        btnTimeoutTimer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openActivityTimer();
-            }
-        });
 
         // Load the two singletons with info if there is info to load
         setupKidManager();
         setupResultsManager();
         setupTaskManager();
+        setupButtons();
+    }
 
-        // Button to go to coin flipping activity
+    private void setupButtons() {
         Button coinBtn = findViewById(R.id.flipBtn);
-        coinBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent coinFlipIntent;
+        Button kidBtn = findViewById(R.id.kidsBtn);
+        Button timerBtn = findViewById(R.id.timeoutBtn);
+        Button breatheBtn = findViewById(R.id.breatheBtn);
+        Button taskBtn = findViewById(R.id.taskBtn);
+        Button helpBtn = findViewById(R.id.helpBtn);
+
+        coinBtn.setOnClickListener(onClickListener);
+        kidBtn.setOnClickListener(onClickListener);
+        timerBtn.setOnClickListener(onClickListener);
+        breatheBtn.setOnClickListener(onClickListener);
+        taskBtn.setOnClickListener(onClickListener);
+        helpBtn.setOnClickListener(onClickListener);
+    }
+
+    View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent;
+            int viewId = view.getId();
+            if (viewId == R.id.flipBtn) {
                 KidManager kids = KidManager.getInstance();
-                // If there are no kids pressing the coin flip button
-                // will take the user straight to the coin flipping activity
-                // without heads or tails chosen
+                // No kids no choice
                 if (kids.getNum() == 0) {
-                    coinFlipIntent = new Intent(MainActivity.this,
+                    intent = new Intent(MainActivity.this,
                             CoinFlipActivity.class);
                 }
-                // If there are kids then pressing the coin flip button will take
-                // the user to a screen for choosing heads or tails, then on to
-                // the coin flipping activity
+                // Choose side
                 else {
-                    coinFlipIntent = new Intent(MainActivity.this,
+                    intent = new Intent(MainActivity.this,
                             ChooseActivity.class);
                 }
-                startActivity(coinFlipIntent);
+                startActivity(intent);
             }
-        });
-
-        Button kidBtn = findViewById(R.id.kidsBtn);
-        kidBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent optionsIntent = new Intent(MainActivity.this,
-                        KidOptionsActivity.class);
-                startActivity(optionsIntent);
+            else if (viewId == R.id.kidsBtn) {
+                intent = KidOptionsActivity.makeLaunchIntent(MainActivity.this);
+                startActivity(intent);
             }
-        });
-
-        Button helpBtn = findViewById(R.id.helpBtn);
-        helpBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent helpIntent = new Intent(MainActivity.this,
-                        HelpActivity.class);
-                startActivity(helpIntent);
+            else if (viewId == R.id.timeoutBtn) {
+                intent = TimerActivity.makeLaunchIntent(MainActivity.this);
+                startActivity(intent);
             }
-        });
-
-        Button taskBtn = findViewById(R.id.taskBtn);
-        taskBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent taskIntent = new Intent(MainActivity.this,
-                        TaskActivity.class);
-                startActivity(taskIntent);
+            else if (viewId == R.id.breatheBtn) {
+                intent = BreatheActivity.makeLaunchIntent(MainActivity.this);
+                startActivity(intent);
             }
-        });
-
-    }
+            else if (viewId == R.id.taskBtn) {
+                intent = TaskActivity.makeLaunchIntent(MainActivity.this);
+                startActivity(intent);
+            }
+            else if (viewId == R.id.helpBtn) {
+                intent = HelpActivity.makeLaunchIntent(MainActivity.this);
+                startActivity(intent);
+            }
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -173,11 +169,6 @@ public class MainActivity extends AppCompatActivity {
             List<Task> list = gson.fromJson(json, listType);
             tasks.setList(list);
         }
-    }
-
-    private void openActivityTimer() {
-        Intent intent = TimerActivity.makeIntent(this);
-        startActivity(intent);
     }
 
     // Loads ResultsManager data which is used to display user history

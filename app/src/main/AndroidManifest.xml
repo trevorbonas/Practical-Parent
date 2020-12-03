@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.raspberry.practicalparent"
-    xmlns:tools="http://schemas.android.com/tools">
-    <!--Adding Read External Storage Permission-->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <!--Adding Camera, Write External Storage Permission-->
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="MANAGE_EXTERNAL_STORAGE"/>
-
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.raspberry.practicalparent">
+    <!-- Adding Read External Storage Permission -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.VIBRATE" /> <!-- Adding Camera, Write External Storage Permission -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -24,9 +21,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="q">
-
-
-
+        <activity
+            android:name=".UI.BreatheActivity"
+            android:label="@string/breathe"
+            android:parentActivityName=".UI.MainActivity" />
+        <!-- <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" /> optional (needed if default theme has no action bar) -->
         <activity
             android:name=".UI.HelpActivity"
             android:label="@string/help"
@@ -35,30 +34,28 @@
             android:name=".UI.TimerActivity"
             android:label="@string/title_activity_timeout_timer"
             android:parentActivityName=".UI.MainActivity" />
-
         <activity
             android:name=".UI.TaskActivity"
             android:label="@string/title_activity_task"
             android:parentActivityName=".UI.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".UI.AddTaskActivity"
             android:label="@string/title_activity_add_task"
             android:parentActivityName=".UI.TaskActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".UI.ChooseActivity"
-            android:label=""
+            android:label="@string/choose_side"
             android:parentActivityName=".UI.MainActivity" />
         <activity
             android:name=".UI.ChooseTurnActivity"
             android:label="@string/title_activity_choose_turn"
             android:parentActivityName=".UI.ChooseActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".UI.CoinFlipActivity"
-            android:label="Coin Flip"
+            android:label="@string/coin_flip"
             android:parentActivityName=".UI.MainActivity" />
         <activity
             android:name=".UI.AddKidActivity"
@@ -77,16 +74,18 @@
         <activity
             android:name=".UI.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".TimerNotificationClasses.TimerNotificationService"/>
-        <receiver android:name=".TimerNotificationClasses.TimerNotificationServiceBroadcastReceiver"/>
-        <receiver android:name=".TimerNotificationClasses.TimerCompleteNotificationBroadcastReceiver"/>
+
+        <service android:name=".TimerNotificationClasses.TimerNotificationService" />
+
+        <receiver android:name=".TimerNotificationClasses.TimerNotificationServiceBroadcastReceiver" />
+        <receiver android:name=".TimerNotificationClasses.TimerCompleteNotificationBroadcastReceiver" />
 
         <meta-data
             android:name="preloaded_fonts"
