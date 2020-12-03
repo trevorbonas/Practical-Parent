@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -32,7 +33,7 @@ import java.util.Locale;
 public class TimerActivity extends AppCompatActivity {
 
     private EditText mEditTextInput;
-
+    private ProgressBar progressBarCircle; //progress bar
     private TextView mTextViewCountDown;
     private Button mButtonStartPause;
     private Button mButtonReset;
@@ -41,7 +42,6 @@ public class TimerActivity extends AppCompatActivity {
     private long mStartTimeInMillis;
     private long mTimeLeftInMillis;
     private long mEndTime;
-
     private RadioGroup presetTimesRadioGroup;
     private int radioButtonIndex;
 
@@ -59,9 +59,12 @@ public class TimerActivity extends AppCompatActivity {
         //setting time in minutes
         mEditTextInput = findViewById(R.id.edit_text_input);
         mTextViewCountDown = findViewById(R.id.text_view_countdown);
-
+        progressBarCircle = findViewById(R.id.progress_bar);
         mButtonStartPause = findViewById(R.id.button_start_pause);
         mButtonReset = findViewById(R.id.button_reset);
+
+
+
 
         //Remove checked radio button if user is inputting a custom time
         mEditTextInput.addTextChangedListener(new TextWatcher() {
@@ -131,21 +134,31 @@ public class TimerActivity extends AppCompatActivity {
         resetTimer();
     }
 
+    private void setProgressBarValues(){
+        progressBarCircle.setMax((int) mStartTimeInMillis / 1000);  //set the size of the progress bar
+        progressBarCircle.setProgress((int) mTimeLeftInMillis / 1000);  //set the progress of the progress bar
+    }
+
     private void startTimer() {
         closeKeyboard();
         mEditTextInput.setText("");
+
+
 
         mEndTime = System.currentTimeMillis() + mTimeLeftInMillis;
         mCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 mTimeLeftInMillis = millisUntilFinished;
+                progressBarCircle.setProgress((int) (millisUntilFinished / 1000));
                 updateCountDownText();
             }
 
             @Override
             public void onFinish() {
                 mTimerRunning = false;
+                //call to initialise the progress bar values
+                setProgressBarValues();
                 updateWatchInterface();
                 Intent timerComplete = new Intent(TimerActivity.this, TimerCompleteNotificationBroadcastReceiver.class);
                 timerComplete.setAction(getString(R.string.intent_action_timer_finished_from_activity));
@@ -167,18 +180,22 @@ public class TimerActivity extends AppCompatActivity {
         mCountDownTimer.cancel();
         mTimerRunning = false;
         updateWatchInterface();
+        //setProgressBarValues();
     }
     
     private  void resetTimer() {
         mTimeLeftInMillis = mStartTimeInMillis;
         updateCountDownText();
         updateWatchInterface();
+        setProgressBarValues();
+
     }
 
     private void updateCountDownText() {
         int[] times = countdownTimerHoursMinutesSeconds(mTimeLeftInMillis);
         String timeLeftFormatted = formatTimer(times[0], times[1], times[2]);
         mTextViewCountDown.setText(timeLeftFormatted);
+        progressBarCircle.setProgress((int) (mTimeLeftInMillis / 1000));
     }
 
     //Returns an array filled with times in hours, minutes, and seconds from time (in millis)
@@ -208,6 +225,7 @@ public class TimerActivity extends AppCompatActivity {
             presetTimesRadioGroup.setVisibility(View.INVISIBLE);
             presetTimesRadioGroup.clearCheck();
             mButtonStartPause.setText(R.string.pause);
+
         } else {
             mEditTextInput.setVisibility(View.VISIBLE);
             presetTimesRadioGroup.setVisibility(View.VISIBLE);
@@ -307,10 +325,12 @@ public class TimerActivity extends AppCompatActivity {
 
         updateCountDownText();
         updateWatchInterface();
+        setProgressBarValues();
 
         if (mTimerRunning){
             mEndTime = prefs.getLong(getString(R.string.shared_preferences_end_time), 0);
             mTimeLeftInMillis = mEndTime - System.currentTimeMillis();
+
             showCalmImage();
 
             //check if overdue
@@ -319,6 +339,7 @@ public class TimerActivity extends AppCompatActivity {
                 mTimerRunning = false;
                 updateCountDownText();
                 updateWatchInterface();  //make buttons invisible
+                setProgressBarValues();
                 removeCalmImage();
             } else {
                 startTimer();
