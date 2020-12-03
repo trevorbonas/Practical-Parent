@@ -54,13 +54,13 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
         helpTxt = findViewById(R.id.helpTxt);
         breathTxt = findViewById(R.id.breathTxt);
 
-        helpTxt.setText("Select number of desired breaths\nPress the button to start");
+        helpTxt.setText(R.string.helptxt);
 
         ActionBar ab = getSupportActionBar();
         assert ab != null;
         ab.setDisplayHomeAsUpEnabled(true);
 
-        changeText("Begin");
+        changeText(getString(R.string.begin));
         changeColor(R.drawable.round_button);
 
         bigBtn.setOnTouchListener(new View.OnTouchListener() {
@@ -172,7 +172,7 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                helpTxt.setText("Release button and breathe out");
+                helpTxt.setText(R.string.release);
                 inHandler.removeCallbacksAndMessages(null);
                 player.setLooping(true);
             }
@@ -180,7 +180,7 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
         @Override
         void setup() {
             changeColor(R.drawable.round_button_in);
-            changeText("In");
+            changeText(getString(R.string.in));
         }
 
         @Override
@@ -191,11 +191,11 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
                 player = MediaPlayer.create(BreatheActivity.this, R.raw.in_sound);
             }
             player.start();
-            helpTxt.setText("Press and hold the button and breathe in");
+            helpTxt.setText(R.string.press_and_hold);
             startTime = System.nanoTime();
             inHandler.postDelayed(runnable, 10000);
             changeColor(R.drawable.round_button_in);
-            changeText("In");
+            changeText(getString(R.string.in));
             bigBtn.animate().scaleX(2.5f).scaleY(2.5f).setDuration(10000);
 
             Log.d("In", "In is now handling press");
@@ -248,20 +248,20 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
                 numBreaths--;
                 updateBreathTxt();
                 if (numBreaths > 0) {
-                    changeText("In");
+                    changeText(getString(R.string.in));
                     changeColor(R.drawable.round_button_in);
                 }
                 else {
-                    changeText("Good job");
+                    changeText(getString(R.string.good_job));
                     changeColor(R.drawable.round_button);
                     bigBtn.setEnabled(false);
-                    helpTxt.setText("All breaths completed");
+                    helpTxt.setText(R.string.breaths_completed);
                 }
             }
         };
         @Override
         void setup() {
-            changeText("Out");
+            changeText(getString(R.string.out));
             changeColor(R.drawable.round_button_out);
             startTime = System.nanoTime();
             bigBtn.animate().scaleX(1.0f).scaleY(1.0f).setDuration(10000);
@@ -271,7 +271,7 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
             player.start();
             outHandler.postDelayed(threeRunnable, 3000);
             outHandler.postDelayed(tenRunnable, 10000);
-            helpTxt.setText("Breathe out");
+            helpTxt.setText(R.string.breathe_out);
         }
 
         @Override
@@ -303,7 +303,7 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
     public class Start extends State {
         @Override
         void setup() {
-            changeText("Begin");
+            changeText(getString(R.string.begin));
             changeColor(R.drawable.round_button);
         }
         @Override
@@ -326,12 +326,12 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
     void setupBigBtn() {
         if (numBreaths > 0) {
             setState(in);
-            helpTxt.setText("Press and hold the button and breathe in");
+            helpTxt.setText(R.string.press_and_hold);
         }
         else {
             changeColor(R.drawable.round_button);
-            bigBtn.setText("Good job");
-            helpTxt.setText("All breaths completed");
+            bigBtn.setText(R.string.good_job);
+            helpTxt.setText(R.string.breaths_completed);
             bigBtn.setEnabled(false);
             removeBreathTxt();
         }
@@ -384,8 +384,8 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
         numBreaths = 3;
         setState(in);
         changeColor(R.drawable.round_button);
-        helpTxt.setText("Select number of desired breaths\nPress the button to start");
-        changeText("Begin");
+        helpTxt.setText(R.string.helptxt);
+        changeText(getString(R.string.begin));
         bigBtn.setEnabled(true);
         breathDropdown.setVisibility(View.VISIBLE);
         removeBreathTxt();
