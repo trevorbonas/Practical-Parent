@@ -103,6 +103,8 @@ public class TimerActivity extends AppCompatActivity {
                         mSpeedFactor = defaultSpeed;
                         saveSpeedFactor();
                         startTimer(mSpeedFactor);
+                        TextView speedPercent = findViewById(R.id.tvTimerSpeed);
+                        speedPercent.setText(getString(R.string.timer_percent_speed_subtle, 100));
                         showCalmImage();
                     }
             }
@@ -404,7 +406,7 @@ public class TimerActivity extends AppCompatActivity {
             Toast.makeText(this, getString(R.string.timer_percent_speed, speed), Toast.LENGTH_SHORT).show();
             saveSpeedFactor();
             changeTimerSpeed(mSpeedFactor);
-            speedPercent.setText(getString(R.string.timer_percent_speed, speed));
+            speedPercent.setText(getString(R.string.timer_percent_speed_subtle, speed));
             return true;
         } else {
             Toast.makeText(this, getString(R.string.please_start_timer_first), Toast.LENGTH_SHORT).show();
