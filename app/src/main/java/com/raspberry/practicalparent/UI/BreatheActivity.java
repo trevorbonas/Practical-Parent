@@ -179,7 +179,9 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
         @Override
         void handlePress() {
             breathDropdown.setVisibility(View.GONE);
-            player = MediaPlayer.create(BreatheActivity.this, R.raw.in_sound);
+            if (player == null) {
+                player = MediaPlayer.create(BreatheActivity.this, R.raw.in_sound);
+            }
             player.start();
             helpTxt.setText("Press and hold the button and breathe in");
             startTime = System.nanoTime();
@@ -196,10 +198,10 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
             long elapsedTime = System.nanoTime() - startTime;
             double seconds = (double)elapsedTime / 1_000_000_000.0;
             timeHandler.removeCallbacksAndMessages(null);
-            player.stop();
-            player.reset();
-            player.release();
-            player = null;
+            if (player != null) {
+                player.release();
+                player = null;
+            }
             Log.d("Time", "Elapsed seconds: " + seconds);
             if (seconds < 3.0) {
                 // Shrink back down so user can try again
@@ -244,7 +246,9 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
             changeColor(R.drawable.round_button_out);
             startTime = System.nanoTime();
             bigBtn.animate().scaleX(1.0f).scaleY(1.0f).setDuration(10000);
-            player = MediaPlayer.create(BreatheActivity.this, R.raw.out_sound);
+            if (player == null) {
+                player = MediaPlayer.create(BreatheActivity.this, R.raw.out_sound);
+            }
             player.start();
             outHandler.postDelayed(threeRunnable, 3000);
             outHandler.postDelayed(tenRunnable, 10000);
@@ -257,10 +261,10 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
             double seconds = (double)elapsedTime / 1_000_000_000.0;
             if (seconds >= 3) {
                 // TODO Update of displayed number of breaths
-                player.stop();
-                player.reset();
-                player.release();
-                player = null;
+                if (player != null) {
+                    player.release();
+                    player = null;
+                }
                 setState(in);
                 currentState.handlePress();
                 outHandler.removeCallbacksAndMessages(null);
