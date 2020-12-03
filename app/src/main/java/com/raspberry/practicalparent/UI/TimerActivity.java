@@ -59,7 +59,7 @@ public class TimerActivity extends AppCompatActivity {
         //setting time in minutes
         mEditTextInput = findViewById(R.id.edit_text_input);
         mTextViewCountDown = findViewById(R.id.text_view_countdown);
-        progressBarCircle = (ProgressBar) findViewById(R.id.progress_bar);
+        progressBarCircle = findViewById(R.id.progress_bar);
         mButtonStartPause = findViewById(R.id.button_start_pause);
         mButtonReset = findViewById(R.id.button_reset);
 
