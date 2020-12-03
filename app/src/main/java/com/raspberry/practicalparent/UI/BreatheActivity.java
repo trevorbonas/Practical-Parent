@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -126,18 +127,32 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
         Integer[] breaths = new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         ArrayAdapter<Integer> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, breaths);
         breathDropdown.setAdapter(adapter);
-        breathDropdown.setSelection(2); //default
+        numBreaths = getBreaths(this);
+        breathDropdown.setSelection(numBreaths - 1); //position in array
         breathDropdown.setOnItemSelectedListener(this);
     }
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         numBreaths = (int) adapterView.getItemAtPosition(i);
+        saveBreaths(numBreaths);
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    private void saveBreaths(int breaths) {
+        SharedPreferences prefs = this.getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("breaths", breaths);
+        editor.apply();
+    }
+
+    private int getBreaths(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        return prefs.getInt("breaths", 3);
     }
 
     /**
