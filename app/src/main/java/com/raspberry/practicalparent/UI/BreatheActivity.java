@@ -32,6 +32,7 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
     Button bigBtn;
     TextView helpTxt;
     Button startBtn;
+    TextView breathTxt;
     int numBreaths = 1; // Default number of breaths is 3
     In in = new In();
     Out out = new Out();
@@ -51,6 +52,7 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
 
         bigBtn = findViewById(R.id.bigBtn);
         helpTxt = findViewById(R.id.helpTxt);
+        breathTxt = findViewById(R.id.breathTxt);
 
         helpTxt.setText("Select number of desired breaths\nPress the button to start");
 
@@ -133,6 +135,16 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
         return prefs.getInt("breaths", 3);
     }
 
+    private void updateBreathTxt() {
+        breathTxt.setText(Integer.toString(numBreaths));
+        breathTxt.invalidate();
+    }
+
+    private void removeBreathTxt() {
+        breathTxt.setText("");
+        breathTxt.invalidate();
+    }
+
     /**
      * States
      */
@@ -174,6 +186,7 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
         @Override
         void handlePress() {
             breathDropdown.setVisibility(View.GONE);
+            updateBreathTxt();
             if (player == null) {
                 player = MediaPlayer.create(BreatheActivity.this, R.raw.in_sound);
             }
@@ -232,7 +245,6 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
         Runnable threeRunnable = new Runnable() {
             @Override
             public void run() {
-                numBreaths--;
                 if (numBreaths > 0) {
                     changeText("In");
                     changeColor(R.drawable.round_button_in);
@@ -258,6 +270,8 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
             outHandler.postDelayed(threeRunnable, 3000);
             outHandler.postDelayed(tenRunnable, 10000);
             helpTxt.setText("Breathe out");
+            numBreaths--;
+            updateBreathTxt();
         }
 
         @Override
@@ -319,6 +333,7 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
             bigBtn.setText("Good job");
             helpTxt.setText("All breaths completed");
             bigBtn.setEnabled(false);
+            removeBreathTxt();
         }
     }
 
@@ -373,6 +388,7 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
         changeText("Begin");
         bigBtn.setEnabled(true);
         breathDropdown.setVisibility(View.VISIBLE);
+        removeBreathTxt();
         setUpDropdown();
         super.onResume();
     }
