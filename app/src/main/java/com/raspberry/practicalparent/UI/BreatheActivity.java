@@ -9,44 +9,20 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.android.exoplayer2.DefaultRenderersFactory;
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.ProgressiveMediaSource;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.raspberry.practicalparent.R;
-
-import net.mabboud.android_tone_player.ContinuousBuzzer;
-
-import java.io.IOException;
-import java.util.Timer;
 
 public class BreatheActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 @SuppressLint("ClickableViewAccessibility")
@@ -174,7 +150,7 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
     public class In extends State {
         long startTime;
         long checkTime;
-        Handler timeHandler = new Handler();
+        Handler inHandler = new Handler();
         Runnable disableRnb = new Runnable() {
             @Override
             public void run() {
@@ -185,7 +161,7 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
             @Override
             public void run() {
                 helpTxt.setText("Release button and breathe out");
-                timeHandler.removeCallbacksAndMessages(null);
+                inHandler.removeCallbacksAndMessages(null);
                 player.setLooping(true);
             }
         };
@@ -204,7 +180,7 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
             player.start();
             helpTxt.setText("Press and hold the button and breathe in");
             startTime = System.nanoTime();
-            timeHandler.postDelayed(runnable, 10000);
+            inHandler.postDelayed(runnable, 10000);
             changeColor(R.drawable.round_button_in);
             changeText("In");
             bigBtn.animate().scaleX(2.5f).scaleY(2.5f).setDuration(10000);
@@ -216,7 +192,7 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
         void handleOff() {
             long elapsedTime = System.nanoTime() - startTime;
             double seconds = (double)elapsedTime / 1_000_000_000.0;
-            timeHandler.removeCallbacksAndMessages(null);
+            inHandler.removeCallbacksAndMessages(null);
             if (player != null) {
                 player.release();
                 player = null;
@@ -226,7 +202,7 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
                 // Shrink back down so user can try again
                 bigBtn.animate().scaleX(1.0f).scaleY(1.0f).setDuration(700);
                 bigBtn.setEnabled(false);
-                timeHandler.postDelayed(disableRnb, 700);
+                inHandler.postDelayed(disableRnb, 700);
             } else {
                 setState(out);
             }
@@ -234,7 +210,8 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
 
         @Override
         void cancel() {
-            bigBtn.animate().scaleX(1.0f).scaleY(1.0f).setDuration(100);
+            bigBtn.animate().scaleX(1.0f).scaleY(1.0f).setDuration(0);
+            inHandler.removeCallbacksAndMessages(null);
         }
     }
 
@@ -245,6 +222,10 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
             @Override
             public void run() {
                 // TODO Update of displayed number of breaths
+                if (player != null) {
+                    player.release();
+                    player = null;
+                }
                 setupBigBtn();
             }
         };
@@ -294,15 +275,14 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
                 outHandler.removeCallbacksAndMessages(null);
             }
         }
-
         @Override
         void handleOff() {
             // Do nothing
         }
-
         @Override
         void cancel() {
-            bigBtn.animate().scaleX(1.0f).scaleY(1.0f).setDuration(100);
+            bigBtn.animate().scaleX(1.0f).scaleY(1.0f).setDuration(0);
+            outHandler.removeCallbacksAndMessages(null);
         }
     }
 
@@ -312,14 +292,12 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
             changeText("Begin");
             changeColor(R.drawable.round_button);
         }
-
         @Override
         void handlePress() {
             if (numBreaths > 0) {
                 setState(in);
             }
         }
-
         @Override
         void handleOff() {
             // Do nothing
@@ -389,8 +367,9 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
     protected void onResume() {
         // TODO: Update display of breaths
         numBreaths = 3;
-        currentState = in;
+        setState(in);
         changeColor(R.drawable.round_button);
+        helpTxt.setText("Select number of desired breaths\nPress the button to start");
         changeText("Begin");
         bigBtn.setEnabled(true);
         breathDropdown.setVisibility(View.VISIBLE);
