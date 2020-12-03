@@ -1,5 +1,6 @@
 package com.raspberry.practicalparent.UI;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -14,6 +15,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -165,6 +167,8 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
         void handlePress() {}
         // Handle the press stopping
         void handleOff() {}
+        // Cancels whatever the object was doing
+        void cancel() {}
     }
 
     public class In extends State {
@@ -226,6 +230,11 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
             } else {
                 setState(out);
             }
+        }
+
+        @Override
+        void cancel() {
+            bigBtn.animate().scaleX(1.0f).scaleY(1.0f).setDuration(100);
         }
     }
 
@@ -290,6 +299,11 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
         void handleOff() {
             // Do nothing
         }
+
+        @Override
+        void cancel() {
+            bigBtn.animate().scaleX(1.0f).scaleY(1.0f).setDuration(100);
+        }
     }
 
     public class Start extends State {
@@ -345,4 +359,55 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
     public static Intent makeLaunchIntent(Context context) {
         return new Intent(context, BreatheActivity.class);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // If the Up button is pressed this ends the sound
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if (player != null) {
+                    player.release();
+                    player = null;
+                }
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    // Absolutely makes sure everything goes back to start if
+    // user presses back button then re-starts activity
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+
+    // This will reset things if the user goes to another
+    // application
+    @Override
+    protected void onResume() {
+        // TODO: Update display of breaths
+        numBreaths = 3;
+        currentState = in;
+        changeColor(R.drawable.round_button);
+        changeText("Begin");
+        bigBtn.setEnabled(true);
+        breathDropdown.setVisibility(View.VISIBLE);
+        setUpDropdown();
+        super.onResume();
+    }
+
+    // This will end the sound if app is navigated away from
+    @Override
+    protected void onPause() {
+        if (player != null) {
+            player.release();
+            player = null;
+        }
+        currentState.cancel();
+        super.onPause();
+    }
 }
+
+
