@@ -245,6 +245,8 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
         Runnable threeRunnable = new Runnable() {
             @Override
             public void run() {
+                numBreaths--;
+                updateBreathTxt();
                 if (numBreaths > 0) {
                     changeText("In");
                     changeColor(R.drawable.round_button_in);
@@ -270,8 +272,6 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
             outHandler.postDelayed(threeRunnable, 3000);
             outHandler.postDelayed(tenRunnable, 10000);
             helpTxt.setText("Breathe out");
-            numBreaths--;
-            updateBreathTxt();
         }
 
         @Override
