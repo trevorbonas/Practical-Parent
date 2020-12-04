@@ -174,7 +174,6 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
             public void run() {
                 helpTxt.setText(R.string.release);
                 inHandler.removeCallbacksAndMessages(null);
-                player.setLooping(true);
             }
         };
         @Override
