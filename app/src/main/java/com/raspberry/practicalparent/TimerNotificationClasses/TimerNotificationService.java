@@ -154,9 +154,6 @@ public class TimerNotificationService extends Service {
             @Override
             public void onTick(long l) {
                 int[] times = TimerActivity.countdownTimerHoursMinutesSeconds((long) (l * speedFactor));
-                //Log.d("TAG", "Timing is ticking: " + times[0] + ":" + times[1] + ":" + times[2]);
-                //Log.d("TAG", "endTime: " + mEndTime);
-                //Log.d("TAG", "mTimeLeftInMillis: " + (mEndTime - System.currentTimeMillis()) * speedFactor);
                 editor.putLong(getString(R.string.shared_preferences_time_left_in_millis), (long) ((mEndTime - System.currentTimeMillis()) * speedFactor));
                 editor.putLong(getString(R.string.shared_preferences_end_time), mEndTime);
                 editor.apply();
