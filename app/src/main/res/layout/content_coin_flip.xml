@@ -12,16 +12,18 @@
         android:layout_width="149dp"
         android:layout_height="171dp"
         android:layout_marginTop="184dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivTails"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.631"
         app:srcCompat="@drawable/heads" />
 
     <ImageView
         android:id="@+id/ivTails"
         android:layout_width="149dp"
         android:layout_height="171dp"
-        android:layout_marginTop="184dp"
+        android:layout_marginTop="328dp"
         android:alpha="0.0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +35,7 @@
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="124dp"
+        android:layout_marginTop="136dp"
         android:background="@drawable/outlined_button"
         android:fontFamily="sans-serif-medium"
         android:foreground="@drawable/ripple_mask"
@@ -42,6 +44,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="#6E6E6E"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivHeads" />
 
@@ -49,7 +52,7 @@
         android:id="@+id/txtResult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="84dp"
         android:text="@string/outcome"
         android:textAlignment="center"
         android:textSize="18sp"
@@ -85,5 +88,15 @@
         android:foreground="@drawable/ic_baseline_settings_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/kidPortraitCoinFlip"
+        android:layout_width="71dp"
+        android:layout_height="77dp"
+        app:layout_constraintBottom_toTopOf="@+id/ivHeads"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/family_icon" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

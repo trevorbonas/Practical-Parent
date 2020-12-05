@@ -94,6 +94,7 @@ public class CoinFlipActivity extends AppCompatActivity {
             //nobodyBtn.setVisibility(View.VISIBLE);
         }
         else {
+            setImage();
             this.kidName = kids.getKidAt(kids.getCurrentIndex()).getName();
             Intent passedIntent = getIntent();
             this.choice = passedIntent.getStringExtra("Choice");
@@ -121,6 +122,15 @@ public class CoinFlipActivity extends AppCompatActivity {
 
 
         playAnimationXML();
+    }
+
+    private void setImage() {
+        ImageView imageView = findViewById(R.id.kidPortraitCoinFlip);
+        Kid kid = kids.getKidAt(kids.getCurrentIndex());
+        if (kid != null) {
+            String path = kids.getKidAt(kids.getCurrentIndex()).getPicPath();
+            MainActivity.displayPortrait(CoinFlipActivity.this, path, imageView);
+        }
     }
 
     @Override
