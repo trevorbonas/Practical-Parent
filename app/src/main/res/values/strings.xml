@@ -130,5 +130,6 @@
     <string name="breaths_completed">All breaths completed</string>
     <string name="out">Out</string>
     <string name="breathe_out">Breathe out</string>
+    <string name="breaths_left">\"Breaths left: \"</string>
 
 </resources>
