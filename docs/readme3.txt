@@ -27,3 +27,8 @@ to "Out," but the color of the button stays green, the inhale colour, and when e
 three seconds the text of the button changes to "In" (if the user has breaths left to do) but
 the colour stays blue, the exhale colour. This is by design and comes from following the iteration
 three description very closely.
+
+Timeout Timer:
+A toast is displayed when the speed of the timer is changed, but this is not the "subtle" message
+that a child would have trouble finding outlined in the iteration three description. The real
+subtle message is in black text in the top left corner when the timer is running.
