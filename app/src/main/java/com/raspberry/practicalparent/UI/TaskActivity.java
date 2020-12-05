@@ -147,4 +147,9 @@ public class TaskActivity extends AppCompatActivity {
         prefEditor.putString("List", json);
         prefEditor.apply();
     }
+
+    //Make intent
+    public static Intent makeLaunchIntent(Context context) {
+        return new Intent(context, TaskActivity.class);
+    }
 }

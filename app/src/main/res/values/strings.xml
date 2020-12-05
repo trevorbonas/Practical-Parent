@@ -118,5 +118,17 @@
     <string name="timer_percent_speed_subtle">Time@%d%%</string>
 
     <string name="please_start_timer_first">Please start timer first!</string>
+    <string name="breathe">Breathe</string>
+    <string name="choose_side">Choose Side</string>
+    <string name="coin_flip">Coin Flip</string>
+    <string name="helptxt">Select number of desired breaths\nPress the button to start</string>
+    <string name="begin">Begin</string>
+    <string name="in">In</string>
+    <string name="press_and_hold">Press and hold the button and breathe in</string>
+    <string name="release">Release button and breathe out</string>
+    <string name="good_job">Good job</string>
+    <string name="breaths_completed">All breaths completed</string>
+    <string name="out">Out</string>
+    <string name="breathe_out">Breathe out</string>
 
 </resources>

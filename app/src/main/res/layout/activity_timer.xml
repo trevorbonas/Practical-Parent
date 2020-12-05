@@ -16,6 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <EditText
         android:id="@+id/edit_text_input"
         android:layout_width="158dp"
@@ -31,14 +32,15 @@
         android:id="@+id/text_view_countdown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="@string/default_timer_value"
         android:textColor="@android:color/black"
         android:textSize="60sp"
+        app:layout_constraintBottom_toBottomOf="@+id/progress_bar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_input" />
+        app:layout_constraintTop_toTopOf="@+id/progress_bar"
+        app:layout_constraintVertical_bias="0.402" />
 
     <Button
         android:id="@+id/button_start_pause"
@@ -82,5 +84,16 @@
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="404dp"
+        android:layout_height="357dp"
+        android:indeterminateOnly="false"
+        android:progressDrawable="@drawable/circle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_input"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
