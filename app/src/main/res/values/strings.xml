@@ -121,7 +121,7 @@
     <string name="breathe">Breathe</string>
     <string name="choose_side">Choose Side</string>
     <string name="coin_flip">Coin Flip</string>
-    <string name="helptxt">Select number of desired breaths\nPress the button to start</string>
+    <string name="helptxt">Let\'s take %1$d breaths together</string>
     <string name="begin">Begin</string>
     <string name="in">In</string>
     <string name="press_and_hold">Hold button and breathe in</string>

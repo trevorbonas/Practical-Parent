@@ -49,12 +49,13 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
 
         //Spinner/dropdown menu
         setUpDropdown();
+        // Update num breaths in welcome message
+        helpTxt = findViewById(R.id.helpTxt);
+        String helpInput = getString(R.string.helptxt, numBreaths);
+        helpTxt.setText(helpInput);
 
         bigBtn = findViewById(R.id.bigBtn);
-        helpTxt = findViewById(R.id.helpTxt);
         breathTxt = findViewById(R.id.breathTxt);
-
-        helpTxt.setText(R.string.helptxt);
 
         ActionBar ab = getSupportActionBar();
         assert ab != null;
@@ -116,6 +117,8 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         numBreaths = (int) adapterView.getItemAtPosition(i);
         saveBreaths(numBreaths);
+        String helpInput = getString(R.string.helptxt, numBreaths);
+        helpTxt.setText(helpInput);
     }
 
     @Override
@@ -383,12 +386,13 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
         numBreaths = 3;
         setState(in);
         changeColor(R.drawable.round_button);
-        helpTxt.setText(R.string.helptxt);
+        setUpDropdown();
+        String helpInput = getString(R.string.helptxt, numBreaths);
+        helpTxt.setText(helpInput);
         changeText(getString(R.string.begin));
         bigBtn.setEnabled(true);
         breathDropdown.setVisibility(View.VISIBLE);
         removeBreathTxt();
-        setUpDropdown();
         super.onResume();
     }
 
