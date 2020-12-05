@@ -1,5 +1,6 @@
 package com.raspberry.practicalparent.UI;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -12,6 +13,9 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -20,6 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.raspberry.practicalparent.R;
 import com.raspberry.practicalparent.TimerNotificationClasses.TimerCompleteNotificationBroadcastReceiver;
@@ -42,6 +47,9 @@ public class TimerActivity extends AppCompatActivity {
     private long mStartTimeInMillis;
     private long mTimeLeftInMillis;
     private long mEndTime;
+    private float mSpeedFactor = 1;
+    private final float defaultSpeed = 1;
+
     private RadioGroup presetTimesRadioGroup;
     private int radioButtonIndex;
 
@@ -62,9 +70,6 @@ public class TimerActivity extends AppCompatActivity {
         progressBarCircle = findViewById(R.id.progress_bar);
         mButtonStartPause = findViewById(R.id.button_start_pause);
         mButtonReset = findViewById(R.id.button_reset);
-
-
-
 
         //Remove checked radio button if user is inputting a custom time
         mEditTextInput.addTextChangedListener(new TextWatcher() {
@@ -96,7 +101,11 @@ public class TimerActivity extends AppCompatActivity {
                         pauseTimer();
                         removeCalmImage();
                     } else {
-                        startTimer();
+                        mSpeedFactor = defaultSpeed;
+                        saveSpeedFactor();
+                        startTimer(mSpeedFactor);
+                        TextView speedPercent = findViewById(R.id.tvTimerSpeed);
+                        speedPercent.setText(getString(R.string.timer_percent_speed_subtle, 100));
                         showCalmImage();
                     }
             }
@@ -139,17 +148,22 @@ public class TimerActivity extends AppCompatActivity {
         progressBarCircle.setProgress((int) mTimeLeftInMillis / 1000);  //set the progress of the progress bar
     }
 
-    private void startTimer() {
+    private void startTimer(final double speedFactor) {
         closeKeyboard();
         mEditTextInput.setText("");
 
+        if (!(mTimerRunning)) {
+            Log.d("TAG", "end time if !mtimerrunning: " + mEndTime);
+            mEndTime = (long) (System.currentTimeMillis() + mTimeLeftInMillis / speedFactor);
+        }
+        Log.d("TAG", "end time timer running: " + mEndTime);
 
-
-        mEndTime = System.currentTimeMillis() + mTimeLeftInMillis;
-        mCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
+        mCountDownTimer = new CountDownTimer((long) (mTimeLeftInMillis / speedFactor), (long) (1000 / speedFactor)) {
             @Override
             public void onTick(long millisUntilFinished) {
-                mTimeLeftInMillis = millisUntilFinished;
+                int[] arr = countdownTimerHoursMinutesSeconds(millisUntilFinished);
+                Log.d("TAG", "onTick: speed factor " + mSpeedFactor + " " + speedFactor + "  |" + millisUntilFinished + "   " + arr[0] + ":" + arr[1] + ":" + arr[2]);
+                mTimeLeftInMillis = (long) (millisUntilFinished * speedFactor);
                 progressBarCircle.setProgress((int) (millisUntilFinished / 1000));
                 updateCountDownText();
             }
@@ -164,6 +178,7 @@ public class TimerActivity extends AppCompatActivity {
                 timerComplete.setAction(getString(R.string.intent_action_timer_finished_from_activity));
                 sendBroadcast(timerComplete);
                 removeCalmImage();
+                clearSpeedPercentText();
             }
         }.start();
 
@@ -180,15 +195,15 @@ public class TimerActivity extends AppCompatActivity {
         mCountDownTimer.cancel();
         mTimerRunning = false;
         updateWatchInterface();
-        //setProgressBarValues();
+        clearSpeedPercentText();
     }
     
-    private  void resetTimer() {
+    private void resetTimer() {
         mTimeLeftInMillis = mStartTimeInMillis;
         updateCountDownText();
         updateWatchInterface();
+        clearSpeedPercentText();
         setProgressBarValues();
-
     }
 
     private void updateCountDownText() {
@@ -225,7 +240,6 @@ public class TimerActivity extends AppCompatActivity {
             presetTimesRadioGroup.setVisibility(View.INVISIBLE);
             presetTimesRadioGroup.clearCheck();
             mButtonStartPause.setText(R.string.pause);
-
         } else {
             mEditTextInput.setVisibility(View.VISIBLE);
             presetTimesRadioGroup.setVisibility(View.VISIBLE);
@@ -293,6 +307,7 @@ public class TimerActivity extends AppCompatActivity {
         editor.putLong(getString(R.string.shared_preferences_time_left_in_millis), mTimeLeftInMillis);
         editor.putBoolean(getString(R.string.shared_preferences_timer_running), mTimerRunning);
         editor.putLong(getString(R.string.shared_preferences_end_time), mEndTime);
+        editor.putFloat(getString(R.string.shared_preferences_speed_factor), mSpeedFactor);
 
         editor.apply();
         if (mTimerRunning) {
@@ -303,6 +318,7 @@ public class TimerActivity extends AppCompatActivity {
             } else {
                 startTimerNotificationService();
             }
+            Log.d("TAG", "onStop: " + mSpeedFactor);
         }
         if(mCountDownTimer != null){
             mCountDownTimer.cancel(); //cancel timer when time runs out
@@ -322,6 +338,7 @@ public class TimerActivity extends AppCompatActivity {
         mStartTimeInMillis = prefs.getLong(getString(R.string.shared_preferences_start_time_in_millis), 600000);
         mTimeLeftInMillis = prefs.getLong(getString(R.string.shared_preferences_time_left_in_millis), mStartTimeInMillis);
         mTimerRunning = prefs.getBoolean(getString(R.string.shared_preferences_timer_running), false);
+        mSpeedFactor = prefs.getFloat(getString(R.string.shared_preferences_speed_factor), 1);
 
         updateCountDownText();
         updateWatchInterface();
@@ -329,8 +346,8 @@ public class TimerActivity extends AppCompatActivity {
 
         if (mTimerRunning){
             mEndTime = prefs.getLong(getString(R.string.shared_preferences_end_time), 0);
-            mTimeLeftInMillis = mEndTime - System.currentTimeMillis();
-
+            mTimeLeftInMillis = (long) ((mEndTime - System.currentTimeMillis()) * mSpeedFactor);
+            Log.d("TAG", "mTimeLeftInMillis in onStart(): " + mTimeLeftInMillis);
             showCalmImage();
 
             //check if overdue
@@ -342,9 +359,12 @@ public class TimerActivity extends AppCompatActivity {
                 setProgressBarValues();
                 removeCalmImage();
             } else {
-                startTimer();
+                startTimer(mSpeedFactor);
             }
         } else {
+            //mEndTime = prefs.getLong(getString(R.string.shared_preferences_end_time), 0);
+            //mTimeLeftInMillis = (mEndTime - System.currentTimeMillis()) * mSpeedFactor;
+            Log.d("TAG", "endTime: " + mEndTime);
             removeCalmImage();
         }
     }
@@ -352,6 +372,71 @@ public class TimerActivity extends AppCompatActivity {
     private void cancelNotification(int notificationId) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.cancel(notificationId);
+    }
+
+    private void changeTimerSpeed(float newSpeed) {
+        pauseTimer();
+        startTimer(newSpeed);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_timer, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        TextView speedPercent = findViewById(R.id.tvTimerSpeed);
+        int speed = 100;
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        if (mTimerRunning) {
+            if (item.getItemId() == R.id.quarterSpeed) {
+                mSpeedFactor = 0.25f;
+                speed = 25;
+            } else if (item.getItemId() == R.id.halfSpeed) {
+                mSpeedFactor = 0.5f;
+                speed = 50;
+            } else if (item.getItemId() == R.id.threeFourthsSpeed) {
+                mSpeedFactor = 0.75f;
+                speed = 75;
+            } else if (item.getItemId() == R.id.normalSpeed) {
+                mSpeedFactor = 1f;
+                speed = 100;
+            } else if (item.getItemId() == R.id.doubleSpeed) {
+                mSpeedFactor = 2f;
+                speed = 200;
+            } else if (item.getItemId() == R.id.tripleSpeed) {
+                mSpeedFactor = 3f;
+                speed = 300;
+            } else if (item.getItemId() == R.id.quadSpeed) {
+                mSpeedFactor = 4f;
+                speed = 400;
+            }
+            Toast.makeText(this, getString(R.string.timer_percent_speed, speed), Toast.LENGTH_SHORT).show();
+            saveSpeedFactor();
+            changeTimerSpeed(mSpeedFactor);
+            speedPercent.setText(getString(R.string.timer_percent_speed_subtle, speed));
+            return true;
+        } else {
+            Toast.makeText(this, getString(R.string.please_start_timer_first), Toast.LENGTH_SHORT).show();
+        }
+        return true;
+    }
+
+    private void clearSpeedPercentText() {
+        TextView speedPercent = findViewById(R.id.tvTimerSpeed);
+        speedPercent.setText("");
+    }
+
+    private void saveSpeedFactor() {
+        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putFloat(getString(R.string.shared_preferences_speed_factor), mSpeedFactor);
+        editor.apply();
     }
 
     //Make intent
