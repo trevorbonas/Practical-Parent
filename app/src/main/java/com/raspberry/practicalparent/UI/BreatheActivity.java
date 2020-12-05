@@ -277,7 +277,7 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
         void handlePress() {
             long elapsedTime = System.nanoTime() - startTime;
             double seconds = (double)elapsedTime / 1_000_000_000.0;
-            if (seconds >= 3) {
+            if (seconds >= 3.0) {
                 // TODO Update of displayed number of breaths
                 if (player != null) {
                     player.release();

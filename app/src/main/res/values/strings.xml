@@ -124,7 +124,7 @@
     <string name="helptxt">Select number of desired breaths\nPress the button to start</string>
     <string name="begin">Begin</string>
     <string name="in">In</string>
-    <string name="press_and_hold">Press and hold the button and breathe in</string>
+    <string name="press_and_hold">Hold button and breathe in</string>
     <string name="release">Release button and breathe out</string>
     <string name="good_job">Good job</string>
     <string name="breaths_completed">All breaths completed</string>
