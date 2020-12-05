@@ -136,7 +136,7 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
     }
 
     private void updateBreathTxt() {
-        breathTxt.setText(Integer.toString(numBreaths));
+        breathTxt.setText("Breaths left: " + numBreaths);
         breathTxt.invalidate();
     }
 
