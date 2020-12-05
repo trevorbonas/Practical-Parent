@@ -1,0 +1,6 @@
+Scrum Roles for Iteration 3
+
+Scrum Master: Trevor Bonas
+Product Owner: Herman Luo
+Team Member: Shubham Negi
+Repo Manager: Jaydon Lau
