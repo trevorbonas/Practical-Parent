@@ -139,6 +139,8 @@ public class CoinFlipActivity extends AppCompatActivity {
         kids.setNobody(false);
     }
 
+
+
     private int flipCoinResult() {
         Random rand = new Random();
         int n = rand.nextInt(2);
