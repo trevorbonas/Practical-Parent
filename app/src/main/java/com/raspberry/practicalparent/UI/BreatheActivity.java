@@ -167,6 +167,12 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
         long startTime;
         long checkTime;
         Handler inHandler = new Handler();
+        Runnable threeRun = new Runnable() {
+            @Override
+            public void run() {
+                changeText(getString(R.string.out));
+            }
+        };
         Runnable disableRnb = new Runnable() {
             @Override
             public void run() {
@@ -197,6 +203,7 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
             helpTxt.setText(R.string.press_and_hold);
             startTime = System.nanoTime();
             inHandler.postDelayed(runnable, 10000);
+            inHandler.postDelayed(threeRun, 3000);
             changeColor(R.drawable.round_button_in);
             changeText(getString(R.string.in));
             bigBtn.animate().scaleX(2.5f).scaleY(2.5f).setDuration(10000);
@@ -252,7 +259,6 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
                 updateBreathTxt();
                 if (numBreaths > 0) {
                     changeText(getString(R.string.in));
-                    changeColor(R.drawable.round_button_in);
                 }
                 else {
                     changeText(getString(R.string.good_job));
