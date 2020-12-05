@@ -33,7 +33,7 @@ public class BreatheActivity extends AppCompatActivity implements AdapterView.On
     TextView helpTxt;
     Button startBtn;
     TextView breathTxt;
-    int numBreaths = 1; // Default number of breaths is 3
+    int numBreaths = 3; // Default number of breaths is 3
     In in = new In();
     Out out = new Out();
     Start start = new Start();
