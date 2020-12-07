@@ -325,7 +325,18 @@ public class TimerActivity extends AppCompatActivity {
         }
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setProgressBarValues();
+        if(mTimeLeftInMillis < 0) {
+            mTimeLeftInMillis = 0;
+            mTimerRunning = false;
+            updateCountDownText();
+            updateWatchInterface();
+            removeCalmImage();
+        }
+    }
 
     @Override
     protected void onStart() {
@@ -349,6 +360,8 @@ public class TimerActivity extends AppCompatActivity {
             mTimeLeftInMillis = (long) ((mEndTime - System.currentTimeMillis()) * mSpeedFactor);
             Log.d("TAG", "mTimeLeftInMillis in onStart(): " + mTimeLeftInMillis);
             showCalmImage();
+            TextView speedPercent = findViewById(R.id.tvTimerSpeed);
+            speedPercent.setText(getString(R.string.timer_percent_speed_subtle, (int) (mSpeedFactor * 100)));
 
             //check if overdue
             if(mTimeLeftInMillis < 0) {
@@ -358,6 +371,7 @@ public class TimerActivity extends AppCompatActivity {
                 updateWatchInterface();  //make buttons invisible
                 setProgressBarValues();
                 removeCalmImage();
+                speedPercent.setText("");
             } else {
                 startTimer(mSpeedFactor);
             }
